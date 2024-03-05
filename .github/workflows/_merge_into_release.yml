@@ -1,0 +1,31 @@
+name: Merge into release
+
+on:
+  workflow_call:
+    secrets:
+      RELEASE_TOKEN:
+        required: true
+
+jobs:
+  merge_into_release:
+    name: Merge ${{ github.event.ref }} -> release branch
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Fetch the whole history to prevent unrelated history errors
+          fetch-depth: 0
+          # The branch you want to checkout (usually equal to `branchtomerge`)
+          # ref: ${{ github.event.ref }}
+      - uses: devmasx/merge-branch@v1.4.0
+        with:
+          type: now
+          target_branch: release
+          # @TODO: A dedicated RELEASE_TOKEN should be created in the repo settings
+          #        and used for this task when in production.
+          #        It is set here to the default GITHUB_TOKEN only
+          #        for demonstration purposes, enabling the workflow in the repo template
+          #        to run without additional configuration.
+          # github_token: ${{ secrets.RELEASE_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}

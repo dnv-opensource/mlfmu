@@ -1,0 +1,31 @@
+name: Unit Tests (py312)
+# Test also with Python 3.12 (experimental; workflow will not fail on error.)
+
+on: workflow_call
+
+jobs:
+  test312:
+    name: Test on ${{matrix.python.toxenv}}-${{matrix.platform.toxenv}} (experimental)
+    continue-on-error: true
+    runs-on: ${{ matrix.platform.runner }}
+    strategy:
+      matrix:
+        platform:
+          - runner: ubuntu-latest
+            toxenv: linux
+          - runner: windows-latest
+            toxenv: windows
+        python:
+          - version: '3.13.0a2'
+            toxenv: 'py313'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Python ${{ matrix.python.version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python.version }}
+          cache: 'pip' # cache pip dependencies
+      - name: Install tox
+        run: python -m pip install tox
+      - name: Run pytest
+        run: tox -e ${{matrix.python.toxenv}}-${{matrix.platform.toxenv}}

@@ -1,0 +1,49 @@
+{
+    "python.languageServer": "Pylance",
+    "editor.formatOnSave": true,
+    "notebook.formatOnSave.enabled": true,
+    "notebook.codeActionsOnSave": {
+        "notebook.source.fixAll": true,
+        "notebook.source.organizeImports": true,
+    },
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "always",
+            "source.organizeImports": "always",
+        },
+        "editor.defaultFormatter": "charliermarsh.ruff",
+    },
+    "autoDocstring.docstringFormat": "numpy",
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.analysis.logLevel": "Warning",
+    "python.analysis.completeFunctionParens": false,
+    "python.analysis.diagnosticMode": "workspace",
+    "python.analysis.diagnosticSeverityOverrides": {},
+    "python.analysis.indexing": true,
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.inlayHints.variableTypes": false,
+    "python.analysis.inlayHints.functionReturnTypes": false,
+    "python.analysis.inlayHints.pytestParameters": true,
+    "python.terminal.executeInFileDir": true,
+    "python.terminal.activateEnvironment": true,
+    "python.terminal.activateEnvInCurrentTerminal": false,
+    "python.analysis.packageIndexDepths": [
+        {
+            "name": "pandas",
+            "depth": 4,
+            "includeAllSymbols": true,
+        },
+        {
+            "name": "matplotlib",
+            "depth": 4,
+            "includeAllSymbols": true,
+        },
+        {
+            "name": "mpl_toolkits",
+            "depth": 4,
+            "includeAllSymbols": true,
+        },
+    ],
+}

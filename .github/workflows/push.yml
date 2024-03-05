@@ -1,0 +1,18 @@
+name: Push to custom branches
+run-name: Push to ${{ github.ref }} by @${{ github.actor }}
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - release
+
+concurrency:
+  group: push-${{ github.ref }}-1
+  cancel-in-progress: true
+
+jobs:
+  code_quality:
+    uses: ./.github/workflows/_code_quality.yml
+  test:
+    uses: ./.github/workflows/_test.yml

@@ -1,0 +1,23 @@
+name: Publish Release
+run-name: Publish Release ${{ github.event.ref }} created by @${{ github.actor }}
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build_package:
+    uses: ./.github/workflows/_build_package.yml
+  # publish_package:
+  #   needs:
+  #     - build_package
+  #   uses: ./.github/workflows/_publish_package.yml
+  # publish_package_test:
+  #   needs:
+  #     - build_package
+  #   uses: ./.github/workflows/_publish_package_test.yml
+  merge_into_release:
+    uses: ./.github/workflows/_merge_into_release.yml
+    secrets:
+      RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}

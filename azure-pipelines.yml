@@ -1,0 +1,125 @@
+# Python package
+# Create and test a Python package on multiple Python versions.
+# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/python
+
+name: Continuous Integration $(Build.SourceBranch) by $(Build.RequestedFor)
+
+trigger:
+  branches:
+    include:
+      - '*'
+  paths:
+    include:
+      - '*'
+
+jobs:
+  - job: black
+    displayName: black
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+      pythonVersion: '3.11'
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: $(pythonVersion)
+        displayName: Use Python $(pythonVersion)
+      - script: pip install black
+        displayName: Install black
+      - script: black --check --diff .
+        displayName: Run black
+
+  - job: ruff
+    displayName: ruff
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+      pythonVersion: '3.11'
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: $(pythonVersion)
+        displayName: Use Python $(pythonVersion)
+      - script: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        displayName: Install dependencies
+      - script: pip install ruff==0.3.0
+        displayName: Install ruff
+      - script: ruff .
+        displayName: Run ruff
+
+  - job: pyright
+    displayName: pyright
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+      pythonVersion: '3.11'
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: $(pythonVersion)
+        displayName: Use Python $(pythonVersion)
+      - script: |
+          python -m pip install --upgrade pip setuptools
+          pip install -r requirements.txt
+          pip install pytest
+        displayName: Install dependencies
+      - script: pip install pyright==1.1.352
+        displayName: Install pyright
+      - script: pyright .
+        displayName: Run pyright
+
+  - job: Test
+    displayName: Test on
+    strategy:
+      matrix:
+        linux-py39:
+          imageName: ubuntu-latest
+          pythonVersion: '3.9'
+          toxenv: linux-py39
+        linux-py310:
+          imageName: ubuntu-latest
+          pythonVersion: '3.10'
+          toxenv: linux-py310
+        linux-py311:
+          imageName: ubuntu-latest
+          pythonVersion: '3.11'
+          toxenv: linux-py311
+        windows-py39:
+          imageName: windows-latest
+          pythonVersion: '3.9'
+          toxenv: windows-py39
+        windows-py310:
+          imageName: windows-latest
+          pythonVersion: '3.10'
+          toxenv: windows-py310
+        windows-py311:
+          imageName: windows-latest
+          pythonVersion: '3.11'
+          toxenv: windows-py311
+      #   macos-py39:
+      #     imageName: macos-latest
+      #     pythonVersion: '3.9'
+      #     toxenv: macos-py39
+      #   macos-py310:
+      #     imageName: macos-latest
+      #     pythonVersion: '3.10'
+      #     toxenv: macos-py310
+      #   macos-py311:
+      #     imageName: macos-latest
+      #     pythonVersion: '3.11'
+      #     toxenv: macos-py311
+      # maxParallel: 6
+    pool:
+      vmImage: $(imageName)
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: $(pythonVersion)
+        displayName: Use Python $(pythonVersion)
+      - script: python -m pip install tox
+        displayName: Install tox
+      - script: tox -e $(toxenv)
+        displayName: Run pytest

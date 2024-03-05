@@ -1,0 +1,68 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Debug Tests",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "purpose": [
+                "debug-test"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                "PYTEST_ADDOPTS": "--no-cov"
+            },
+            "autoReload": {
+                "enable": true
+            },
+            "justMyCode": false,
+        },
+        {
+            "name": "Python: Current File, cwd = file dir, envFile",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${fileDirname}", // working dir = dir where current file is
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "autoReload": {
+                "enable": true
+            },
+            "envFile": "${workspaceFolder}/.env" // specify where mvx is
+        },
+        {
+            "name": "Python: Current File, cwd = workspace root folder, envFile",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}", // working dir = workspace (mvx) dir
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "autoReload": {
+                "enable": true
+            },
+            "justMyCode": false,
+            "envFile": "${workspaceFolder}/.env" // specify where mvx is
+        },
+        {
+            "name": "my_package test_cli",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}\\tests",
+            "program": "${workspaceFolder}\\src\\my_package\\cli\\my_package.py",
+            "args": [
+                "test_config_file",
+                "--run",
+                "-v",
+            ],
+            "console": "integratedTerminal",
+            "autoReload": {
+                "enable": true
+            },
+            "justMyCode": false,
+        },
+    ]
+}

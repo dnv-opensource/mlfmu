@@ -1,0 +1,54 @@
+name: Code Quality
+
+on: workflow_call
+
+jobs:
+  ruff_format:
+    runs-on: ubuntu-latest
+    name: ruff format
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip' # cache pip dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Install ruff
+        run: pip install ruff==0.3.0
+      - name: Run ruff format
+        run: ruff format --diff .
+
+  ruff_check:
+    runs-on: ubuntu-latest
+    name: ruff check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip' # cache pip dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Install ruff
+        run: pip install ruff==0.3.0
+      - name: Run ruff check
+        run: ruff check --diff .
+
+  pyright:
+    runs-on: ubuntu-latest
+    name: pyright
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip' # cache pip dependencies
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+      - name: Install pyright
+        run: pip install pyright==1.1.352
+      - name: Run pyright
+        run: pyright .

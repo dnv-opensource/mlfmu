@@ -1,0 +1,165 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "my-package"
+version = "0.1.6"
+description = "example package short description."
+readme = "README.md"
+requires-python = ">= 3.9"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Author One", email = "author.one@dnv.com"},
+    {name = "Author Two", email = "author.two@dnv.com"},
+]
+maintainers = [
+    {name = "Author Three", email = "author.three@dnv.com"},
+]
+keywords = []
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    # "License :: OSI Approved :: XYZ License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "dictIO>=0.3.3",
+    # "some_package_on_pypi>=0.1.0",
+    # "some_project_in_my_local_dev @ file:../some_project_in_my_local_dev",
+    # "some_project_on_github @ git+https://github.com/user/project.git@version_or_tag_or_branch_name#egg=project_name",
+]
+
+[project.urls]
+Homepage = "https://github.com/dnv-innersource/my-package"
+Documentation = "https://dnv-innersource.github.io/my-package/README.html"
+Repository = "https://github.com/dnv-innersource/my-package.git"
+Issues = "https://github.com/dnv-innersource/my-package/issues"
+Changelog = "https://github.com/dnv-innersource/my-package/blob/main/CHANGELOG.md"
+
+[project.scripts]
+my-package = "my_package.cli.my_package:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["test*"]
+
+[tool.ruff]
+exclude = [
+    ".git",
+    ".venv",
+    ".tox",
+    "build",
+    "dist",
+    "__pycache__",
+    "./docs/source/conf.py",
+    "./src/folder_to_be_ignored",
+]
+src = ["src"]
+line-length = 120
+target-version = "py39"
+
+[tool.ruff.lint]
+ignore = [
+    "E501",  # Line length too long
+    "D100",  # Missing docstring in public module
+    "D101",  # Missing docstring in public class
+    "D102",  # Missing docstring in public method
+    "D103",  # Missing docstring in public function
+    "D104",  # Missing docstring in public package
+    "D105",  # Missing docstring in magic method
+    "D107",  # Missing docstring in __init__
+    "D202",  # No blank lines allowed after function docstring
+    "D203",  # 1 blank line required before class docstring
+    "D205",  # 1 blank line required between summary line and description
+    "D212",  # Multi-line docstring summary should start at the first line
+    "D213",  # Multi-line docstring summary should start at the second line
+    # "N802",  # Function name should be lowercase  (uncomment if you want to allow Uppercase function names)
+    # "N803",  # Argument name should be lowercase  (uncomment if you want to allow Uppercase argument names)
+    "N806",  # Variable in function should be lowercase  (uncomment if you want to allow Uppercase variable names in functions)
+    # "N815",  # Variable in class scope should not be mixedCase  (uncomment if you want to allow mixedCase variable names in class scope)
+    # "N816",  # Variable in global scope should not be mixedCase  (uncomment if you want to allow mixedCase variable names in global scope)
+    ]
+select = [
+    "E",
+    "D",
+    "F",
+    "N",
+    "W",
+    "I",
+    "B",
+]
+
+[tool.ruff.lint.pep8-naming]
+ignore-names = [
+    "test_*",
+    "setUp",
+    "tearDown",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["I001"]
+"./tests/*" = ["D"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.pyright]
+exclude = [
+    ".git",
+    ".venv",
+    ".tox",
+    "build",
+    "dist",
+    "**/__pycache__",
+    "./docs/source/conf.py",
+    "./src/folder_to_be_ignored",
+    "./venv",
+]
+extraPaths = ["./src"]
+typeCheckingMode = "basic"
+useLibraryCodeForTypes = true
+reportMissingParameterType = "error"
+reportUnknownParameterType = "warning"
+reportUnknownMemberType = "warning"
+reportMissingTypeArgument = "error"
+reportPropertyTypeMismatch = "error"
+reportFunctionMemberAccess = "warning"
+reportPrivateUsage = "warning"
+reportTypeCommentUsage = "warning"
+reportIncompatibleMethodOverride = "warning"
+reportIncompatibleVariableOverride = "error"
+reportInconsistentConstructor = "error"
+reportOverlappingOverload = "warning"
+reportUninitializedInstanceVariable = "warning"
+reportCallInDefaultInitializer = "warning"
+reportUnnecessaryIsInstance = "information"
+reportUnnecessaryCast = "warning"
+reportUnnecessaryComparison = "warning"
+reportUnnecessaryContains = "warning"
+reportUnusedCallResult = "warning"
+reportUnusedExpression = "warning"
+reportMatchNotExhaustive = "warning"
+reportShadowedImports = "warning"
+reportUntypedFunctionDecorator = "warning"
+reportUntypedBaseClass = "error"
+reportUntypedNamedTuple = "warning"
+# Activate the following rules only locally and temporary, i.e. for a QA session.
+# (For server side CI they are considered too strict.)
+# reportConstantRedefinition = "warning"
+# reportUnnecessaryTypeIgnoreComment = "information"
+# reportImportCycles = "warning"
+# reportImplicitStringConcatenation = "warning"

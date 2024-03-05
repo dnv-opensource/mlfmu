@@ -1,0 +1,28 @@
+name: Pull Request to main
+run-name: Pull Request to main from ${{ github.event.pull_request.head.ref }} by @${{ github.actor }}
+
+on:
+  pull_request:
+    types:
+      - opened
+#      - synchronize
+      - reopened
+      - ready_for_review
+      - converted_to_draft
+    branches:
+      - main
+
+concurrency:
+  group: pr-${{ github.ref }}-1
+  cancel-in-progress: true
+
+jobs:
+  code_quality:
+    uses: ./.github/workflows/_code_quality.yml
+  test:
+    uses: ./.github/workflows/_test.yml
+#  build_package:
+#    needs:
+#      - code_quality
+#      - test
+#    uses: ./.github/workflows/_build_package.yml

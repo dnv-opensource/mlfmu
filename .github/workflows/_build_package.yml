@@ -1,0 +1,26 @@
+name: Build Package
+
+on: workflow_call
+
+jobs:
+  build:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: true
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip' # cache pip dependencies
+      - name: Install build and twine
+        run: pip install build twine
+      - name: Run build
+        run: python -m build
+      - name: Run twine check
+        run: twine check --strict dist/*
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ./dist/*.tar.gz

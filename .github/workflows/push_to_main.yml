@@ -1,0 +1,26 @@
+name: Push to main
+run-name: Push to main by @${{ github.actor }}
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: push-${{ github.ref }}-1
+  cancel-in-progress: true
+
+jobs:
+  code_quality:
+    uses: ./.github/workflows/_code_quality.yml
+  test:
+    uses: ./.github/workflows/_test.yml
+  build_package:
+    needs:
+      - code_quality
+      - test
+    uses: ./.github/workflows/_build_package.yml
+  build_and_publish_documentation:
+    needs:
+      - build_package
+    uses: ./.github/workflows/_build_and_publish_documentation.yml
