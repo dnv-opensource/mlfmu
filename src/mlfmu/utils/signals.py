@@ -7,7 +7,8 @@ def range_list_expanded(list_of_ranges: List[str]) -> List[int]:
     Args:
         list_of_ranges (List[str]): List of indexes or ranges.
 
-    returns:
+    Returns
+    -------
         A list of all indexes covered in ranges or individual indexes
     """
     indexes: List[int] = []

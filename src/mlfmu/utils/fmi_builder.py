@@ -1,16 +1,25 @@
-import logging
 import datetime
-import pkg_resources
+import logging
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import Element, ElementTree, SubElement
-from mlfmu.types.FMU_component import FmiCausality, FmiModel, FmiVariability, FmiVariable, ModelComponent
+
+import pkg_resources
+
+from mlfmu.types.FMU_component import (
+    FmiCausality,
+    FmiModel,
+    FmiVariability,
+    FmiVariable,
+)
 
 logger = logging.getLogger(__name__)
+
 
 def requires_start(var: FmiVariable) -> bool:
     """Test if a variable requires a start attribute
 
-    Returns:
+    Returns
+    -------
         True if successful, False otherwise
     """
     return (
@@ -26,7 +35,8 @@ def generate_model_description(fmu_component: FmiModel) -> ElementTree:
     Args:
         fmu_component (FmiModel): Object representation of FMI slave instance
 
-    returns:
+    Returns
+    -------
         xml.etree.TreeElement.Element: modelDescription XML representation.
     """
 
@@ -38,7 +48,9 @@ def generate_model_description(fmu_component: FmiModel) -> ElementTree:
     model_description = dict(
         fmiVersion="2.0",
         modelName=fmu_component.name,
-        guid=f"{fmu_component.guid!s}" if fmu_component.guid is not None else "@FMU_UUID@",
+        guid=f"{fmu_component.guid!s}"
+        if fmu_component.guid is not None
+        else "@FMU_UUID@",
         version=fmu_component.version,
         generationDateAndTime=date_str,
         variableNamingConvention="structured",
@@ -58,7 +70,10 @@ def generate_model_description(fmu_component: FmiModel) -> ElementTree:
     root = Element("fmiModelDescription", model_description)
 
     # <CoSimulation> tag options
-    cosim_options = dict(modelIdentifier=fmu_component.name, canHandleVariableCommunicationStepSize="true")
+    cosim_options = dict(
+        modelIdentifier=fmu_component.name,
+        canHandleVariableCommunicationStepSize="true",
+    )
     _ = SubElement(root, "CoSimulation", attrib=cosim_options)
 
     # <ModelVariables> tag -> Append inputs/parameters/outputs
@@ -70,7 +85,9 @@ def generate_model_description(fmu_component: FmiModel) -> ElementTree:
             valueReference=str(var.variable_reference),
             causality=var.causality.value,
             description=var.description if var.description else "",
-            variability=var.variability.value if var.variability else FmiVariability.CONTINUOUS.value,
+            variability=var.variability.value
+            if var.variability
+            else FmiVariability.CONTINUOUS.value,
         )
         var_elem = SubElement(variables, "ScalarVariable", var_attrs)
 

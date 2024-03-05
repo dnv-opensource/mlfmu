@@ -21,7 +21,9 @@ class CliArgs:
     verbose: bool = False
     log: Union[str, None] = None
     log_level: str = field(default_factory=lambda: "WARNING")
-    config_file: Union[str, None] = field(default_factory=lambda: "test_config_file")  # noqa: N815
+    config_file: Union[str, None] = field(
+        default_factory=lambda: "test_config_file"
+    )  # noqa: N815
     option: bool = False
 
 
@@ -86,7 +88,10 @@ class ConfigureLoggingArgs:
         ([], ArgumentError),
         (["test_config_file"], ConfigureLoggingArgs()),
         (["test_config_file", "-q"], ConfigureLoggingArgs(log_level_console="ERROR")),
-        (["test_config_file", "--quiet"], ConfigureLoggingArgs(log_level_console="ERROR")),
+        (
+            ["test_config_file", "--quiet"],
+            ConfigureLoggingArgs(log_level_console="ERROR"),
+        ),
         (["test_config_file", "-v"], ConfigureLoggingArgs(log_level_console="INFO")),
         (
             ["test_config_file", "--verbose"],

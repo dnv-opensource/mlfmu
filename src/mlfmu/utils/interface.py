@@ -5,21 +5,23 @@ from pathlib import Path
 from typing import List, Union
 
 from dictIO.utils.path import relative_path
-from pydantic import BaseModel
-from pydantic._internal._model_construction import ModelMetaclass
 from json_schema_for_humans.generate import (
     SchemaToRender,
     TemplateRenderer,
     generate_schemas_doc,
 )
 from json_schema_for_humans.generation_configuration import GenerationConfiguration
+from pydantic import BaseModel
+from pydantic._internal._model_construction import ModelMetaclass
+
 from mlfmu.types.FMU_component import ModelComponent
 
 __ALL__ = ["publish_interface_schema"]
 
 
 def generate_interface_schema(
-    model: Union[BaseModel, ModelMetaclass], schema_dir: Union[str, os.PathLike[str], None] = None
+    model: Union[BaseModel, ModelMetaclass],
+    schema_dir: Union[str, os.PathLike[str], None] = None,
 ):
     schema_dir_default = Path.cwd() / "docs/schema"
     schema_dir = schema_dir or schema_dir_default
@@ -94,7 +96,8 @@ def generate_interface_docs(
 
 
 def publish_interface_schema(
-    schema_dir: Union[str, os.PathLike[str], None] = None, docs_dir: Union[str, os.PathLike[str], None] = None
+    schema_dir: Union[str, os.PathLike[str], None] = None,
+    docs_dir: Union[str, os.PathLike[str], None] = None,
 ):
     # Generate JSON schema
     generate_interface_schema(model=ModelComponent, schema_dir=schema_dir)

@@ -1,4 +1,3 @@
-
 def to_camel(string: str) -> str:
     """Change casing of string to CamelCase."""
     words = string.split("_")
