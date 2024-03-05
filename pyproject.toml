@@ -119,6 +119,7 @@ convention = "numpy"
 docstring-code-format = true
 
 [tool.pyright]
+include = ["src"]
 exclude = [
     ".git",
     ".venv",
