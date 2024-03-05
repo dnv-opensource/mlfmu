@@ -86,7 +86,10 @@ class ConfigureLoggingArgs:
         ([], ArgumentError),
         (["test_config_file"], ConfigureLoggingArgs()),
         (["test_config_file", "-q"], ConfigureLoggingArgs(log_level_console="ERROR")),
-        (["test_config_file", "--quiet"], ConfigureLoggingArgs(log_level_console="ERROR")),
+        (
+            ["test_config_file", "--quiet"],
+            ConfigureLoggingArgs(log_level_console="ERROR"),
+        ),
         (["test_config_file", "-v"], ConfigureLoggingArgs(log_level_console="INFO")),
         (
             ["test_config_file", "--verbose"],

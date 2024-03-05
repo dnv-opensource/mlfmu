@@ -5,16 +5,16 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mlfmu"
 version = "0.1.6"
-description = "example package short description."
+description = "Export ML models represented as ONNX files to Functional-Mockup-Units (FMU)"
 readme = "README.md"
 requires-python = ">= 3.9"
 license = {file = "LICENSE"}
 authors = [
-    {name = "Author One", email = "author.one@dnv.com"},
-    {name = "Author Two", email = "author.two@dnv.com"},
+    {name = "Jorge Luis Mendez", email = "jorge.luis.mendez@dnv.com"},
+    {name = "Skare Kristoffer", email = "kristoffer.skare@dnv.com"},
 ]
 maintainers = [
-    {name = "Author Three", email = "author.three@dnv.com"},
+    {name = "Claas Rostock", email = "claas.rostock@dnv.com"},
 ]
 keywords = []
 classifiers = [
@@ -35,9 +35,9 @@ classifiers = [
 ]
 dependencies = [
     "dictIO>=0.3.3",
-    # "some_package_on_pypi>=0.1.0",
-    # "some_project_in_my_local_dev @ file:../some_project_in_my_local_dev",
-    # "some_project_on_github @ git+https://github.com/user/project.git@version_or_tag_or_branch_name#egg=project_name",
+    "pydantic>=2.6",
+    "json-schema-for-humans>=0.4.7",
+    "onnxruntime>=1.17.0",
 ]
 
 [project.urls]
@@ -48,6 +48,7 @@ Issues = "https://github.com/dnv-innersource/mlfmu/issues"
 Changelog = "https://github.com/dnv-innersource/mlfmu/blob/main/CHANGELOG.md"
 
 [project.scripts]
+publish-interface-docs = "mlfmu.cli.publish_interface_docs:main"
 mlfmu = "mlfmu.cli.mlfmu:main"
 
 [tool.setuptools.packages.find]
@@ -118,6 +119,7 @@ convention = "numpy"
 docstring-code-format = true
 
 [tool.pyright]
+include = ["src"]
 exclude = [
     ".git",
     ".venv",
