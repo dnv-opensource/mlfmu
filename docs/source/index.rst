@@ -1,9 +1,9 @@
-.. my-package documentation master file, created by
+.. mlfmu documentation master file, created by
    sphinx-quickstart on Wed Jul  6 21:16:21 2022.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-my-package: Example Python Package
+mlfmu: Example Python Package
 =========================================
 
 .. toctree::

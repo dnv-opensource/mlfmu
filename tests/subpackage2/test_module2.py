@@ -4,7 +4,7 @@ import contextlib
 import pytest
 from pytest import LogCaptureFixture
 
-from my_package.subpackage2.module2 import str_to_int
+from mlfmu.subpackage2.module2 import str_to_int
 
 
 @pytest.mark.parametrize(

@@ -48,11 +48,11 @@
             "envFile": "${workspaceFolder}/.env" // specify where mvx is
         },
         {
-            "name": "my_package test_cli",
+            "name": "mlfmu test_cli",
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}\\tests",
-            "program": "${workspaceFolder}\\src\\my_package\\cli\\my_package.py",
+            "program": "${workspaceFolder}\\src\\mlfmu\\cli\\mlfmu.py",
             "args": [
                 "test_config_file",
                 "--run",

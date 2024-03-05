@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from pytest import LogCaptureFixture
 
-from my_package.api import MyPackageProcess, run
+from mlfmu.api import MlFmuProcess, run
 
 
 def test_file_not_found_exception():
@@ -28,7 +28,7 @@ def test_run_with_option(caplog: LogCaptureFixture):
     # Prepare
     config_file = Path("test_config_file")
     log_level_expected = "INFO"
-    log_message_expected = "option is True. my-package process will do something differently."
+    log_message_expected = "option is True. mlfmu process will do something differently."
     caplog.clear()
     # Execute
     run(config_file=config_file, option=True)
@@ -38,12 +38,12 @@ def test_run_with_option(caplog: LogCaptureFixture):
     assert caplog.records[0].message == log_message_expected
 
 
-class TestMyPackageProcess:
+class TestMlFmuProcess:
     def test_init(self):
         # Prepare
         config_file = Path("test_config_file.json")
         # Execute
-        process = MyPackageProcess(config_file=config_file)
+        process = MlFmuProcess(config_file=config_file)
         # Assert
         assert process.config_file is config_file
         assert process.max_number_of_runs == 3
@@ -55,7 +55,7 @@ class TestMyPackageProcess:
         # Prepare
         config_file = Path("test_config_file_empty.json")
         # Execute
-        process = MyPackageProcess(config_file=config_file)
+        process = MlFmuProcess(config_file=config_file)
         # Assert
         assert process.config_file is config_file
         assert process.max_number_of_runs == 1

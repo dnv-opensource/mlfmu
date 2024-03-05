@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "my-package"
+name = "mlfmu"
 version = "0.1.6"
 description = "example package short description."
 readme = "README.md"
@@ -41,14 +41,14 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/dnv-innersource/my-package"
-Documentation = "https://dnv-innersource.github.io/my-package/README.html"
-Repository = "https://github.com/dnv-innersource/my-package.git"
-Issues = "https://github.com/dnv-innersource/my-package/issues"
-Changelog = "https://github.com/dnv-innersource/my-package/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/dnv-innersource/mlfmu"
+Documentation = "https://dnv-innersource.github.io/mlfmu/README.html"
+Repository = "https://github.com/dnv-innersource/mlfmu.git"
+Issues = "https://github.com/dnv-innersource/mlfmu/issues"
+Changelog = "https://github.com/dnv-innersource/mlfmu/blob/main/CHANGELOG.md"
 
 [project.scripts]
-my-package = "my_package.cli.my_package:main"
+mlfmu = "mlfmu.cli.mlfmu:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -1,6 +1,6 @@
 # pyright: reportPrivateUsage=false
 
-from my_package.subpackage1.module1 import int_to_str
+from mlfmu.subpackage1.module1 import int_to_str
 
 
 def test_int_to_str():

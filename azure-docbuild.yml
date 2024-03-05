@@ -21,7 +21,7 @@ steps:
     displayName: 'Install dependencies'
 
   - script: |
-      sphinx-apidoc -f -e -M -T -o docs/source src/my_package *utils *cli
+      sphinx-apidoc -f -e -M -T -o docs/source src/mlfmu *utils *cli
       cd docs
       make html
     displayName: 'Build Sphinx docs'
