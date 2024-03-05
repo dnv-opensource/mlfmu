@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Union
 
 from mlfmu.api import run
-from mlfmu.utils.logging import configure_logging
+from mlfmu.utils.logger import configure_logging
 
 logger = logging.getLogger(__name__)
 

@@ -1,0 +1,43 @@
+{
+	"name": "WindGenerator",
+	"description": "A Machine Learning based FMU that outputs a synthetic time series of wind.",
+	"usesTime": true,
+	"inputs": [
+		{
+			"name": "speedNoise",
+			"description": "Noise to be added to the change in wind speed",
+			"agentInputIndexes": [
+				"0"
+			]
+		},
+		{
+			"name": "directionNoise",
+			"description": "Noise to be added to the change in wind direction",
+			"agentInputIndexes": [
+				"1"
+			]
+		}
+	],
+	"parameters": [],
+	"outputs": [
+		{
+			"name": "windSpeed",
+			"description": "The speed of the wind",
+			"agentOutputIndexes": [
+				"0"
+			]
+		},
+		{
+			"name": "windDirection",
+			"description": "The direction of the wind",
+			"agentOutputIndexes": [
+				"1"
+			]
+		}
+	],
+	"states": {
+		"agentOutputIndexes": [
+			"0:130"
+		]
+	}
+}

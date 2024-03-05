@@ -1,0 +1,17 @@
+<fmiModelDescription fmiVersion="2.0" modelName="WindGenerator" guid="@FMU_UUID@" version="0.0.1" generationDateAndTime="2024-03-05T17:30:50+00:00" variableNamingConvention="structured" generationTool="MLFMU 0.1.6" description="A Machine Learning based FMU that outputs a synthetic time series of wind.">
+	<CoSimulation modelIdentifier="WindGenerator" canHandleVariableCommunicationStepSize="true" />
+	<ModelVariables>
+		<ScalarVariable name="speedNoise" valueReference="0" causality="input" description="Noise to be added to the change in wind speed" variability="continuous">
+			<Real start="0" />
+		</ScalarVariable>
+		<ScalarVariable name="directionNoise" valueReference="1" causality="input" description="Noise to be added to the change in wind direction" variability="continuous">
+			<Real start="0" />
+		</ScalarVariable>
+		<ScalarVariable name="windSpeed" valueReference="2" causality="output" description="The speed of the wind" variability="continuous">
+			<Real />
+		</ScalarVariable>
+		<ScalarVariable name="windDirection" valueReference="3" causality="output" description="The direction of the wind" variability="continuous">
+			<Real />
+		</ScalarVariable>
+	</ModelVariables>
+</fmiModelDescription>

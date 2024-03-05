@@ -5,9 +5,6 @@ from typing import Union
 
 from dictIO import DictReader
 
-from mlfmu.subpackage1.module1 import int_to_str
-from mlfmu.subpackage2.module2 import str_to_int
-
 __ALL__ = ["run", "MlFmuProcess"]
 
 logger = logging.getLogger(__name__)
@@ -115,11 +112,6 @@ class MlFmuProcess:
 
         logger.info(f"Start run {self._run_number}")
 
-        # Do stuff
-        _string: str = _do_cool_stuff(self._run_number)
-        _number: int = _do_even_cooler_stuff(_string)
-        logger.debug(f"\t _string: {_string} _number: {_number}")
-
         logger.info(f"Successfully finished run {self._run_number}")
 
         return
@@ -147,24 +139,5 @@ def _do_cool_stuff(run_number: int) -> str:
     str
         the run number converted to string
     """
-    result: str = int_to_str(run_number)
-    return result
-
-
-def _do_even_cooler_stuff(string: str) -> int:
-    """Do even cooler stuff.
-
-    Converts the passed in string-formatted integer back to an integer.
-
-    Parameters
-    ----------
-    string : str
-        the string-formatted integer to be converted back to an integer
-
-    Returns
-    -------
-    int
-        the resulting integer
-    """
-    result: int = str_to_int(string)
+    result: str = ""
     return result
