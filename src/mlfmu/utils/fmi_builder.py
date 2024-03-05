@@ -1,11 +1,10 @@
 import datetime
 import logging
-import xml.etree.ElementTree as ET
-from xml.etree.ElementTree import Element, ElementTree, SubElement
+from xml.etree.ElementTree import Element, ElementTree, SubElement, indent
 
 import pkg_resources
 
-from mlfmu.types.FMU_component import (
+from mlfmu.types.fmu_component import (
     FmiCausality,
     FmiModel,
     FmiVariability,
@@ -16,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 def requires_start(var: FmiVariable) -> bool:
-    """Test if a variable requires a start attribute
+    """Test if a variable requires a start attribute.
 
     Returns
     -------
@@ -29,11 +28,11 @@ def requires_start(var: FmiVariable) -> bool:
     )
 
 
-def generate_model_description(fmu_component: FmiModel) -> ElementTree:
+def generate_model_description(fmu_model: FmiModel) -> ElementTree:
     """Generate FMU modelDescription as XML.
 
     Args:
-        fmu_component (FmiModel): Object representation of FMI slave instance
+        fmu_model (FmiModel): Object representation of FMI slave instance
 
     Returns
     -------
@@ -47,38 +46,38 @@ def generate_model_description(fmu_component: FmiModel) -> ElementTree:
     # Root <fmiModelDescription> tag
     model_description = dict(
         fmiVersion="2.0",
-        modelName=fmu_component.name,
-        guid=f"{fmu_component.guid!s}"
-        if fmu_component.guid is not None
+        modelName=fmu_model.name,
+        guid=f"{fmu_model.guid!s}"
+        if fmu_model.guid is not None
         else "@FMU_UUID@",
-        version=fmu_component.version,
+        version=fmu_model.version,
         generationDateAndTime=date_str,
         variableNamingConvention="structured",
         generationTool=f"MLFMU {TOOL_VERSION}",
     )
 
     # Optional props
-    if fmu_component.copyright is not None:
-        model_description["copyright"] = fmu_component.copyright
-    if fmu_component.license is not None:
-        model_description["license"] = fmu_component.license
-    if fmu_component.author is not None:
-        model_description["author"] = fmu_component.author
-    if fmu_component.description is not None:
-        model_description["description"] = fmu_component.description
+    if fmu_model.copyright is not None:
+        model_description["copyright"] = fmu_model.copyright
+    if fmu_model.license is not None:
+        model_description["license"] = fmu_model.license
+    if fmu_model.author is not None:
+        model_description["author"] = fmu_model.author
+    if fmu_model.description is not None:
+        model_description["description"] = fmu_model.description
 
     root = Element("fmiModelDescription", model_description)
 
     # <CoSimulation> tag options
     cosim_options = dict(
-        modelIdentifier=fmu_component.name,
+        modelIdentifier=fmu_model.name,
         canHandleVariableCommunicationStepSize="true",
     )
     _ = SubElement(root, "CoSimulation", attrib=cosim_options)
 
     # <ModelVariables> tag -> Append inputs/parameters/outputs
     variables = SubElement(root, "ModelVariables")
-    for var in fmu_component.get_fmi_model_variables():
+    for var in fmu_model.get_fmi_model_variables():
         # XML variable attributes
         var_attrs = dict(
             name=var.name,
@@ -100,5 +99,5 @@ def generate_model_description(fmu_component: FmiModel) -> ElementTree:
 
     # Create XML tree containing root element and pretty format its contents
     xml_tree = ElementTree(root)
-    ET.indent(xml_tree, space="\t", level=0)
+    indent(xml_tree, space="\t", level=0)
     return xml_tree

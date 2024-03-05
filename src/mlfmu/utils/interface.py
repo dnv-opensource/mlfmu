@@ -14,7 +14,7 @@ from json_schema_for_humans.generation_configuration import GenerationConfigurat
 from pydantic import BaseModel
 from pydantic._internal._model_construction import ModelMetaclass
 
-from mlfmu.types.FMU_component import ModelComponent
+from mlfmu.types.fmu_component import ModelComponent
 
 __ALL__ = ["publish_interface_schema"]
 

@@ -5,7 +5,7 @@ from typing import Optional
 
 from pydantic import ValidationError
 
-from mlfmu.types.FMU_component import FmiModel, ModelComponent
+from mlfmu.types.fmu_component import FmiModel, ModelComponent
 from mlfmu.types.onnx_model import ONNXModel
 from mlfmu.utils.fmi_builder import generate_model_description
 from mlfmu.utils.signals import range_list_expanded
@@ -33,9 +33,9 @@ def format_template_file(template_path: Path, save_path: Path, data: dict[str, s
         _ = save_file.write(formatted_string)
 
 
-def create_modelDescription(fmu_component: FmiModel, src_path: Path):
+def create_model_description(fmu: FmiModel, src_path: Path):
     # Compute XML structure for FMU
-    xml_structure = generate_model_description(fmu_component=fmu_component)
+    xml_structure = generate_model_description(fmu_model=fmu)
 
     # Save in file
     xml_structure.write(src_path / "modelDescription.xml", encoding="utf-8")
@@ -137,7 +137,7 @@ def format_template_data(
 def validate_interface_spec(
     spec: str,
 ) -> tuple[Optional[ValidationError], ModelComponent]:
-    """Parsed and validate JSON data from interface file
+    """Parse and validate JSON data from interface file.
 
     Args:
         spec (str): Contents of JSON file.
@@ -187,7 +187,7 @@ def build_fmu(onnx_path: os.PathLike[str], interface_spec_path: os.PathLike[str]
     # Generate all FMU files
     make_fmu_dirs(fmu_source)
     create_files_from_templates(data=template_data, fmu_src=fmu_source)
-    create_modelDescription(fmu_component=fmi_model, src_path=fmu_source)
+    create_model_description(fmu=fmi_model, src_path=fmu_source)
 
     # Copy ONNX file and save it inside FMU folder
     _ = shutil.copyfile(

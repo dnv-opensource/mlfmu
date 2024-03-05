@@ -1,5 +1,5 @@
 def create_fmu_signal_example():
-    from mlfmu.types.FMU_component import FmiVariableType, Variable
+    from mlfmu.types.fmu_component import FmiVariableType, Variable
 
     return Variable(
         name="dis_yx",

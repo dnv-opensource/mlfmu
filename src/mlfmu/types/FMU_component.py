@@ -14,9 +14,7 @@ from mlfmu.utils.strings import to_camel
 
 
 class FmiVariableType(str, Enum):
-    """
-    Enum for variable type
-    """
+    """Enum for variable type."""
 
     REAL = "real"
     INTEGER = "integer"
@@ -25,9 +23,7 @@ class FmiVariableType(str, Enum):
 
 
 class FmiCausality(str, Enum):
-    """
-    Enum for variable causality
-    """
+    """Enum for variable causality."""
 
     PARAMETER = "parameter"
     INPUT = "input"
@@ -35,9 +31,7 @@ class FmiCausality(str, Enum):
 
 
 class FmiVariability(str, Enum):
-    """
-    Enum for signal variability
-    """
+    """Enum for signal variability."""
 
     CONSTANT = "constant"
     FIXED = "fixed"
@@ -352,7 +346,7 @@ class FmiModel:
         return variables
 
     def get_fmi_model_variables(self) -> List[FmiVariable]:
-        """Get a full list of all variables in ths FMU, including each index of vector ports"""
+        """Get a full list of all variables in ths FMU, including each index of vector ports."""
         variables = [*self.inputs, *self.parameters, *self.outputs]
         fmi_variables = list(map(lambda var: self.format_fmi_variable(var), variables))
 

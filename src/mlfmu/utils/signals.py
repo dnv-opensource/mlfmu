@@ -2,7 +2,7 @@ from typing import List
 
 
 def range_list_expanded(list_of_ranges: List[str]) -> List[int]:
-    """Expand ranges specified in interface. They should be formatted as [starts_index:end_index]
+    """Expand ranges specified in interface. They should be formatted as [starts_index:end_index].
 
     Args:
         list_of_ranges (List[str]): List of indexes or ranges.
