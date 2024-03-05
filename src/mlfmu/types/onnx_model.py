@@ -25,9 +25,7 @@ class ONNXModel:
     __onnx_path: Path
     __onnx_session: InferenceSession
 
-    def __init__(
-        self, onnx_path: Union[str, os.PathLike[str]], time_input: bool = False
-    ):
+    def __init__(self, onnx_path: Union[str, os.PathLike[str]], time_input: bool = False):
         # Load ONNX file into memory
         self.__onnx_path = onnx_path if isinstance(onnx_path, Path) else Path(onnx_path)
         self.__onnx_session = onnxruntime.InferenceSession(onnx_path)

@@ -15,9 +15,7 @@ absolute_path = Path().absolute()
 # TODO: I had some problems with this absolute_path.parent.parent, so I changed it to this to make it work.
 # These are just temporary hard coded values that should be provided by the user. So it isn't that important.
 template_parent_path = absolute_path / "templates" / "fmu"
-json_interface = (
-    absolute_path / "examples" / "wind_generator" / "config" / "interface.json"
-)
+json_interface = absolute_path / "examples" / "wind_generator" / "config" / "interface.json"
 fmu_src_path = absolute_path / "examples" / "wind_generator"
 onnx_path = absolute_path / "examples" / "wind_generator" / "config" / "example.onnx"
 
@@ -69,14 +67,10 @@ def create_files_from_templates(data: dict[str, str], fmu_src: Path):
 
 
 # Function for generating the key value pairs needed to format the template files to valid c++
-def format_template_data(
-    onnx: ONNXModel, fmi_model: FmiModel, model_component: ModelComponent
-) -> dict[str, str]:
+def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: ModelComponent) -> dict[str, str]:
     # Work out template mapping between ONNX and FMU ports
     inputs, outputs = fmi_model.get_template_mapping()
-    state_output_indexes = range_list_expanded(
-        model_component.states.agent_output_indexes
-    )
+    state_output_indexes = range_list_expanded(model_component.states.agent_output_indexes)
 
     # Total number of inputs/outputs/internal states
     num_fmu_inputs = len(inputs)
@@ -96,18 +90,10 @@ def format_template_data(
 
     # Flatten vectors to comply with template requirements -> onnx-index, variable-reference, onnx-index, variable-reference ...
     flattened_input_string = ", ".join(
-        [
-            str(index)
-            for indexValueReferencePair in inputs
-            for index in indexValueReferencePair
-        ]
+        [str(index) for indexValueReferencePair in inputs for index in indexValueReferencePair]
     )
     flattened_output_string = ", ".join(
-        [
-            str(index)
-            for indexValueReferencePair in outputs
-            for index in indexValueReferencePair
-        ]
+        [str(index) for indexValueReferencePair in outputs for index in indexValueReferencePair]
     )
     flattened_state_string = ", ".join([str(index) for index in state_output_indexes])
 
@@ -174,15 +160,11 @@ def build_fmu(onnx_path: os.PathLike[str], interface_spec_path: os.PathLike[str]
         return
 
     # Create ONNXModel and FmiModel instances -> load some metadata
-    onnx_model = ONNXModel(
-        onnx_path=onnx_path, time_input=bool(component_model.uses_time)
-    )
+    onnx_model = ONNXModel(onnx_path=onnx_path, time_input=bool(component_model.uses_time))
     fmi_model = FmiModel(model=component_model)
     fmu_source = fmu_src_path / fmi_model.name
 
-    template_data = format_template_data(
-        onnx=onnx_model, fmi_model=fmi_model, model_component=component_model
-    )
+    template_data = format_template_data(onnx=onnx_model, fmi_model=fmi_model, model_component=component_model)
 
     # Generate all FMU files
     make_fmu_dirs(fmu_source)
@@ -190,9 +172,7 @@ def build_fmu(onnx_path: os.PathLike[str], interface_spec_path: os.PathLike[str]
     create_model_description(fmu=fmi_model, src_path=fmu_source)
 
     # Copy ONNX file and save it inside FMU folder
-    _ = shutil.copyfile(
-        src=onnx_path, dst=fmu_source / "resources" / onnx_model.filename
-    )
+    _ = shutil.copyfile(src=onnx_path, dst=fmu_source / "resources" / onnx_model.filename)
 
     return None
 

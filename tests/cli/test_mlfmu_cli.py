@@ -21,9 +21,7 @@ class CliArgs:
     verbose: bool = False
     log: Union[str, None] = None
     log_level: str = field(default_factory=lambda: "WARNING")
-    config_file: Union[str, None] = field(
-        default_factory=lambda: "test_config_file"
-    )  # noqa: N815
+    config_file: Union[str, None] = field(default_factory=lambda: "test_config_file")  # noqa: N815
     option: bool = False
 
 

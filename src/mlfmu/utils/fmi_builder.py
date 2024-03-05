@@ -47,9 +47,7 @@ def generate_model_description(fmu_model: FmiModel) -> ElementTree:
     model_description = dict(
         fmiVersion="2.0",
         modelName=fmu_model.name,
-        guid=f"{fmu_model.guid!s}"
-        if fmu_model.guid is not None
-        else "@FMU_UUID@",
+        guid=f"{fmu_model.guid!s}" if fmu_model.guid is not None else "@FMU_UUID@",
         version=fmu_model.version,
         generationDateAndTime=date_str,
         variableNamingConvention="structured",
@@ -84,9 +82,7 @@ def generate_model_description(fmu_model: FmiModel) -> ElementTree:
             valueReference=str(var.variable_reference),
             causality=var.causality.value,
             description=var.description if var.description else "",
-            variability=var.variability.value
-            if var.variability
-            else FmiVariability.CONTINUOUS.value,
+            variability=var.variability.value if var.variability else FmiVariability.CONTINUOUS.value,
         )
         var_elem = SubElement(variables, "ScalarVariable", var_attrs)
 
