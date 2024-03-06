@@ -1,7 +1,6 @@
 {
 	"name": "WindToPower",
 	"description": "A Machine Learning based FMU that outputs the estimated power output of a windmill given the wind speed and direction.",
-	"usesTime": true,
 	"inputs": [
 		{
 			"name": "windSpeed",

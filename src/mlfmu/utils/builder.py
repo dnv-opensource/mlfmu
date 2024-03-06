@@ -15,9 +15,9 @@ absolute_path = Path().absolute()
 # TODO: I had some problems with this absolute_path.parent.parent, so I changed it to this to make it work.
 # These are just temporary hard coded values that should be provided by the user. So it isn't that important.
 template_parent_path = absolute_path / "templates" / "fmu"
-json_interface = absolute_path / "examples" / "wind_generator" / "config" / "interface.json"
-fmu_src_path = absolute_path / "examples" / "wind_generator"
-onnx_path = absolute_path / "examples" / "wind_generator" / "config" / "example.onnx"
+json_interface = absolute_path / "examples" / "wind_to_power" / "config" / "interface.json"
+fmu_src_path = absolute_path / "examples" / "wind_to_power"
+onnx_path = absolute_path / "examples" / "wind_to_power" / "config" / "example.onnx"
 
 
 # Replacing all the template strings with their corresponding values and saving to new file
