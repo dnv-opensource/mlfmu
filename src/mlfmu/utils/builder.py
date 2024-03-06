@@ -2,6 +2,7 @@ import os
 import shutil
 from pathlib import Path
 from typing import Optional
+import subprocess
 
 from pydantic import ValidationError
 
@@ -18,7 +19,8 @@ template_parent_path = absolute_path / "templates" / "fmu"
 json_interface = absolute_path / "examples" / "wind_generator" / "config" / "interface.json"
 fmu_src_path = absolute_path / "examples" / "wind_generator"
 onnx_path = absolute_path / "examples" / "wind_generator" / "config" / "example.onnx"
-
+build_path = absolute_path / "build_fmu"
+save_fmu_path = absolute_path / "fmus"
 
 # Replacing all the template strings with their corresponding values and saving to new file
 def format_template_file(template_path: Path, save_path: Path, data: dict[str, str]):
@@ -142,7 +144,7 @@ def validate_interface_spec(
     return None, validated_model
 
 
-def build_fmu(onnx_path: os.PathLike[str], interface_spec_path: os.PathLike[str]):
+def generate_fmu_files(fmu_src_path: os.PathLike[str], onnx_path: os.PathLike[str], interface_spec_path: os.PathLike[str]):
     # Create Path instances for the path to the spec and ONNX file.
     onnx_path = Path(onnx_path)
     interface_spec_path = Path(interface_spec_path)
@@ -162,7 +164,7 @@ def build_fmu(onnx_path: os.PathLike[str], interface_spec_path: os.PathLike[str]
     # Create ONNXModel and FmiModel instances -> load some metadata
     onnx_model = ONNXModel(onnx_path=onnx_path, time_input=bool(component_model.uses_time))
     fmi_model = FmiModel(model=component_model)
-    fmu_source = fmu_src_path / fmi_model.name
+    fmu_source = Path(fmu_src_path) / fmi_model.name
 
     template_data = format_template_data(onnx=onnx_model, fmi_model=fmi_model, model_component=component_model)
 
@@ -174,8 +176,25 @@ def build_fmu(onnx_path: os.PathLike[str], interface_spec_path: os.PathLike[str]
     # Copy ONNX file and save it inside FMU folder
     _ = shutil.copyfile(src=onnx_path, dst=fmu_source / "resources" / onnx_model.filename)
 
-    return None
+    return fmi_model
 
+
+def build_fmu(fmi_model: FmiModel, fmu_src_path: os.PathLike[str], fmu_build_path: os.PathLike[str], fmu_save_path: os.PathLike[str]):
+
+    conan_install_command = ["conan", "install", ".", "-of", str(fmu_build_path), "-u", "-b", "missing", "-o", "shared=True"]
+
+    cmake_set_folders = [f"-DCMAKE_BINARY_DIR={str(fmu_build_path)}", f"-DFMU_OUTPUT_DIR={str(fmu_save_path)}", f"-Dfmus={fmi_model.name}"]
+
+    cmake_command = ["cmake", *cmake_set_folders, "--presets", "conan-default"]
+
+    cd_build_command = ["cd", str(fmu_build_path)]
+
+    cmake_build_command = ["cmake", "--build", ".", "-j", "14", "--config", "Release"]
+
+    pass
 
 if __name__ == "__main__":
-    build_fmu(onnx_path=onnx_path, interface_spec_path=json_interface)
+    fmi_model = generate_fmu_files(fmu_src_path=fmu_src_path, onnx_path=onnx_path, interface_spec_path=json_interface)
+    if fmi_model is None:
+        exit()
+    build_fmu(fmi_model, fmu_src_path, build_path, save_fmu_path)
