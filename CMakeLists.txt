@@ -58,7 +58,7 @@ endif()
 
 # List CPPFMU sources
 file(GLOB cppfmuSourceFiles "${CMAKE_SOURCE_DIR}/cppfmu/*.?pp")
-file(GLOB onnxfmuSourceFiles "${CMAKE_SOURCE_DIR}/OnnxFmuTemplate/OnnxFmu/*.?pp")
+file(GLOB onnxfmuSourceFiles "${CMAKE_SOURCE_DIR}/templates/onnx_fmu/*.?pp")
 # Find FMU Compliance Checker
 if(FMU_CHECK_COMPLIANCE)
     enable_testing()
@@ -141,7 +141,7 @@ foreach(fmuName IN LISTS fmus)
     target_include_directories(${fmuLibraryTarget} PRIVATE
         "${CMAKE_SOURCE_DIR}/fmi"
         "${CMAKE_SOURCE_DIR}/cppfmu"
-        "${CMAKE_SOURCE_DIR}/OnnxFmuTemplate/OnnxFmu"
+        "${CMAKE_SOURCE_DIR}/templates/onnx_fmu"
         "${fmuSourceDir}/sources"
         "${fmuGuidDir}"
     )
