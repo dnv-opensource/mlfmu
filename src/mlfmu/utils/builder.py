@@ -180,16 +180,21 @@ def generate_fmu_files(fmu_src_path: os.PathLike[str], onnx_path: os.PathLike[st
 
 
 def build_fmu(fmi_model: FmiModel, fmu_src_path: os.PathLike[str], fmu_build_path: os.PathLike[str], fmu_save_path: os.PathLike[str]):
-
     conan_install_command = ["conan", "install", ".", "-of", str(fmu_build_path), "-u", "-b", "missing", "-o", "shared=True"]
 
-    cmake_set_folders = [f"-DCMAKE_BINARY_DIR={str(fmu_build_path)}", f"-DFMU_OUTPUT_DIR={str(fmu_save_path)}", f"-Dfmus={fmi_model.name}"]
+    cmake_set_folders = [f"-DCMAKE_BINARY_DIR={str(fmu_build_path)}", f"-DFMU_OUTPUT_DIR={str(fmu_save_path)}", f"-DFMU_NAMES={fmi_model.name}", f"-DFMU_SOURCE_PATH={str(fmu_src_path)}"]
 
-    cmake_command = ["cmake", *cmake_set_folders, "--presets", "conan-default"]
-
-    cd_build_command = ["cd", str(fmu_build_path)]
+    cmake_command = ["cmake", *cmake_set_folders, "--preset", "conan-default"]
 
     cmake_build_command = ["cmake", "--build", ".", "-j", "14", "--config", "Release"]
+
+    _ = subprocess.run(conan_install_command)
+    _ = subprocess.run(cmake_command)
+    os.chdir(fmu_build_path)
+    _ = subprocess.run(cmake_build_command)
+    os.chdir(os.getcwd())
+
+    # TODO: Clean up. 
 
     pass
 
