@@ -15,11 +15,13 @@ set(FMU_STAGING_DIR "${CMAKE_BINARY_DIR}/fmu-staging"
     CACHE PATH "Where to put the generated FMU contents before zipping")
 set(FMU_UUID_DIR "${CMAKE_BINARY_DIR}/fmu-uuids"
     CACHE PATH "Where to put the headers containing FMU UUIDs")
+set(FMU_SOURCE_PATH "${CMAKE_SOURCE_DIR}/src"
+    CACHE PATH "Where the folder with the FMU source is located")
 
 # The names of the FMUs built in this project
 
-# Set variable -Dfmus from command line instead
-# set(fmus)
+# Set variable -DFMU_NAMES from command line instead
+set(FMU_NAMES)
 
 # ==============================================================================
 # Compiler/platform specific settings
@@ -91,12 +93,12 @@ set(includeDirs
 
 find_package (onnxruntime REQUIRED)
 
-foreach(fmuName IN LISTS fmus)
+foreach(fmuName IN LISTS FMU_NAMES)
     set(fmuLibraryTarget "${fmuName}")
     set(fmuGuidTarget "${fmuName}_guid")
     set(fmuTarget "${fmuName}_fmu")
 
-    set(fmuSourceDir "${CMAKE_SOURCE_DIR}/src/${fmuName}")
+    set(fmuSourceDir "${FMU_SOURCE_PATH}/${fmuName}")
     set(fmuSourceModelDescription "${fmuSourceDir}/modelDescription.xml")
     set(fmuSourceFiles "${fmuSourceDir}/sources/fmu.cpp")
 
