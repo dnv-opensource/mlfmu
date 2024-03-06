@@ -2,7 +2,7 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import ValidationError
 
@@ -82,14 +82,17 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
 
     # Checking compatibility between ModelComponent and ONNXModel
     if num_fmu_inputs > onnx.input_size:
-        # TODO: Throw error?
-        pass
+        raise ValueError(
+            f"The number of total input indexes for all inputs and parameter in the interface file(={num_fmu_inputs}) cannot exceed the input size of the ml model (={onnx.input_size})"
+        )
     if num_fmu_outputs > onnx.output_size:
-        # TODO: Throw error?
-        pass
+        raise ValueError(
+            f"The number of total output indexes for all outputs in the interface file(={num_fmu_outputs}) cannot exceed the output size of the ml model (={onnx.output_size})"
+        )
     if num_onnx_states > min(onnx.state_size, onnx.output_size):
-        # TODO: Throw error?
-        pass
+        raise ValueError(
+            f"The number of total output indexes for all states in the interface file(={num_onnx_states}) cannot exceed either the state input size (={onnx.state_size}) or the output size of the ml model (={onnx.output_size})"
+        )
 
     # Flatten vectors to comply with template requirements -> onnx-index, variable-reference, onnx-index, variable-reference ...
     flattened_input_string = ", ".join(
@@ -182,12 +185,40 @@ def generate_fmu_files(
     return fmi_model
 
 
+def validate_fmu_source_files(fmu_path: os.PathLike[str]):
+    fmu_path = Path(fmu_path)
+
+    files_should_exist: List[str] = [
+        "modelDescription.xml",
+        "sources/fmu.cpp",
+        "sources/model_definitions.h",
+    ]
+
+    files_not_exists = [file for file in files_should_exist if not (fmu_path / file).is_file()]
+
+    if len(files_not_exists) > 0:
+        raise FileNotFoundError(
+            f"The files {files_not_exists} are not contained in the provided fmu source path ({fmu_path})"
+        )
+
+    resources_dir = fmu_path / "resources"
+
+    num_onnx_files = len(list(resources_dir.glob("*.onnx")))
+
+    if num_onnx_files < 1:
+        raise FileNotFoundError(
+            f"There is no *.onnx file in the resource folder in the provided fmu source path ({fmu_path})"
+        )
+
+
 def build_fmu(
     fmi_model: FmiModel,
     fmu_src_path: os.PathLike[str],
     fmu_build_path: os.PathLike[str],
     fmu_save_path: os.PathLike[str],
 ):
+    validate_fmu_source_files(Path(fmu_src_path) / fmi_model.name)
+
     conan_install_command = [
         "conan",
         "install",
