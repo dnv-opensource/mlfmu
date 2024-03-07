@@ -1,0 +1,33 @@
+{
+	"name": "WindToPower",
+	"description": "A Machine Learning based FMU that outputs the estimated power output of a windmill given the wind speed and direction.",
+	"inputs": [
+		{
+			"name": "windSpeed",
+			"description": "Noise to be added to the change in wind speed",
+			"agentInputIndexes": [
+				"0"
+			]
+		},
+		{
+			"name": "windDirection",
+			"description": "Noise to be added to the change in wind direction",
+			"agentInputIndexes": [
+				"1"
+			]
+		}
+	],
+	"parameters": [],
+	"outputs": [
+		{
+			"name": "power",
+			"description": "The estimated windmill power output",
+			"agentOutputIndexes": [
+				"0"
+			]
+		}
+	],
+	"states": {
+		"agentOutputIndexes": []
+	}
+}

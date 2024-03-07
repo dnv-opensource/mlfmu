@@ -6,6 +6,15 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ## [Unreleased]
 
 ### Changed
+* Default build target in builder to wind_to_power example
+
+### Added
+* Wind to power model example in examples
+  * Onnx file containing ml model
+  * Interface json file containing information needed not contained in onnx file
+* The generated fmu files resulting from running running builder on the new wind_to_power example
+
+### Changed
 * CMakeList.txt (from old repo) to be able to take an arbitrary path where the fmu files to be compiled are located
 * Builder to run commands to compile generated files into an fmu
   * Can take and keep track of arbitrary paths
