@@ -35,7 +35,7 @@ class FmiVariability(str, Enum):
 
     CONSTANT = "constant"
     FIXED = "fixed"
-    TUNNABLE = "tunnable"
+    TUNABLE = "tunable"
     DISCRETE = "discrete"
     CONTINUOUS = "continuous"
 
@@ -307,9 +307,7 @@ class FmiModel:
                     description=var.description or "",
                     variability=var.variability
                     or (
-                        FmiVariability.CONTINUOUS
-                        if var.causality != FmiCausality.PARAMETER
-                        else FmiVariability.TUNNABLE
+                        FmiVariability.CONTINUOUS if var.causality != FmiCausality.PARAMETER else FmiVariability.TUNABLE
                     ),
                 )
                 variables.append(fmi_var)
@@ -321,7 +319,7 @@ class FmiModel:
                 causality=var.causality,
                 description=var.description or "",
                 variability=var.variability
-                or (FmiVariability.CONTINUOUS if var.causality != FmiCausality.PARAMETER else FmiVariability.TUNNABLE),
+                or (FmiVariability.CONTINUOUS if var.causality != FmiCausality.PARAMETER else FmiVariability.TUNABLE),
                 start_value=var.start_value or 0,
                 type=var.type or FmiVariableType.REAL,
             )
