@@ -58,9 +58,7 @@ class Variable(BaseModelConfig):
         examples=[FmiVariableType.REAL, FmiVariableType.INTEGER],
     )
     description: Optional[str] = Field(None, description="Short FMU variable description.")
-    variability: Optional[FmiVariability] = Field(
-        FmiVariability.CONTINUOUS, description="Signal variability as defined by FMI."
-    )
+    variability: Optional[FmiVariability] = Field(None, description="Signal variability as defined by FMI.")
     start_value: Optional[Union[float, str, bool, int]] = Field(
         0,
         description="Initial value of the signal at time step 1. Type should match the variable type.",
