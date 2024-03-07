@@ -15,6 +15,16 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 * The generated fmu files resulting from running running builder on the new wind_to_power example
 
 ### Changed
+* CMakeList.txt (from old repo) to be able to take an arbitrary path where the fmu files to be compiled are located
+* Builder to run commands to compile generated files into an fmu
+  * Can take and keep track of arbitrary paths
+* Builder checks if the files needed to compile the fmu exists before trying to compile the fmu
+* Replaced "TODO: Trow Error?" with raising a fitting exception 
+
+### Added
+* CMakeLists.txt and conanfile.txt from old repo to configure compiling/building FMU from generated files
+
+### Changed
 * replaced black formatter with ruff formatter
 
 ### Dependencies

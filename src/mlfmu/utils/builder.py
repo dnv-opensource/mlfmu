@@ -1,7 +1,8 @@
 import os
 import shutil
+import subprocess
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import ValidationError
 
@@ -18,6 +19,8 @@ template_parent_path = absolute_path / "templates" / "fmu"
 json_interface = absolute_path / "examples" / "wind_to_power" / "config" / "interface.json"
 fmu_src_path = absolute_path / "examples" / "wind_to_power"
 onnx_path = absolute_path / "examples" / "wind_to_power" / "config" / "example.onnx"
+build_path = absolute_path / "build_fmu"
+save_fmu_path = absolute_path / "fmus"
 
 
 # Replacing all the template strings with their corresponding values and saving to new file
@@ -61,8 +64,6 @@ def create_files_from_templates(data: dict[str, str], fmu_src: Path):
     ]
 
     for template_path, save_path in paths:
-        # TODO: Is it needed to have the same call with the same parameters here?
-        format_template_file(template_path, save_path, data)
         format_template_file(template_path, save_path, data)
 
 
@@ -79,14 +80,17 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
 
     # Checking compatibility between ModelComponent and ONNXModel
     if num_fmu_inputs > onnx.input_size:
-        # TODO: Throw error?
-        pass
+        raise ValueError(
+            f"The number of total input indexes for all inputs and parameter in the interface file(={num_fmu_inputs}) cannot exceed the input size of the ml model (={onnx.input_size})"
+        )
     if num_fmu_outputs > onnx.output_size:
-        # TODO: Throw error?
-        pass
+        raise ValueError(
+            f"The number of total output indexes for all outputs in the interface file(={num_fmu_outputs}) cannot exceed the output size of the ml model (={onnx.output_size})"
+        )
     if num_onnx_states > min(onnx.state_size, onnx.output_size):
-        # TODO: Throw error?
-        pass
+        raise ValueError(
+            f"The number of total output indexes for all states in the interface file(={num_onnx_states}) cannot exceed either the state input size (={onnx.state_size}) or the output size of the ml model (={onnx.output_size})"
+        )
 
     # Flatten vectors to comply with template requirements -> onnx-index, variable-reference, onnx-index, variable-reference ...
     flattened_input_string = ", ".join(
@@ -142,7 +146,9 @@ def validate_interface_spec(
     return None, validated_model
 
 
-def build_fmu(onnx_path: os.PathLike[str], interface_spec_path: os.PathLike[str]):
+def generate_fmu_files(
+    fmu_src_path: os.PathLike[str], onnx_path: os.PathLike[str], interface_spec_path: os.PathLike[str]
+):
     # Create Path instances for the path to the spec and ONNX file.
     onnx_path = Path(onnx_path)
     interface_spec_path = Path(interface_spec_path)
@@ -162,7 +168,7 @@ def build_fmu(onnx_path: os.PathLike[str], interface_spec_path: os.PathLike[str]
     # Create ONNXModel and FmiModel instances -> load some metadata
     onnx_model = ONNXModel(onnx_path=onnx_path, time_input=bool(component_model.uses_time))
     fmi_model = FmiModel(model=component_model)
-    fmu_source = fmu_src_path / fmi_model.name
+    fmu_source = Path(fmu_src_path) / fmi_model.name
 
     template_data = format_template_data(onnx=onnx_model, fmi_model=fmi_model, model_component=component_model)
 
@@ -174,8 +180,80 @@ def build_fmu(onnx_path: os.PathLike[str], interface_spec_path: os.PathLike[str]
     # Copy ONNX file and save it inside FMU folder
     _ = shutil.copyfile(src=onnx_path, dst=fmu_source / "resources" / onnx_model.filename)
 
-    return None
+    return fmi_model
+
+
+def validate_fmu_source_files(fmu_path: os.PathLike[str]):
+    fmu_path = Path(fmu_path)
+
+    files_should_exist: List[str] = [
+        "modelDescription.xml",
+        "sources/fmu.cpp",
+        "sources/model_definitions.h",
+    ]
+
+    files_not_exists = [file for file in files_should_exist if not (fmu_path / file).is_file()]
+
+    if len(files_not_exists) > 0:
+        raise FileNotFoundError(
+            f"The files {files_not_exists} are not contained in the provided fmu source path ({fmu_path})"
+        )
+
+    resources_dir = fmu_path / "resources"
+
+    num_onnx_files = len(list(resources_dir.glob("*.onnx")))
+
+    if num_onnx_files < 1:
+        raise FileNotFoundError(
+            f"There is no *.onnx file in the resource folder in the provided fmu source path ({fmu_path})"
+        )
+
+
+def build_fmu(
+    fmi_model: FmiModel,
+    fmu_src_path: os.PathLike[str],
+    fmu_build_path: os.PathLike[str],
+    fmu_save_path: os.PathLike[str],
+):
+    validate_fmu_source_files(Path(fmu_src_path) / fmi_model.name)
+
+    conan_install_command = [
+        "conan",
+        "install",
+        ".",
+        "-of",
+        str(fmu_build_path),
+        "-u",
+        "-b",
+        "missing",
+        "-o",
+        "shared=True",
+    ]
+
+    cmake_set_folders = [
+        f"-DCMAKE_BINARY_DIR={str(fmu_build_path)}",
+        f"-DFMU_OUTPUT_DIR={str(fmu_save_path)}",
+        f"-DFMU_NAMES={fmi_model.name}",
+        f"-DFMU_SOURCE_PATH={str(fmu_src_path)}",
+    ]
+
+    cmake_command = ["cmake", *cmake_set_folders, "--preset", "conan-default"]
+
+    cmake_build_command = ["cmake", "--build", ".", "-j", "14", "--config", "Release"]
+
+    _ = subprocess.run(conan_install_command)
+    _ = subprocess.run(cmake_command)
+    os.chdir(fmu_build_path)
+    _ = subprocess.run(cmake_build_command)
+    os.chdir(os.getcwd())
+
+    # TODO: Clean up.
+
+    pass
 
 
 if __name__ == "__main__":
-    build_fmu(onnx_path=onnx_path, interface_spec_path=json_interface)
+    fmi_model = generate_fmu_files(fmu_src_path=fmu_src_path, onnx_path=onnx_path, interface_spec_path=json_interface)
+    if fmi_model is None:
+        exit()
+    build_fmu(fmi_model, fmu_src_path, build_path, save_fmu_path)
