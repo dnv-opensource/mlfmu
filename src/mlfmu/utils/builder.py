@@ -64,8 +64,6 @@ def create_files_from_templates(data: dict[str, str], fmu_src: Path):
     ]
 
     for template_path, save_path in paths:
-        # TODO: Is it needed to have the same call with the same parameters here?
-        format_template_file(template_path, save_path, data)
         format_template_file(template_path, save_path, data)
 
 
