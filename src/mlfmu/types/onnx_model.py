@@ -54,7 +54,9 @@ class ONNXModel:
             self.time_input_name = input_names[2]
             num_states = input_shapes[1][1]
             if not self.time_input:
-                # TODO: Throw error?
+                raise ValueError(
+                    "The ml model has 3 inputs, but the usesTime flag is set to false in the json interface. A model can only have 3 inputs if it uses time input."
+                )
                 pass
         elif len(input_names) == 2:
             if self.time_input:
@@ -64,7 +66,7 @@ class ONNXModel:
                 num_states = input_shapes[1][1]
 
         elif len(input_names) == 0 or len(input_names) > 0:
-            # TODO: Throw error?
+            raise ValueError(f"The number of inputs to the ml model (={len(input_names)}) must be 1, 2 or 3")
             pass
 
         self.state_size = num_states
@@ -75,8 +77,7 @@ class ONNXModel:
         output_names = [out.name for out in outputs]  # type: ignore
 
         if len(output_names) != 1:
-            # TODO: Throw error?
-            pass
+            raise ValueError(f"The number of outputs from the ml model (={len(output_names)}) must be exactly 1")
 
         output_shapes = [out.shape for out in outputs]  # type: ignore
         self.output_name = output_names[0]
