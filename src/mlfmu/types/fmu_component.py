@@ -230,7 +230,7 @@ class FmiModel:
             if var.is_array:
                 # If array then allocate space for every element
                 vector_port_length = var.length or 1
-                var_port_refs = range(current_var_ref, vector_port_length)
+                var_port_refs = list(range(current_var_ref, current_var_ref + vector_port_length))
             else:
                 var_port_refs = [current_var_ref]
 
@@ -249,7 +249,7 @@ class FmiModel:
             if var.is_array:
                 # If array then allocate space for every element
                 vector_port_length = var.length or 1
-                var_port_refs = range(current_var_ref, vector_port_length)
+                var_port_refs = list(range(current_var_ref, current_var_ref + vector_port_length))
             else:
                 var_port_refs = [current_var_ref]
 
