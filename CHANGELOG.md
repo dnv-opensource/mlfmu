@@ -6,6 +6,15 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ## [Unreleased]
 
 ### Changed
+* Default build target in builder to wind_to_power example
+
+### Added
+* Wind to power model example in examples
+  * Onnx file containing ml model
+  * Interface json file containing information needed not contained in onnx file
+* The generated fmu files resulting from running running builder on the new wind_to_power example
+
+### Changed
 * replaced black formatter with ruff formatter
 
 ### Dependencies
