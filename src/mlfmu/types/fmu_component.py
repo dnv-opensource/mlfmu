@@ -256,7 +256,7 @@ class FmiModel:
             # Set current variable reference based on number of ports used by this input (array or scalar port)
             current_var_ref = current_var_ref + len(var_port_refs)
             fmi_variable = FmiInputVariable(
-                causality=FmiCausality.INPUT,
+                causality=FmiCausality.PARAMETER,
                 variable_references=var_port_refs,
                 **var.__dict__,
             )
@@ -307,7 +307,12 @@ class FmiModel:
                     variable_reference=var_ref,
                     causality=var.causality,
                     description=var.description or "",
-                    variability=var.variability or FmiVariability.CONTINUOUS,
+                    variability=var.variability
+                    or (
+                        FmiVariability.CONTINUOUS
+                        if var.causality != FmiCausality.PARAMETER
+                        else FmiVariability.TUNNABLE
+                    ),
                 )
                 variables.append(fmi_var)
         else:
@@ -317,7 +322,8 @@ class FmiModel:
                 variable_reference=var.variable_references[0],
                 causality=var.causality,
                 description=var.description or "",
-                variability=var.variability or FmiVariability.CONTINUOUS,
+                variability=var.variability
+                or (FmiVariability.CONTINUOUS if var.causality != FmiCausality.PARAMETER else FmiVariability.TUNNABLE),
                 start_value=var.start_value or 0,
                 type=var.type or FmiVariableType.REAL,
             )
