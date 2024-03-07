@@ -5,6 +5,8 @@
 There are some requirements put on the onnx file to be compatible with this tool.
 <div style="display: flex; width: 100%; justify-content: space-between">
 
+<div style="width: 25%">
+
 ```mermaid
 graph TD;
     inputs-->Model
@@ -13,6 +15,10 @@ graph TD;
     Model-->outputs
 ```
 
+</div>
+
+<div style="width: 25%">
+
 ```mermaid
 graph TD;
     inputs-->Model
@@ -20,18 +26,28 @@ graph TD;
     Model-->outputs
 ```
 
+</div>
+
+<div style="width: 25%">
+
 ```mermaid
 graph TD;
     inputs-->Model
     time-->Model
     Model-->outputs
 ```
+</div>
+
+<div style="width: 25%">
 
 ```mermaid
 graph TD;
     inputs-->Model
     Model-->outputs
 ```
+
+</div>
+
 
 </div>
 
