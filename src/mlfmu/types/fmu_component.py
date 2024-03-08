@@ -35,7 +35,7 @@ class FmiVariability(str, Enum):
 
     CONSTANT = "constant"
     FIXED = "fixed"
-    TUNNABLE = "tunnable"
+    TUNABLE = "tunable"
     DISCRETE = "discrete"
     CONTINUOUS = "continuous"
 
@@ -58,9 +58,7 @@ class Variable(BaseModelConfig):
         examples=[FmiVariableType.REAL, FmiVariableType.INTEGER],
     )
     description: Optional[str] = Field(None, description="Short FMU variable description.")
-    variability: Optional[FmiVariability] = Field(
-        FmiVariability.CONTINUOUS, description="Signal variability as defined by FMI."
-    )
+    variability: Optional[FmiVariability] = Field(None, description="Signal variability as defined by FMI.")
     start_value: Optional[Union[float, str, bool, int]] = Field(
         0,
         description="Initial value of the signal at time step 1. Type should match the variable type.",
@@ -230,7 +228,7 @@ class FmiModel:
             if var.is_array:
                 # If array then allocate space for every element
                 vector_port_length = var.length or 1
-                var_port_refs = range(current_var_ref, vector_port_length)
+                var_port_refs = list(range(current_var_ref, current_var_ref + vector_port_length))
             else:
                 var_port_refs = [current_var_ref]
 
@@ -249,14 +247,14 @@ class FmiModel:
             if var.is_array:
                 # If array then allocate space for every element
                 vector_port_length = var.length or 1
-                var_port_refs = range(current_var_ref, vector_port_length)
+                var_port_refs = list(range(current_var_ref, current_var_ref + vector_port_length))
             else:
                 var_port_refs = [current_var_ref]
 
             # Set current variable reference based on number of ports used by this input (array or scalar port)
             current_var_ref = current_var_ref + len(var_port_refs)
             fmi_variable = FmiInputVariable(
-                causality=FmiCausality.INPUT,
+                causality=FmiCausality.PARAMETER,
                 variable_references=var_port_refs,
                 **var.__dict__,
             )
@@ -307,7 +305,10 @@ class FmiModel:
                     variable_reference=var_ref,
                     causality=var.causality,
                     description=var.description or "",
-                    variability=var.variability or FmiVariability.CONTINUOUS,
+                    variability=var.variability
+                    or (
+                        FmiVariability.CONTINUOUS if var.causality != FmiCausality.PARAMETER else FmiVariability.TUNABLE
+                    ),
                 )
                 variables.append(fmi_var)
         else:
@@ -317,7 +318,8 @@ class FmiModel:
                 variable_reference=var.variable_references[0],
                 causality=var.causality,
                 description=var.description or "",
-                variability=var.variability or FmiVariability.CONTINUOUS,
+                variability=var.variability
+                or (FmiVariability.CONTINUOUS if var.causality != FmiCausality.PARAMETER else FmiVariability.TUNABLE),
                 start_value=var.start_value or 0,
                 type=var.type or FmiVariableType.REAL,
             )

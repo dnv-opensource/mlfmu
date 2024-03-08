@@ -6,6 +6,13 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ## [Unreleased]
 
 ### Changed
+* Fixed typo from 'tunnable' to 'tunable'
+* Fixed number of onnx output check to be correct (1-3 and not always raising exception)
+* Fix correct fmi causality for parameters
+* Fix correct default variability for parameters
+* Fix expanding of array variables into one variable per index for inputs and parameters to work as outputs
+
+### Changed
 * Default build target in builder to wind_to_power example
 
 ### Added

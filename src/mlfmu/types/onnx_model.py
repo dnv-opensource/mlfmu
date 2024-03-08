@@ -57,7 +57,6 @@ class ONNXModel:
                 raise ValueError(
                     "The ml model has 3 inputs, but the usesTime flag is set to false in the json interface. A model can only have 3 inputs if it uses time input."
                 )
-                pass
         elif len(input_names) == 2:
             if self.time_input:
                 self.time_input_name = input_names[1]
@@ -65,9 +64,8 @@ class ONNXModel:
                 self.states_name = input_names[1]
                 num_states = input_shapes[1][1]
 
-        elif len(input_names) == 0 or len(input_names) > 0:
+        elif len(input_names) == 0 or len(input_names) > 3:
             raise ValueError(f"The number of inputs to the ml model (={len(input_names)}) must be 1, 2 or 3")
-            pass
 
         self.state_size = num_states
 
