@@ -35,9 +35,21 @@
 			]
 		}
 	],
-	"states": {
-		"agentOutputIndexes": [
-			"0:130"
-		]
-	}
+	"states": [
+		{
+			"agentOutputIndexes": [
+				"0"
+			]
+		},
+		{
+			"agentOutputIndexes": [
+				"1"
+			]
+		},
+		{
+			"agentOutputIndexes": [
+				"2:130"
+			]
+		}
+	]
 }
