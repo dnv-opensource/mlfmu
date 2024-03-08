@@ -1,4 +1,4 @@
-#define NUM_FMU_VARIABLES 4
+#define NUM_FMU_VARIABLES 6
 
 #define NUM_ONNX_INPUTS 2
 #define NUM_ONNX_FMU_INPUTS 2
