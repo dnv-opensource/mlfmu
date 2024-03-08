@@ -213,7 +213,9 @@ class FmiModel:
         self.description = model.description
         self.copyright = model.copyright
         self.license = model.license
+
         self.add_variable_references(model.inputs, model.parameters, model.outputs)
+        self.add_state_initialization_parameters(model.states)
 
     def add_variable_references(
         self,
@@ -297,6 +299,35 @@ class FmiModel:
         self.inputs = fmu_inputs
         self.outputs = fmu_outputs
         self.parameters = fmu_parameters
+
+    def add_state_initialization_parameters(self, states: List[InternalState]):
+        init_parameters: List[FmiInputVariable] = []
+
+        init_states = [state for state in states if state.initialization]
+
+        # TODO: Raise exception of init_state doesn't have name
+
+        # TODO: Add parameters based on states to init_parameters
+        value_reference_start = self.get_total_variable_number()  # TODO: Bigest used value reference + 1
+        for state in init_states:
+            length = len(range_list_expanded(state.agent_output_indexes))
+            value_references = list(range(value_reference_start, value_reference_start + length))
+            is_array = length > 1
+            init_param = FmiInputVariable(
+                name=state.name,
+                description=state.description,
+                start_value=state.start_value,
+                variability=FmiVariability.FIXED,
+                type=FmiVariableType.REAL,
+                causality=FmiCausality.PARAMETER,
+                variable_references=value_references,
+                length=length,
+                is_array=is_array,
+                agent_input_indexes=[],
+            )
+            init_parameters.append(init_param)
+
+        self.parameters = [*self.parameters, *init_parameters]
 
     def format_fmi_variable(self, var: Union[FmiInputVariable, FmiOutputVariable]) -> List[FmiVariable]:
         """Get an inclusive list of variables from an interface variable definition.
