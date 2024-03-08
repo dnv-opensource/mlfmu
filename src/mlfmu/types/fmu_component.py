@@ -75,6 +75,16 @@ class Variable(BaseModelConfig):
 
 
 class InternalState(BaseModelConfig):
+    name: Optional[str] = Field(
+        None,
+        description="Unique name for state. Only needed if initialization=true. Initialization FMU parameters will be generated using this name",
+        examples=["windSpeed", "windDirection"],
+    )
+    description: Optional[str] = Field(None, description="Short FMU variable description.")
+    start_value: Optional[float] = Field(
+        0.0,
+        description="The default value of the parameter used for initialization",
+    )
     agent_output_indexes: List[
         Annotated[
             str,
@@ -84,6 +94,11 @@ class InternalState(BaseModelConfig):
         None,
         description="Index or range of indices of agent outputs that will be stored as internal states and will be fed as inputs in the next time step. Note: the FMU signal and the agent outputs need to have the same length.",
         examples=["10", "10:20", "30"],
+    )
+    initialization: Optional[bool] = Field(
+        False,
+        description="Boolean flag that decides if it should be possible to set the initial value of this state. Setting of the initial value is done through FMU parameters.",
+        examples=[True, False],
     )
 
 
@@ -168,7 +183,7 @@ class ModelComponent(BaseModelConfig):
         description="List of parameter signals of the simulation model.",
         examples=[[create_fmu_signal_example()]],
     )
-    states: InternalState = Field(
+    states: List[InternalState] = Field(
         [],
         description="Internal states that will be stored in the simulation model's memory, these will be passed as inputs to the agent in the next time step.",
     )

@@ -16,9 +16,9 @@ absolute_path = Path().absolute()
 # TODO: I had some problems with this absolute_path.parent.parent, so I changed it to this to make it work.
 # These are just temporary hard coded values that should be provided by the user. So it isn't that important.
 template_parent_path = absolute_path / "templates" / "fmu"
-json_interface = absolute_path / "examples" / "wind_to_power" / "config" / "interface.json"
-fmu_src_path = absolute_path / "examples" / "wind_to_power"
-onnx_path = absolute_path / "examples" / "wind_to_power" / "config" / "example.onnx"
+json_interface = absolute_path / "examples" / "wind_generator" / "config" / "interface.json"
+fmu_src_path = absolute_path / "examples" / "wind_generator"
+onnx_path = absolute_path / "examples" / "wind_generator" / "config" / "example.onnx"
 build_path = absolute_path / "build_fmu"
 save_fmu_path = absolute_path / "fmus"
 
@@ -71,7 +71,9 @@ def create_files_from_templates(data: dict[str, str], fmu_src: Path):
 def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: ModelComponent) -> dict[str, str]:
     # Work out template mapping between ONNX and FMU ports
     inputs, outputs = fmi_model.get_template_mapping()
-    state_output_indexes = range_list_expanded(model_component.states.agent_output_indexes)
+    state_output_indexes = [
+        index for state in model_component.states for index in range_list_expanded(state.agent_output_indexes)
+    ]
 
     # Total number of inputs/outputs/internal states
     num_fmu_inputs = len(inputs)
