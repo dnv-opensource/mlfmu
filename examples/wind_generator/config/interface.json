@@ -38,14 +38,14 @@
 	"states": [
 		{
 			"name": "initialWindSpeed",
-			"start_value": 10.0,
+			"startValue": 10.0,
 			"agentOutputIndexes": [
 				"0"
 			]
 		},
 		{
 			"name": "initialWindDirection",
-			"start_value": 180.0,
+			"startValue": 180.0,
 			"agentOutputIndexes": [
 				"1"
 			]
