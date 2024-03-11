@@ -36,6 +36,7 @@ public:
     bool SetOnnxInputs();
     bool GetOnnxOutputs();
     bool SetOnnxStates();
+    bool InitOnnxStates();
     bool RunOnnxModel(cppfmu::FMIReal currentCommunicationPoint, cppfmu::FMIReal dt);
 
     // Override functions from cppmu::SlaveInstance
@@ -76,7 +77,7 @@ private:
     std::array<int64_t, 2> timeInputShape_ {1, 2};
     std::array<float, 2> onnxTimeInput_ {0.0, 0.0};
 
-    std::array<std::array<int, 2> NUM_ONNX_STATE_INIT> onnxStateInitValueReferenceIndexPairs_ {
+    std::array<std::array<int, 2>, NUM_ONNX_STATE_INIT> onnxStateInitValueReferenceIndexPairs_ {
         ONNX_STATE_INIT_VALUE_REFERENCES};
     bool doStateInit_ = true;
 };

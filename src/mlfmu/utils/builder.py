@@ -70,6 +70,8 @@ def create_files_from_templates(data: dict[str, str], fmu_src: Path):
 # Function for generating the key value pairs needed to format the template files to valid c++
 def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: ModelComponent) -> dict[str, str]:
     # Work out template mapping between ONNX and FMU ports
+    # TODO: Get information about the parameters for initalizing state and add that info to the template
+    # Initialization indexes should be formatted as onnxInputValueReferences: state_index, value_reference, state_index, value_reference, ...
     inputs, outputs = fmi_model.get_template_mapping()
     state_output_indexes = [
         index for state in model_component.states for index in range_list_expanded(state.agent_output_indexes)
@@ -121,6 +123,8 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
         onnxInputValueReferences=flattened_input_string,
         onnxOutputValueReferences=flattened_output_string,
         onnxStateOutputIndexes=flattened_state_string,
+        numOnnxStateInit="0",
+        onnxStateInitValueReferences="",
     )
 
     return template_data
