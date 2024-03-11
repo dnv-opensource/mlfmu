@@ -171,6 +171,7 @@ bool OnnxFmu::DoStep(cppfmu::FMIReal currentCommunicationPoint, cppfmu::FMIReal 
         if (!initOnnxStates) {
             return false;
         }
+        doStateInit_ = false;
     }
     bool setOnnxSuccessful = SetOnnxInputs();
     if (!setOnnxSuccessful) {
