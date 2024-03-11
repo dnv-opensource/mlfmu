@@ -297,6 +297,12 @@ class FmiModel:
         self.parameters = fmu_parameters
 
     def add_state_initialization_parameters(self, states: List[InternalState]):
+        """Generate FmuInputVariables for initialization of states for the InternalState objects that have set start_value and name. The generated parameters are appended to self.parameters.
+
+        Args:
+            states (List[InternalState]): List of states from JSON interface
+
+        """
         init_parameters: List[FmiInputVariable] = []
 
         value_reference_start = self.get_total_variable_number()  # TODO: Biggest used value reference + 1
@@ -383,6 +389,12 @@ class FmiModel:
     def get_template_mapping(
         self,
     ) -> Tuple[List[Tuple[int, int]], List[Tuple[int, int]], List[Tuple[int, int]]]:
+        """Calculate the index to value reference mapping between onnx inputs/outputs/state to fmu variables.
+
+        Returns
+        -------
+            Tuple of lists of mappings between onnx indexes to fmu variables. (input_mapping, output_mapping, state_init_mapping)
+        """
         # Input and output mapping in the form of agent index and fmu variable reference pairs
         input_mapping: List[Tuple[int, int]] = []
         output_mapping: List[Tuple[int, int]] = []
