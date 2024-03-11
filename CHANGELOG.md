@@ -6,6 +6,20 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ## [Unreleased]
 
 ### Changed
+* OnnxFmu cpp template class updated to be able to initialize state with FMU Variables
+  * Add variables to specify which FMU variable that should be used to initialize which state
+  * Add function to DoStep that initializes the state at the beginning of the first time step. 
+* model_definitions_template.h
+  * Add definitions for the the number of states that should be initialized and array of index/value reference pairs to describe how the states should be initialized
+* Fmu Component json interface
+  * Add name, description and start_value to state in the json interface
+  * States changed from a single InternalState to a list of InternalState 
+* Added code to generate parameters for initialization of state
+
+### Added
+* .clang-format to consistently format cpp code
+
+### Changed
 * Fixed typo from 'tunnable' to 'tunable'
 * Fixed number of onnx output check to be correct (1-3 and not always raising exception)
 * Fix correct fmi causality for parameters
