@@ -48,7 +48,7 @@ Issues = "https://github.com/dnv-innersource/mlfmu/issues"
 Changelog = "https://github.com/dnv-innersource/mlfmu/blob/main/CHANGELOG.md"
 
 [project.scripts]
-publish-interface-docs = "mlfmu.cli.publish_interface_docs:main"
+publish-interface-docs = "mlfmu.cli.publish_docs:main"
 mlfmu = "mlfmu.cli.mlfmu:main"
 
 [tool.setuptools.packages.find]

@@ -1,0 +1,452 @@
+{
+    "$defs": {
+        "FmiVariability": {
+            "description": "Enum for signal variability.",
+            "enum": [
+                "constant",
+                "fixed",
+                "tunable",
+                "discrete",
+                "continuous"
+            ],
+            "title": "FmiVariability",
+            "type": "string"
+        },
+        "FmiVariableType": {
+            "description": "Enum for variable type.",
+            "enum": [
+                "real",
+                "integer",
+                "string",
+                "boolean"
+            ],
+            "title": "FmiVariableType",
+            "type": "string"
+        },
+        "InputVariable": {
+            "properties": {
+                "name": {
+                    "default": null,
+                    "description": "Unique name for the port.",
+                    "examples": [
+                        "windSpeed",
+                        "windDirection"
+                    ],
+                    "title": "Name",
+                    "type": "string"
+                },
+                "type": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/FmiVariableType"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": "real",
+                    "description": "Data type as defined by FMI standard, defaults to Real.",
+                    "examples": [
+                        "real",
+                        "integer"
+                    ]
+                },
+                "description": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Short FMU variable description.",
+                    "title": "Description"
+                },
+                "variability": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/FmiVariability"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Signal variability as defined by FMI."
+                },
+                "startValue": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": 0,
+                    "description": "Initial value of the signal at time step 1. Type should match the variable type.",
+                    "title": "Startvalue"
+                },
+                "isArray": {
+                    "anyOf": [
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": false,
+                    "description": "When dealing with an array signal, it is essential to specify the LENGTH parameter. Arrays are indexed starting from 0, and FMU signals will be structured as SIGNAL_NAME[0], SIGNAL_NAME[1], and so forth. By default, this feature is set to False.",
+                    "title": "Isarray"
+                },
+                "length": {
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Defines the number of entries in the signal if the signal is array.",
+                    "examples": [
+                        3,
+                        5
+                    ],
+                    "title": "Length"
+                },
+                "agentInputIndexes": {
+                    "default": null,
+                    "description": "Index or range of indices of agent inputs to which this FMU signal shall be linked to. Note: the FMU signal and the agent inputs need to have the same length.",
+                    "examples": [
+                        "10",
+                        "10:20",
+                        "30"
+                    ],
+                    "items": {
+                        "pattern": "^(\\d+|\\d+:\\d+)$",
+                        "type": "string"
+                    },
+                    "title": "Agentinputindexes",
+                    "type": "array"
+                }
+            },
+            "title": "InputVariable",
+            "type": "object"
+        },
+        "InternalState": {
+            "properties": {
+                "agentOutputIndexes": {
+                    "default": null,
+                    "description": "Index or range of indices of agent outputs that will be stored as internal states and will be fed as inputs in the next time step. Note: the FMU signal and the agent outputs need to have the same length.",
+                    "examples": [
+                        "10",
+                        "10:20",
+                        "30"
+                    ],
+                    "items": {
+                        "pattern": "^(\\d+|\\d+:\\d+)$",
+                        "type": "string"
+                    },
+                    "title": "Agentoutputindexes",
+                    "type": "array"
+                }
+            },
+            "title": "InternalState",
+            "type": "object"
+        },
+        "OutputVariable": {
+            "properties": {
+                "name": {
+                    "default": null,
+                    "description": "Unique name for the port.",
+                    "examples": [
+                        "windSpeed",
+                        "windDirection"
+                    ],
+                    "title": "Name",
+                    "type": "string"
+                },
+                "type": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/FmiVariableType"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": "real",
+                    "description": "Data type as defined by FMI standard, defaults to Real.",
+                    "examples": [
+                        "real",
+                        "integer"
+                    ]
+                },
+                "description": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Short FMU variable description.",
+                    "title": "Description"
+                },
+                "variability": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/FmiVariability"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Signal variability as defined by FMI."
+                },
+                "startValue": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": 0,
+                    "description": "Initial value of the signal at time step 1. Type should match the variable type.",
+                    "title": "Startvalue"
+                },
+                "isArray": {
+                    "anyOf": [
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": false,
+                    "description": "When dealing with an array signal, it is essential to specify the LENGTH parameter. Arrays are indexed starting from 0, and FMU signals will be structured as SIGNAL_NAME[0], SIGNAL_NAME[1], and so forth. By default, this feature is set to False.",
+                    "title": "Isarray"
+                },
+                "length": {
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Defines the number of entries in the signal if the signal is array.",
+                    "examples": [
+                        3,
+                        5
+                    ],
+                    "title": "Length"
+                },
+                "agentOutputIndexes": {
+                    "default": null,
+                    "description": "Index or range of indices of agent outputs that will be linked to this output signal. Note: the FMU signal and the agent outputs need to have the same length.",
+                    "examples": [
+                        "10",
+                        "10:20",
+                        "30"
+                    ],
+                    "items": {
+                        "pattern": "^(\\d+|\\d+:\\d+)$",
+                        "type": "string"
+                    },
+                    "title": "Agentoutputindexes",
+                    "type": "array"
+                }
+            },
+            "title": "OutputVariable",
+            "type": "object"
+        }
+    },
+    "properties": {
+        "name": {
+            "default": null,
+            "description": "The name of the simulation model.",
+            "title": "Name",
+            "type": "string"
+        },
+        "version": {
+            "default": "0.0.1",
+            "description": "The version number of the model.",
+            "title": "Version",
+            "type": "string"
+        },
+        "author": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "Name or email of the model's author.",
+            "title": "Author"
+        },
+        "description": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": "",
+            "description": "Brief description of the model.",
+            "title": "Description"
+        },
+        "copyright": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "Copyright line for use in full license text.",
+            "title": "Copyright"
+        },
+        "license": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "License text or file name (relative to source files)",
+            "title": "License"
+        },
+        "inputs": {
+            "default": [],
+            "description": "List of input signals of the simulation model.",
+            "examples": [
+                [
+                    {
+                        "description": null,
+                        "isArray": null,
+                        "length": null,
+                        "name": "dis_yx",
+                        "startValue": null,
+                        "type": "real",
+                        "variability": null
+                    }
+                ]
+            ],
+            "items": {
+                "$ref": "#/$defs/InputVariable"
+            },
+            "title": "Inputs",
+            "type": "array"
+        },
+        "outputs": {
+            "default": [],
+            "description": "List of output signals of the simulation model.",
+            "examples": [
+                [
+                    {
+                        "description": null,
+                        "isArray": null,
+                        "length": null,
+                        "name": "dis_yx",
+                        "startValue": null,
+                        "type": "real",
+                        "variability": null
+                    }
+                ]
+            ],
+            "items": {
+                "$ref": "#/$defs/OutputVariable"
+            },
+            "title": "Outputs",
+            "type": "array"
+        },
+        "parameters": {
+            "default": [],
+            "description": "List of parameter signals of the simulation model.",
+            "examples": [
+                [
+                    {
+                        "description": null,
+                        "isArray": null,
+                        "length": null,
+                        "name": "dis_yx",
+                        "startValue": null,
+                        "type": "real",
+                        "variability": null
+                    }
+                ]
+            ],
+            "items": {
+                "$ref": "#/$defs/InputVariable"
+            },
+            "title": "Parameters",
+            "type": "array"
+        },
+        "states": {
+            "allOf": [
+                {
+                    "$ref": "#/$defs/InternalState"
+                }
+            ],
+            "default": [],
+            "description": "Internal states that will be stored in the simulation model's memory, these will be passed as inputs to the agent in the next time step."
+        },
+        "usesTime": {
+            "anyOf": [
+                {
+                    "type": "boolean"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": false,
+            "description": "Whether the agent consumes time data from co-simulation algorithm.",
+            "title": "Usestime"
+        }
+    },
+    "title": "ModelComponent",
+    "type": "object"
+}
