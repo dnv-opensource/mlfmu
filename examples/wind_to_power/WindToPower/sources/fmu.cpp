@@ -1,13 +1,13 @@
-#include "model_definitions.h"
 #include "fmu-uuid.h"
+#include "model_definitions.h"
+
 #include <cppfmu_cs.hpp>
 #include <onnxFmu.hpp>
 
 
-class WindToPower : public OnnxFmu{
-public:
-    WindToPower(cppfmu::FMIString fmuResourceLocation) : OnnxFmu(fmuResourceLocation){}
-private:
+class WindToPower : public OnnxFmu {
+    public :
+        WindToPower(cppfmu::FMIString fmuResourceLocation) : OnnxFmu(fmuResourceLocation) {} private :
 };
 
 
