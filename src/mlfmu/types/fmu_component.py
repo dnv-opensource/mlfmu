@@ -77,13 +77,13 @@ class Variable(BaseModelConfig):
 class InternalState(BaseModelConfig):
     name: Optional[str] = Field(
         None,
-        description="Unique name for state. Only needed if initialization=true. Initialization FMU parameters will be generated using this name",
-        examples=["windSpeed", "windDirection"],
+        description="Unique name for state. Only needed if start_value is set (!= None). Initialization FMU parameters will be generated using this name",
+        examples=["initialWindSpeed", "initialWindDirection"],
     )
     description: Optional[str] = Field(None, description="Short FMU variable description.")
     start_value: Optional[float] = Field(
-        0.0,
-        description="The default value of the parameter used for initialization",
+        None,
+        description="The default value of the parameter used for initialization. If this field is set parameters for initialization will be automatically generated for these states.",
     )
     agent_output_indexes: List[
         Annotated[
@@ -94,11 +94,6 @@ class InternalState(BaseModelConfig):
         None,
         description="Index or range of indices of agent outputs that will be stored as internal states and will be fed as inputs in the next time step. Note: the FMU signal and the agent outputs need to have the same length.",
         examples=["10", "10:20", "30"],
-    )
-    initialization: Optional[bool] = Field(
-        False,
-        description="Boolean flag that decides if it should be possible to set the initial value of this state. Setting of the initial value is done through FMU parameters.",
-        examples=[True, False],
     )
 
 
@@ -308,10 +303,10 @@ class FmiModel:
         current_state_index_state = 0
         for i, state in enumerate(states):
             length = len(range_list_expanded(state.agent_output_indexes))
-            if state.initialization:
+            if state.start_value is not None:
                 if state.name is None:
                     raise ValueError(
-                        f"State with index {i} has initialization = true without having a name. Either give it a name or set initialization = false"
+                        f"State with index {i} has state_value (!= None) without having a name. Either give it a name or set start_value = None"
                     )
                 value_references = list(range(value_reference_start, value_reference_start + length))
                 is_array = length > 1
