@@ -41,16 +41,14 @@
 			"start_value": 10.0,
 			"agentOutputIndexes": [
 				"0"
-			],
-			"initialization": true
+			]
 		},
 		{
 			"name": "initialWindDirection",
 			"start_value": 180.0,
 			"agentOutputIndexes": [
 				"1"
-			],
-			"initialization": true
+			]
 		},
 		{
 			"agentOutputIndexes": [
