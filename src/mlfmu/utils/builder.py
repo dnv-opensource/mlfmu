@@ -70,17 +70,17 @@ def create_files_from_templates(data: dict[str, str], fmu_src: Path):
 # Function for generating the key value pairs needed to format the template files to valid c++
 def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: ModelComponent) -> dict[str, str]:
     # Work out template mapping between ONNX and FMU ports
-    # TODO: Get information about the parameters for initalizing state and add that info to the template
-    # Initialization indexes should be formatted as onnxInputValueReferences: state_index, value_reference, state_index, value_reference, ...
-    inputs, outputs = fmi_model.get_template_mapping()
+    inputs, outputs, state_init = fmi_model.get_template_mapping()
     state_output_indexes = [
         index for state in model_component.states for index in range_list_expanded(state.agent_output_indexes)
     ]
 
     # Total number of inputs/outputs/internal states
+    num_fmu_variables = fmi_model.get_total_variable_number()
     num_fmu_inputs = len(inputs)
     num_fmu_outputs = len(outputs)
     num_onnx_states = len(state_output_indexes)
+    num_onnx_state_init = len(state_init)
 
     # Checking compatibility between ModelComponent and ONNXModel
     if num_fmu_inputs > onnx.input_size:
@@ -95,6 +95,10 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
         raise ValueError(
             f"The number of total output indexes for all states in the interface file(={num_onnx_states}) cannot exceed either the state input size (={onnx.state_size}) or the output size of the ml model (={onnx.output_size})"
         )
+    if num_onnx_state_init > min(onnx.state_size, num_fmu_variables):
+        raise ValueError(
+            f"The number of state that are initialized in the interface file(={num_onnx_state_init}) cannot exceed either the state input size (={onnx.state_size}) or the number of fmu variables (={num_fmu_variables})"
+        )
 
     # Flatten vectors to comply with template requirements -> onnx-index, variable-reference, onnx-index, variable-reference ...
     flattened_input_string = ", ".join(
@@ -104,13 +108,17 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
         [str(index) for indexValueReferencePair in outputs for index in indexValueReferencePair]
     )
     flattened_state_string = ", ".join([str(index) for index in state_output_indexes])
+    flattened_state_init_string = ", ".join(
+        [str(index) for indexValueReferencePair in state_init for index in indexValueReferencePair]
+    )
 
     template_data: dict[str, str] = dict(
-        numFmuVariables=str(fmi_model.get_total_variable_number()),
+        numFmuVariables=str(num_fmu_variables),
         FmuName=fmi_model.name,
         numOnnxInputs=str(onnx.input_size),
         numOnnxOutputs=str(onnx.output_size),
         numOnnxStates=str(onnx.state_size),
+        numOnnxStateInit=str(num_onnx_state_init),
         onnxUsesTime="true" if onnx.time_input else "false",
         onnxInputName=onnx.input_name,
         onnxStatesName=onnx.states_name,
@@ -123,8 +131,7 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
         onnxInputValueReferences=flattened_input_string,
         onnxOutputValueReferences=flattened_output_string,
         onnxStateOutputIndexes=flattened_state_string,
-        numOnnxStateInit="0",
-        onnxStateInitValueReferences="",
+        onnxStateInitValueReferences=flattened_state_init_string,
     )
 
     return template_data

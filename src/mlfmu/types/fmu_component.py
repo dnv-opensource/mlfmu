@@ -132,6 +132,7 @@ class OutputVariable(Variable):
 class FmiInputVariable(InputVariable):
     causality: FmiCausality
     variable_references: List[int] = []
+    agent_state_init_indexes: List[int] = []
 
     def __init__(self, **kwargs):  # type: ignore
         super().__init__(**kwargs)
@@ -303,30 +304,33 @@ class FmiModel:
     def add_state_initialization_parameters(self, states: List[InternalState]):
         init_parameters: List[FmiInputVariable] = []
 
-        init_states = [state for state in states if state.initialization]
-
-        # TODO: Raise exception of init_state doesn't have name
-
-        # TODO: Add parameters based on states to init_parameters
-        value_reference_start = self.get_total_variable_number()  # TODO: Bigest used value reference + 1
-        for state in init_states:
+        value_reference_start = self.get_total_variable_number()  # TODO: Biggest used value reference + 1
+        current_state_index_state = 0
+        for i, state in enumerate(states):
             length = len(range_list_expanded(state.agent_output_indexes))
-            value_references = list(range(value_reference_start, value_reference_start + length))
-            is_array = length > 1
-            init_param = FmiInputVariable(
-                name=state.name,
-                description=state.description,
-                start_value=state.start_value,
-                variability=FmiVariability.FIXED,
-                type=FmiVariableType.REAL,
-                causality=FmiCausality.PARAMETER,
-                variable_references=value_references,
-                length=length,
-                is_array=is_array,
-                agent_input_indexes=[],
-            )
-            init_parameters.append(init_param)
-
+            if state.initialization:
+                if state.name is None:
+                    raise ValueError(
+                        f"State with index {i} has initialization = true without having a name. Either give it a name or set initialization = false"
+                    )
+                value_references = list(range(value_reference_start, value_reference_start + length))
+                is_array = length > 1
+                init_param = FmiInputVariable(
+                    name=state.name,
+                    description=state.description,
+                    start_value=state.start_value,
+                    variability=FmiVariability.FIXED,
+                    type=FmiVariableType.REAL,
+                    causality=FmiCausality.PARAMETER,
+                    variable_references=value_references,
+                    length=length,
+                    is_array=is_array,
+                    agent_input_indexes=[],
+                    agent_state_init_indexes=list(range(current_state_index_state, current_state_index_state + length)),
+                )
+                init_parameters.append(init_param)
+                value_reference_start += length
+            current_state_index_state += length
         self.parameters = [*self.parameters, *init_parameters]
 
     def format_fmi_variable(self, var: Union[FmiInputVariable, FmiOutputVariable]) -> List[FmiVariable]:
@@ -383,15 +387,19 @@ class FmiModel:
 
     def get_template_mapping(
         self,
-    ) -> Tuple[List[Tuple[int, int]], List[Tuple[int, int]]]:
+    ) -> Tuple[List[Tuple[int, int]], List[Tuple[int, int]], List[Tuple[int, int]]]:
         # Input and output mapping in the form of agent index and fmu variable reference pairs
         input_mapping: List[Tuple[int, int]] = []
         output_mapping: List[Tuple[int, int]] = []
+        state_init_mapping: List[Tuple[int, int]] = []
 
         for inp in self.inputs + self.parameters:
             input_indexes = range_list_expanded(inp.agent_input_indexes)
             for variable_index, input_index in enumerate(input_indexes):
                 input_mapping.append((input_index, inp.variable_references[variable_index]))
+
+            for variable_index, state_init_index in enumerate(inp.agent_state_init_indexes):
+                state_init_mapping.append((state_init_index, inp.variable_references[variable_index]))
 
         for out in self.outputs:
             output_indexes = range_list_expanded(out.agent_output_indexes)
@@ -400,7 +408,7 @@ class FmiModel:
 
         input_mapping = sorted(input_mapping, key=lambda inp: inp[0])
         output_mapping = sorted(output_mapping, key=lambda out: out[0])
-        return input_mapping, output_mapping
+        return input_mapping, output_mapping, state_init_mapping
 
     def get_total_variable_number(self) -> int:
         """Calculate the total amount of variables including every index of vector ports."""
