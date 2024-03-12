@@ -95,7 +95,7 @@ class InternalState(BaseModelConfig):
             StringConstraints(strip_whitespace=True, to_upper=True, pattern=r"^(\d+|\d+:\d+)$"),
         ]
     ] = Field(
-        None,
+        [],
         description="Index or range of indices of agent outputs that will be stored as internal states and will be fed as inputs in the next time step. Note: the FMU signal and the agent outputs need to have the same length.",
         examples=["10", "10:20", "30"],
     )
@@ -128,7 +128,7 @@ class InputVariable(Variable):
             StringConstraints(strip_whitespace=True, to_upper=True, pattern=r"^(\d+|\d+:\d+)$"),
         ]
     ] = Field(
-        None,
+        [],
         description="Index or range of indices of agent inputs to which this FMU signal shall be linked to. Note: the FMU signal and the agent inputs need to have the same length.",
         examples=["10", "10:20", "30"],
     )
@@ -141,7 +141,7 @@ class OutputVariable(Variable):
             StringConstraints(strip_whitespace=True, to_upper=True, pattern=r"^(\d+|\d+:\d+)$"),
         ]
     ] = Field(
-        None,
+        [],
         description="Index or range of indices of agent outputs that will be linked to this output signal. Note: the FMU signal and the agent outputs need to have the same length.",
         examples=["10", "10:20", "30"],
     )
