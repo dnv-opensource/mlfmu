@@ -4,7 +4,7 @@ from functools import reduce
 from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, StringConstraints, validator
+from pydantic import BaseModel, ConfigDict, StringConstraints, root_validator
 from pydantic.fields import Field
 from typing_extensions import Annotated
 
@@ -100,21 +100,25 @@ class InternalState(BaseModelConfig):
         examples=["10", "10:20", "30"],
     )
 
-    @validator("name", "start_value", "initialization_variable")
-    def check_only_one_initialization(self, v: Any, values: Dict[str, Any]):
-        if "initialization_variable" in values and ("start_value" in values or "name" in values):
+    @root_validator(allow_reuse=True, skip_on_failure=True)
+    def check_only_one_initialization(cls, values: Dict[str, Any]):
+        init_var = "initialization_variable" in values and values["initialization_variable"] is not None
+        name = "name" in values and values["name"] is not None
+        start_value = "start_value" in values and values["start_value"] is not None
+
+        if init_var and (start_value or name):
             raise ValueError(
                 "Only one state initialization method is allowed to be used at a time: initialization_variable cannot be set if either start_value or name is set."
             )
-        if "start_value" not in values and "name" in values:
+        if (not start_value) and name:
             raise ValueError(
                 "name is set without start_value being set. Both fields needs to be set for the state initialization to be valid"
             )
-        if "start_value" in values and "name" not in values:
+        if start_value and (not name):
             raise ValueError(
                 "start_value is set without name being set. Both fields needs to be set for the state initialization to be valid"
             )
-        return v
+        return values
 
 
 class InputVariable(Variable):
