@@ -6,6 +6,9 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ## [Unreleased]
 
 ### Changed
+* Deleted azure files from old azure devops repo
+
+### Changed
 * OnnxFmu cpp template class updated to be able to initialize state with FMU Variables
   * Add variables to specify which FMU variable that should be used to initialize which state
   * Add function to DoStep that initializes the state at the beginning of the first time step. 
