@@ -321,7 +321,7 @@ class FmiModel:
         self.parameters = fmu_parameters
 
     def add_state_initialization_parameters(self, states: List[InternalState]):
-        """Generate FmuInputVariables for initialization of states for the InternalState objects that have set start_value and name. The generated parameters are appended to self.parameters.
+        """Generate or modifies FmuInputVariables for initialization of states for the InternalState objects that have set start_value and name or have set initialization_variable. Any generated parameters are appended to self.parameters.
 
         Args:
             states (List[InternalState]): List of states from JSON interface
@@ -329,11 +329,37 @@ class FmiModel:
         """
         init_parameters: List[FmiInputVariable] = []
 
-        value_reference_start = self.get_total_variable_number()  # TODO: Biggest used value reference + 1
+        value_reference_start = (
+            self.get_total_variable_number()
+        )  # TODO: Biggest used value reference + 1, will this always be correct?
         current_state_index_state = 0
         for i, state in enumerate(states):
             length = len(range_list_expanded(state.agent_output_indexes))
-            if state.start_value is not None:
+            if state.initialization_variable is not None:
+                variable_name = state.initialization_variable
+                variable_name_input_index = [i for i, inp in enumerate(self.inputs) if inp.name == variable_name]
+                variable_name_parameter_index = [
+                    i for i, param in enumerate(self.parameters) if param.name == variable_name
+                ]
+                if len(variable_name_input_index) + len(variable_name_parameter_index) > 1:
+                    raise ValueError(
+                        f"Found {len(variable_name_input_index) + len(variable_name_parameter_index)} FMU inputs or parameters with same name (={variable_name}) when trying to use for state initialization. Variables must have a unique name."
+                    )
+
+                if len(variable_name_input_index) + len(variable_name_parameter_index) == 0:
+                    raise ValueError(
+                        f"Did not find any FMU variables for use for initialization with name={variable_name} for state with agent_output_indexes={state.agent_output_indexes}."
+                    )
+                agent_state_init_indexes = list(range(current_state_index_state, current_state_index_state + length))
+
+                if len(variable_name_input_index) == 1:
+                    self.inputs[variable_name_input_index[0]].agent_state_init_indexes = agent_state_init_indexes
+                if len(variable_name_parameter_index) == 1:
+                    self.parameters[
+                        variable_name_parameter_index[0]
+                    ].agent_state_init_indexes = agent_state_init_indexes
+
+            elif state.start_value is not None:
                 if state.name is None:
                     raise ValueError(
                         f"State with index {i} has state_value (!= None) without having a name. Either give it a name or set start_value = None"
