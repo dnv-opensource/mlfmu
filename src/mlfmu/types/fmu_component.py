@@ -456,6 +456,8 @@ class FmiModel:
                 input_mapping.append((input_index, inp.variable_references[variable_index]))
 
             for variable_index, state_init_index in enumerate(inp.agent_state_init_indexes):
+                if variable_index >= len(inp.variable_references):
+                    break
                 state_init_mapping.append((state_init_index, inp.variable_references[variable_index]))
 
         for out in self.outputs:
