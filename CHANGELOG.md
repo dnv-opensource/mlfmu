@@ -12,6 +12,9 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
   * This is done by setting "initializationVariable" = "{variable name}", instead of using the "name" and "start_value" attributes
 
 ### Changed
+* The generated modelDescription.xml files now also contain <ModelStructure> with a list of the outputs of the FMU.
+
+### Changed
 * OnnxFmu cpp template class updated to be able to initialize state with FMU Variables
   * Add variables to specify which FMU variable that should be used to initialize which state
   * Add function to DoStep that initializes the state at the beginning of the first time step. 
