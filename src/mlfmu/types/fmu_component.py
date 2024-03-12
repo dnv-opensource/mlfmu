@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 from enum import Enum
 from functools import reduce
-from typing import List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, StringConstraints
+from pydantic import BaseModel, ConfigDict, StringConstraints, validator
 from pydantic.fields import Field
 from typing_extensions import Annotated
 
@@ -99,6 +99,22 @@ class InternalState(BaseModelConfig):
         description="Index or range of indices of agent outputs that will be stored as internal states and will be fed as inputs in the next time step. Note: the FMU signal and the agent outputs need to have the same length.",
         examples=["10", "10:20", "30"],
     )
+
+    @validator("name", "start_value", "initialization_variable")
+    def check_only_one_initialization(self, v: Any, values: Dict[str, Any]):
+        if "initialization_variable" in values and ("start_value" in values or "name" in values):
+            raise ValueError(
+                "Only one state initialization method is allowed to be used at a time: initialization_variable cannot be set if either start_value or name is set."
+            )
+        if "start_value" not in values and "name" in values:
+            raise ValueError(
+                "name is set without start_value being set. Both fields needs to be set for the state initialization to be valid"
+            )
+        if "start_value" in values and "name" not in values:
+            raise ValueError(
+                "start_value is set without name being set. Both fields needs to be set for the state initialization to be valid"
+            )
+        return v
 
 
 class InputVariable(Variable):
