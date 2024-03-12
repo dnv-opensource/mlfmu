@@ -27,7 +27,5 @@
 			]
 		}
 	],
-	"states": {
-		"agentOutputIndexes": []
-	}
+	"states": []
 }

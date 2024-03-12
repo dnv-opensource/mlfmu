@@ -35,9 +35,25 @@
 			]
 		}
 	],
-	"states": {
-		"agentOutputIndexes": [
-			"0:130"
-		]
-	}
+	"states": [
+		{
+			"name": "initialWindSpeed",
+			"startValue": 10.0,
+			"agentOutputIndexes": [
+				"0"
+			]
+		},
+		{
+			"name": "initialWindDirection",
+			"startValue": 180.0,
+			"agentOutputIndexes": [
+				"1"
+			]
+		},
+		{
+			"agentOutputIndexes": [
+				"2:130"
+			]
+		}
+	]
 }

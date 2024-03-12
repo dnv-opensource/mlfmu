@@ -75,6 +75,16 @@ class Variable(BaseModelConfig):
 
 
 class InternalState(BaseModelConfig):
+    name: Optional[str] = Field(
+        None,
+        description="Unique name for state. Only needed if start_value is set (!= None). Initialization FMU parameters will be generated using this name",
+        examples=["initialWindSpeed", "initialWindDirection"],
+    )
+    description: Optional[str] = Field(None, description="Short FMU variable description.")
+    start_value: Optional[float] = Field(
+        None,
+        description="The default value of the parameter used for initialization. If this field is set parameters for initialization will be automatically generated for these states.",
+    )
     agent_output_indexes: List[
         Annotated[
             str,
@@ -117,6 +127,7 @@ class OutputVariable(Variable):
 class FmiInputVariable(InputVariable):
     causality: FmiCausality
     variable_references: List[int] = []
+    agent_state_init_indexes: List[int] = []
 
     def __init__(self, **kwargs):  # type: ignore
         super().__init__(**kwargs)
@@ -168,7 +179,7 @@ class ModelComponent(BaseModelConfig):
         description="List of parameter signals of the simulation model.",
         examples=[[create_fmu_signal_example()]],
     )
-    states: InternalState = Field(
+    states: List[InternalState] = Field(
         [],
         description="Internal states that will be stored in the simulation model's memory, these will be passed as inputs to the agent in the next time step.",
     )
@@ -198,7 +209,9 @@ class FmiModel:
         self.description = model.description
         self.copyright = model.copyright
         self.license = model.license
+
         self.add_variable_references(model.inputs, model.parameters, model.outputs)
+        self.add_state_initialization_parameters(model.states)
 
     def add_variable_references(
         self,
@@ -283,6 +296,44 @@ class FmiModel:
         self.outputs = fmu_outputs
         self.parameters = fmu_parameters
 
+    def add_state_initialization_parameters(self, states: List[InternalState]):
+        """Generate FmuInputVariables for initialization of states for the InternalState objects that have set start_value and name. The generated parameters are appended to self.parameters.
+
+        Args:
+            states (List[InternalState]): List of states from JSON interface
+
+        """
+        init_parameters: List[FmiInputVariable] = []
+
+        value_reference_start = self.get_total_variable_number()  # TODO: Biggest used value reference + 1
+        current_state_index_state = 0
+        for i, state in enumerate(states):
+            length = len(range_list_expanded(state.agent_output_indexes))
+            if state.start_value is not None:
+                if state.name is None:
+                    raise ValueError(
+                        f"State with index {i} has state_value (!= None) without having a name. Either give it a name or set start_value = None"
+                    )
+                value_references = list(range(value_reference_start, value_reference_start + length))
+                is_array = length > 1
+                init_param = FmiInputVariable(
+                    name=state.name,
+                    description=state.description,
+                    start_value=state.start_value,
+                    variability=FmiVariability.FIXED,
+                    type=FmiVariableType.REAL,
+                    causality=FmiCausality.PARAMETER,
+                    variable_references=value_references,
+                    length=length,
+                    is_array=is_array,
+                    agent_input_indexes=[],
+                    agent_state_init_indexes=list(range(current_state_index_state, current_state_index_state + length)),
+                )
+                init_parameters.append(init_param)
+                value_reference_start += length
+            current_state_index_state += length
+        self.parameters = [*self.parameters, *init_parameters]
+
     def format_fmi_variable(self, var: Union[FmiInputVariable, FmiOutputVariable]) -> List[FmiVariable]:
         """Get an inclusive list of variables from an interface variable definition.
            Vectors are separated as N number of signals, being N the size of the array.
@@ -337,15 +388,25 @@ class FmiModel:
 
     def get_template_mapping(
         self,
-    ) -> Tuple[List[Tuple[int, int]], List[Tuple[int, int]]]:
+    ) -> Tuple[List[Tuple[int, int]], List[Tuple[int, int]], List[Tuple[int, int]]]:
+        """Calculate the index to value reference mapping between onnx inputs/outputs/state to fmu variables.
+
+        Returns
+        -------
+            Tuple of lists of mappings between onnx indexes to fmu variables. (input_mapping, output_mapping, state_init_mapping)
+        """
         # Input and output mapping in the form of agent index and fmu variable reference pairs
         input_mapping: List[Tuple[int, int]] = []
         output_mapping: List[Tuple[int, int]] = []
+        state_init_mapping: List[Tuple[int, int]] = []
 
         for inp in self.inputs + self.parameters:
             input_indexes = range_list_expanded(inp.agent_input_indexes)
             for variable_index, input_index in enumerate(input_indexes):
                 input_mapping.append((input_index, inp.variable_references[variable_index]))
+
+            for variable_index, state_init_index in enumerate(inp.agent_state_init_indexes):
+                state_init_mapping.append((state_init_index, inp.variable_references[variable_index]))
 
         for out in self.outputs:
             output_indexes = range_list_expanded(out.agent_output_indexes)
@@ -354,7 +415,7 @@ class FmiModel:
 
         input_mapping = sorted(input_mapping, key=lambda inp: inp[0])
         output_mapping = sorted(output_mapping, key=lambda out: out[0])
-        return input_mapping, output_mapping
+        return input_mapping, output_mapping, state_init_mapping
 
     def get_total_variable_number(self) -> int:
         """Calculate the total amount of variables including every index of vector ports."""
