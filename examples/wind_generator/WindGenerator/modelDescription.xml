@@ -1,4 +1,4 @@
-<fmiModelDescription fmiVersion="2.0" modelName="WindGenerator" guid="@FMU_UUID@" version="0.0.1" generationDateAndTime="2024-03-11T09:48:21+00:00" variableNamingConvention="structured" generationTool="MLFMU 0.1.6" description="A Machine Learning based FMU that outputs a synthetic time series of wind.">
+<fmiModelDescription fmiVersion="2.0" modelName="WindGenerator" guid="@FMU_UUID@" version="0.0.1" generationDateAndTime="2024-03-12T14:06:00+00:00" variableNamingConvention="structured" generationTool="MLFMU 0.1.6" description="A Machine Learning based FMU that outputs a synthetic time series of wind.">
 	<CoSimulation modelIdentifier="WindGenerator" canHandleVariableCommunicationStepSize="true" />
 	<ModelVariables>
 		<ScalarVariable name="speedNoise" valueReference="0" causality="input" description="Noise to be added to the change in wind speed" variability="continuous">
@@ -20,4 +20,10 @@
 			<Real />
 		</ScalarVariable>
 	</ModelVariables>
+	<ModelStructure>
+		<Outputs>
+			<Unknown index="2" />
+			<Unknown index="3" />
+		</Outputs>
+	</ModelStructure>
 </fmiModelDescription>
