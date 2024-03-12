@@ -129,7 +129,7 @@
                     "title": "Length"
                 },
                 "agentInputIndexes": {
-                    "default": null,
+                    "default": [],
                     "description": "Index or range of indices of agent inputs to which this FMU signal shall be linked to. Note: the FMU signal and the agent inputs need to have the same length.",
                     "examples": [
                         "10",
@@ -149,8 +149,64 @@
         },
         "InternalState": {
             "properties": {
-                "agentOutputIndexes": {
+                "name": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
                     "default": null,
+                    "description": "Unique name for state. Only needed if start_value is set (!= None). Initialization FMU parameters will be generated using this name",
+                    "examples": [
+                        "initialWindSpeed",
+                        "initialWindDirection"
+                    ],
+                    "title": "Name"
+                },
+                "description": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Short FMU variable description.",
+                    "title": "Description"
+                },
+                "startValue": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "The default value of the parameter used for initialization. If this field is set parameters for initialization will be automatically generated for these states.",
+                    "title": "Startvalue"
+                },
+                "initializationVariable": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "The name of a an input or parameter in the same model interface that should be used to initialize this state.",
+                    "title": "Initializationvariable"
+                },
+                "agentOutputIndexes": {
+                    "default": [],
                     "description": "Index or range of indices of agent outputs that will be stored as internal states and will be fed as inputs in the next time step. Note: the FMU signal and the agent outputs need to have the same length.",
                     "examples": [
                         "10",
@@ -274,7 +330,7 @@
                     "title": "Length"
                 },
                 "agentOutputIndexes": {
-                    "default": null,
+                    "default": [],
                     "description": "Index or range of indices of agent outputs that will be linked to this output signal. Note: the FMU signal and the agent outputs need to have the same length.",
                     "examples": [
                         "10",
@@ -425,13 +481,13 @@
             "type": "array"
         },
         "states": {
-            "allOf": [
-                {
-                    "$ref": "#/$defs/InternalState"
-                }
-            ],
             "default": [],
-            "description": "Internal states that will be stored in the simulation model's memory, these will be passed as inputs to the agent in the next time step."
+            "description": "Internal states that will be stored in the simulation model's memory, these will be passed as inputs to the agent in the next time step.",
+            "items": {
+                "$ref": "#/$defs/InternalState"
+            },
+            "title": "States",
+            "type": "array"
         },
         "usesTime": {
             "anyOf": [
