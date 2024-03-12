@@ -85,6 +85,10 @@ class InternalState(BaseModelConfig):
         None,
         description="The default value of the parameter used for initialization. If this field is set parameters for initialization will be automatically generated for these states.",
     )
+    initialization_variable: Optional[str] = Field(
+        None,
+        description="The name of a an input or parameter in the same model interface that should be used to initialize this state.",
+    )
     agent_output_indexes: List[
         Annotated[
             str,
