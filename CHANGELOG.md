@@ -13,6 +13,8 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
   * Added flag in schema to allow a variable to be reused when initializing states
   * Allowed for multiple states to use the same variable for initialization
   
+### Changed
+* Deleted azure files from old azure devops repo
 
 ### Changed
 * The generated modelDescription.xml files now also contain <ModelStructure> with a list of the outputs of the FMU.
