@@ -152,7 +152,7 @@ class OutputVariable(Variable):
 class FmiInputVariable(InputVariable):
     causality: FmiCausality
     variable_references: List[int] = []
-    agent_state_init_indexes: List[int] = []
+    agent_state_init_indexes: List[List[int]] = []
 
     def __init__(self, **kwargs):  # type: ignore
         super().__init__(**kwargs)
@@ -360,11 +360,11 @@ class FmiModel:
                 agent_state_init_indexes = list(range(current_state_index_state, current_state_index_state + length))
 
                 if len(variable_name_input_index) == 1:
-                    self.inputs[variable_name_input_index[0]].agent_state_init_indexes = agent_state_init_indexes
+                    self.inputs[variable_name_input_index[0]].agent_state_init_indexes.append(agent_state_init_indexes)
                 if len(variable_name_parameter_index) == 1:
-                    self.parameters[
-                        variable_name_parameter_index[0]
-                    ].agent_state_init_indexes = agent_state_init_indexes
+                    self.parameters[variable_name_parameter_index[0]].agent_state_init_indexes.append(
+                        agent_state_init_indexes
+                    )
 
             elif state.start_value is not None:
                 if state.name is None:
@@ -462,18 +462,19 @@ class FmiModel:
             for variable_index, input_index in enumerate(input_indexes):
                 input_mapping.append((input_index, inp.variable_references[variable_index]))
 
-            num_state_init_indexes = len(inp.agent_state_init_indexes)
             num_variable_references = len(inp.variable_references)
-            for variable_index, state_init_index in enumerate(inp.agent_state_init_indexes):
-                if variable_index >= num_variable_references:
-                    if not self.state_initialization_reuse:
-                        warnings.warn(
-                            f"Too few variables in {inp.name} (={num_variable_references}) to initialize all states (={num_state_init_indexes}). To initialize all states set state_initialization_reuse=true in interface json or provide a variable with length >={num_state_init_indexes}",
-                            stacklevel=1,
-                        )
-                        break
-                    variable_index = variable_index % num_variable_references
-                state_init_mapping.append((state_init_index, inp.variable_references[variable_index]))
+            for state_init_indexes in inp.agent_state_init_indexes:
+                num_state_init_indexes = len(state_init_indexes)
+                for variable_index, state_init_index in enumerate(state_init_indexes):
+                    if variable_index >= num_variable_references:
+                        if not self.state_initialization_reuse:
+                            warnings.warn(
+                                f"Too few variables in {inp.name} (={num_variable_references}) to initialize all states (={num_state_init_indexes}). To initialize all states set state_initialization_reuse=true in interface json or provide a variable with length >={num_state_init_indexes}",
+                                stacklevel=1,
+                            )
+                            break
+                        variable_index = variable_index % num_variable_references
+                    state_init_mapping.append((state_init_index, inp.variable_references[variable_index]))
 
         for out in self.outputs:
             output_indexes = range_list_expanded(out.agent_output_indexes)
