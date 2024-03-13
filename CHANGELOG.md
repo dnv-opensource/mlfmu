@@ -10,6 +10,9 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 * Updated doc by running publish-interface-docs
 * Added feature to be able to initialize states using previously defined parameters or inputs
   * This is done by setting "initializationVariable" = "{variable name}", instead of using the "name" and "start_value" attributes
+  * Added flag in schema to allow a variable to be reused when initializing states
+  * Allowed for multiple states to use the same variable for initialization
+  
 
 ### Changed
 * The generated modelDescription.xml files now also contain <ModelStructure> with a list of the outputs of the FMU.
