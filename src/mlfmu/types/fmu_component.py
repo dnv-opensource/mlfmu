@@ -1,3 +1,4 @@
+import warnings
 from dataclasses import dataclass
 from enum import Enum
 from functools import reduce
@@ -457,6 +458,10 @@ class FmiModel:
 
             for variable_index, state_init_index in enumerate(inp.agent_state_init_indexes):
                 if variable_index >= len(inp.variable_references):
+                    warnings.warn(
+                        f"Too few variables in {inp.name} (={len(inp.variable_references)}) to initialize all states (={len(inp.agent_state_init_indexes)}). To initialize all states either set state_initialization_reuse=true in interface json or provide a variable with length >={len(inp.agent_state_init_indexes)}",
+                        stacklevel=1,
+                    )
                     break
                 state_init_mapping.append((state_init_index, inp.variable_references[variable_index]))
 
