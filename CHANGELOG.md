@@ -6,6 +6,9 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ## [Unreleased]
 
 ### Changed
+* Deleted azure files from old azure devops repo
+
+### Changed
 * The generated modelDescription.xml files now also contain <ModelStructure> with a list of the outputs of the FMU.
 
 ### Changed
