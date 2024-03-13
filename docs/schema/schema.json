@@ -501,6 +501,12 @@
             "default": false,
             "description": "Whether the agent consumes time data from co-simulation algorithm.",
             "title": "Usestime"
+        },
+        "stateInitializationReuse": {
+            "default": false,
+            "description": "Whether variables are allowed to be reused for state initialization when initialization_variable is used for state initialization. If set to true the variable referred to in initialization_variable will be repeated for the state initialization until the entire state is initialized.",
+            "title": "Stateinitializationreuse",
+            "type": "boolean"
         }
     },
     "title": "ModelComponent",
