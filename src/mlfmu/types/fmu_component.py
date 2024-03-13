@@ -212,6 +212,10 @@ class ModelComponent(BaseModelConfig):
         False,
         description="Whether the agent consumes time data from co-simulation algorithm.",
     )
+    state_initialization_reuse: bool = Field(
+        False,
+        description="Whether variables are allowed to be reused for state initialization when initialization_variable is used for state initialization. If set to true the variable referred to in initialization_variable will be repeated for the state initialization until the entire state is initialized.",
+    )
 
 
 class FmiModel:
@@ -225,6 +229,7 @@ class FmiModel:
     description: Optional[str] = None
     copyright: Optional[str] = None
     license: Optional[str] = None
+    state_initialization_reuse: bool = False
 
     def __init__(self, model: ModelComponent):
         # Assign model specification to a valid FMU component complaint with FMISlave
@@ -234,6 +239,7 @@ class FmiModel:
         self.description = model.description
         self.copyright = model.copyright
         self.license = model.license
+        self.state_initialization_reuse = model.state_initialization_reuse
 
         self.add_variable_references(model.inputs, model.parameters, model.outputs)
         self.add_state_initialization_parameters(model.states)
@@ -456,13 +462,17 @@ class FmiModel:
             for variable_index, input_index in enumerate(input_indexes):
                 input_mapping.append((input_index, inp.variable_references[variable_index]))
 
+            num_state_init_indexes = len(inp.agent_state_init_indexes)
+            num_variable_references = len(inp.variable_references)
             for variable_index, state_init_index in enumerate(inp.agent_state_init_indexes):
-                if variable_index >= len(inp.variable_references):
-                    warnings.warn(
-                        f"Too few variables in {inp.name} (={len(inp.variable_references)}) to initialize all states (={len(inp.agent_state_init_indexes)}). To initialize all states set state_initialization_reuse=true in interface json or provide a variable with length >={len(inp.agent_state_init_indexes)}",
-                        stacklevel=1,
-                    )
-                    break
+                if variable_index >= num_variable_references:
+                    if not self.state_initialization_reuse:
+                        warnings.warn(
+                            f"Too few variables in {inp.name} (={num_variable_references}) to initialize all states (={num_state_init_indexes}). To initialize all states set state_initialization_reuse=true in interface json or provide a variable with length >={num_state_init_indexes}",
+                            stacklevel=1,
+                        )
+                        break
+                    variable_index = variable_index % num_variable_references
                 state_init_mapping.append((state_init_index, inp.variable_references[variable_index]))
 
         for out in self.outputs:
