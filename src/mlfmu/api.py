@@ -15,6 +15,13 @@ class MlFmuCommand(Enum):
     GENERATE = "generate-code"
     COMPILE = "build-code"
 
+    @staticmethod
+    def from_string(command_string: str):
+        matches = [command for command in MlFmuCommand if command.value == command_string]
+        if len(matches) == 0:
+            return None
+        return matches[0]
+
 
 def run(
     command: MlFmuCommand,

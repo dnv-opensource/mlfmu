@@ -4,7 +4,7 @@
 import argparse
 import logging
 from pathlib import Path
-from typing import Union
+from typing import Optional, Union
 
 from mlfmu.api import MlFmuCommand, run
 from mlfmu.utils.logger import configure_logging
@@ -123,7 +123,11 @@ def main():
     log_level_file: str = args.log_level
     configure_logging(log_level_console, log_file, log_level_file)
 
-    command: MlFmuCommand = args.command
+    command: Optional[MlFmuCommand] = MlFmuCommand.from_string(args.command)
+
+    if command is None:
+        raise
+
     interface_file = args.interface_file if "interface_file" in args else None
     model_file = args.model_file if "model_file" in args else None
     fmu_path = args.fmu_path if "fmu_path" in args else None
