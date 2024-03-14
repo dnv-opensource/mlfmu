@@ -6,6 +6,9 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ## [Unreleased]
 
 ### Changed
+* Moved CMake + conan + c++ package files and folders with cpp code inside src folder to be included in package
+
+### Changed
 * Deleted azure files from old azure devops repo
 
 ### Changed
