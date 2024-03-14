@@ -175,8 +175,7 @@ def generate_fmu_files(
 
     if error:
         # Display error and finish workflow
-        print(error)
-        return
+        raise error
 
     # Create ONNXModel and FmiModel instances -> load some metadata
     onnx_model = ONNXModel(onnx_path=onnx_path, time_input=bool(component_model.uses_time))
@@ -223,13 +222,13 @@ def validate_fmu_source_files(fmu_path: os.PathLike[str]):
 
 
 def build_fmu(
-    fmi_model: FmiModel,
     fmu_src_path: os.PathLike[str],
     fmu_build_path: os.PathLike[str],
     fmu_save_path: os.PathLike[str],
 ):
-    validate_fmu_source_files(Path(fmu_src_path) / fmi_model.name)
-
+    fmu_src_path = Path(fmu_src_path)
+    validate_fmu_source_files(fmu_src_path)
+    fmu_name = fmu_src_path.stem
     conan_install_command = [
         "conan",
         "install",
@@ -246,8 +245,8 @@ def build_fmu(
     cmake_set_folders = [
         f"-DCMAKE_BINARY_DIR={str(fmu_build_path)}",
         f"-DFMU_OUTPUT_DIR={str(fmu_save_path)}",
-        f"-DFMU_NAMES={fmi_model.name}",
-        f"-DFMU_SOURCE_PATH={str(fmu_src_path)}",
+        f"-DFMU_NAMES={fmu_name}",
+        f"-DFMU_SOURCE_PATH={str(fmu_src_path.parent)}",
     ]
 
     cmake_command = ["cmake", *cmake_set_folders, "--preset", "conan-default"]
@@ -260,13 +259,10 @@ def build_fmu(
     _ = subprocess.run(cmake_build_command)
     os.chdir(os.getcwd())
 
-    # TODO: Clean up.
-
-    pass
-
 
 if __name__ == "__main__":
     fmi_model = generate_fmu_files(fmu_src_path=fmu_src_path, onnx_path=onnx_path, interface_spec_path=json_interface)
-    if fmi_model is None:
-        exit()
-    build_fmu(fmi_model, fmu_src_path, build_path, save_fmu_path)
+
+    fmu_src_path_with_name = fmu_src_path / fmi_model.name
+
+    build_fmu(fmu_src_path_with_name, build_path, save_fmu_path)
