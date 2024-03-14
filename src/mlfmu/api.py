@@ -1,18 +1,28 @@
 import logging
-import os
+from enum import Enum
 from pathlib import Path
-from typing import Union
+from typing import Optional
 
-from dictIO import DictReader
+import mlfmu.utils.builder as builder
 
 __ALL__ = ["run", "MlFmuProcess"]
 
 logger = logging.getLogger(__name__)
 
 
+class MlFmuCommand(Enum):
+    BUILD = "build"
+    GENERATE = "generate-code"
+    COMPILE = "build-code"
+
+
 def run(
-    config_file: Union[str, os.PathLike[str]],
-    option: bool = False,
+    command: MlFmuCommand,
+    logger: logging.Logger,
+    interface_file: Optional[str],
+    model_file: Optional[str],
+    fmu_path: Optional[str],
+    source_folder: Optional[str],
 ):
     """Run the mlfmu process.
 
@@ -20,29 +30,20 @@ def run(
 
     Parameters
     ----------
-    config_file : Union[str, os.PathLike[str]]
-        file containing the mlfmu configuration
-    option : bool, optional
-        if True, does something differently, by default False
 
     Raises
     ------
-    FileNotFoundError
-        if config_file does not exist
+
     """
 
-    # Make sure config_file argument is of type Path. If not, cast it to Path type.
-    config_file = config_file if isinstance(config_file, Path) else Path(config_file)
-
-    # Check whether config file exists
-    if not config_file.exists():
-        logger.error(f"run: File {config_file} not found.")
-        raise FileNotFoundError(config_file)
-
-    if option:
-        logger.info("option is True. mlfmu process will do something differently.")
-
-    process = MlFmuProcess(config_file)
+    process = MlFmuProcess(
+        command=command,
+        source_folder=Path(source_folder) if source_folder is not None else None,
+        interface_file=Path(interface_file) if interface_file is not None else None,
+        ml_model_file=Path(model_file) if model_file is not None else None,
+        fmu_output_folder=Path(fmu_path) if fmu_path is not None else None,
+        logger=logger,
+    )
     process.run()
 
     return
@@ -51,16 +52,109 @@ def run(
 class MlFmuProcess:
     """Top level class encapsulating the mlfmu process."""
 
+    command: MlFmuCommand
+    fmu_name: Optional[str] = None
+    build_folder: Optional[Path] = None
+    source_folder: Optional[Path] = None
+    ml_model_file: Optional[Path] = None
+    interface_file: Optional[Path] = None
+    fmu_output_folder: Optional[Path] = None
+    logger: logging.Logger
+
     def __init__(
         self,
-        config_file: Path,
+        command: MlFmuCommand,
+        logger: logging.Logger,
+        source_folder: Optional[Path] = None,
+        ml_model_file: Optional[Path] = None,
+        interface_file: Optional[Path] = None,
+        fmu_output_folder: Optional[Path] = None,
     ):
-        self.config_file: Path = config_file
         self._run_number: int = 0
         self._max_number_of_runs: int = 1
         self.terminate: bool = False
-        self._read_config_file()
+
+        self.logger = logger
+
+        self.command = command
+        self.fmu_name = None
+
+        self.ml_model_file = ml_model_file
+        self.interface_file = interface_file
+        self.fmu_output_folder = fmu_output_folder
+
+        self.source_folder = source_folder
+
         return
+
+    def _build_fmu(self):
+        # TODO: Raise errors
+        if self.source_folder is None:
+            raise
+        if self.ml_model_file is None:
+            raise
+        if self.interface_file is None:
+            raise
+
+        if self.build_folder is None:
+            raise
+        if self.fmu_output_folder is None:
+            raise
+
+        try:
+            fmi_model = builder.generate_fmu_files(self.source_folder, self.ml_model_file, self.interface_file)
+        except Exception as e:
+            print(e)
+            # TODO: cleanup
+            return
+
+        self.fmu_name = fmi_model.name
+        builder.build_fmu(
+            fmu_src_path=self.source_folder / self.fmu_name,
+            fmu_build_path=self.build_folder,
+            fmu_save_path=self.fmu_output_folder,
+        )
+
+        # TODO: Clean up generated source and build files
+
+        pass
+
+    def _generate_code(self):
+        # TODO: Raise errors
+        if self.source_folder is None:
+            raise
+        if self.ml_model_file is None:
+            raise
+        if self.interface_file is None:
+            raise
+        try:
+            _ = builder.generate_fmu_files(self.source_folder, self.ml_model_file, self.interface_file)
+        except Exception as e:
+            print(e)
+            # TODO: Clean up
+            return
+
+    def _build_source_code(self):
+        if self.source_folder is None:
+            raise
+        if self.build_folder is None:
+            raise
+        if self.fmu_output_folder is None:
+            raise
+        if self.fmu_name is None:
+            raise
+
+        try:
+            builder.build_fmu(
+                fmu_src_path=self.source_folder / self.fmu_name,
+                fmu_build_path=self.build_folder,
+                fmu_save_path=self.fmu_output_folder,
+            )
+        except Exception as e:
+            print(e)
+
+        # TODO: Clean up generated source and build files
+        pass
 
     def run(self):
         """Run the mlfmu process.
@@ -114,13 +208,6 @@ class MlFmuProcess:
 
         logger.info(f"Successfully finished run {self._run_number}")
 
-        return
-
-    def _read_config_file(self):
-        """Read config file."""
-        config = DictReader.read(self.config_file)
-        if "max_number_of_runs" in config:
-            self._max_number_of_runs = config["max_number_of_runs"]
         return
 
 
