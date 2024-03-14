@@ -1,10 +1,11 @@
+import warnings
 from dataclasses import dataclass
 from enum import Enum
 from functools import reduce
-from typing import List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, StringConstraints
+from pydantic import BaseModel, ConfigDict, StringConstraints, root_validator
 from pydantic.fields import Field
 from typing_extensions import Annotated
 
@@ -85,16 +86,40 @@ class InternalState(BaseModelConfig):
         None,
         description="The default value of the parameter used for initialization. If this field is set parameters for initialization will be automatically generated for these states.",
     )
+    initialization_variable: Optional[str] = Field(
+        None,
+        description="The name of a an input or parameter in the same model interface that should be used to initialize this state.",
+    )
     agent_output_indexes: List[
         Annotated[
             str,
             StringConstraints(strip_whitespace=True, to_upper=True, pattern=r"^(\d+|\d+:\d+)$"),
         ]
     ] = Field(
-        None,
+        [],
         description="Index or range of indices of agent outputs that will be stored as internal states and will be fed as inputs in the next time step. Note: the FMU signal and the agent outputs need to have the same length.",
         examples=["10", "10:20", "30"],
     )
+
+    @root_validator(allow_reuse=True, skip_on_failure=True)
+    def check_only_one_initialization(cls, values: Dict[str, Any]):
+        init_var = "initialization_variable" in values and values["initialization_variable"] is not None
+        name = "name" in values and values["name"] is not None
+        start_value = "start_value" in values and values["start_value"] is not None
+
+        if init_var and (start_value or name):
+            raise ValueError(
+                "Only one state initialization method is allowed to be used at a time: initialization_variable cannot be set if either start_value or name is set."
+            )
+        if (not start_value) and name:
+            raise ValueError(
+                "name is set without start_value being set. Both fields needs to be set for the state initialization to be valid"
+            )
+        if start_value and (not name):
+            raise ValueError(
+                "start_value is set without name being set. Both fields needs to be set for the state initialization to be valid"
+            )
+        return values
 
 
 class InputVariable(Variable):
@@ -104,7 +129,7 @@ class InputVariable(Variable):
             StringConstraints(strip_whitespace=True, to_upper=True, pattern=r"^(\d+|\d+:\d+)$"),
         ]
     ] = Field(
-        None,
+        [],
         description="Index or range of indices of agent inputs to which this FMU signal shall be linked to. Note: the FMU signal and the agent inputs need to have the same length.",
         examples=["10", "10:20", "30"],
     )
@@ -117,7 +142,7 @@ class OutputVariable(Variable):
             StringConstraints(strip_whitespace=True, to_upper=True, pattern=r"^(\d+|\d+:\d+)$"),
         ]
     ] = Field(
-        None,
+        [],
         description="Index or range of indices of agent outputs that will be linked to this output signal. Note: the FMU signal and the agent outputs need to have the same length.",
         examples=["10", "10:20", "30"],
     )
@@ -127,7 +152,7 @@ class OutputVariable(Variable):
 class FmiInputVariable(InputVariable):
     causality: FmiCausality
     variable_references: List[int] = []
-    agent_state_init_indexes: List[int] = []
+    agent_state_init_indexes: List[List[int]] = []
 
     def __init__(self, **kwargs):  # type: ignore
         super().__init__(**kwargs)
@@ -187,6 +212,10 @@ class ModelComponent(BaseModelConfig):
         False,
         description="Whether the agent consumes time data from co-simulation algorithm.",
     )
+    state_initialization_reuse: bool = Field(
+        False,
+        description="Whether variables are allowed to be reused for state initialization when initialization_variable is used for state initialization. If set to true the variable referred to in initialization_variable will be repeated for the state initialization until the entire state is initialized.",
+    )
 
 
 class FmiModel:
@@ -200,6 +229,7 @@ class FmiModel:
     description: Optional[str] = None
     copyright: Optional[str] = None
     license: Optional[str] = None
+    state_initialization_reuse: bool = False
 
     def __init__(self, model: ModelComponent):
         # Assign model specification to a valid FMU component complaint with FMISlave
@@ -209,6 +239,7 @@ class FmiModel:
         self.description = model.description
         self.copyright = model.copyright
         self.license = model.license
+        self.state_initialization_reuse = model.state_initialization_reuse
 
         self.add_variable_references(model.inputs, model.parameters, model.outputs)
         self.add_state_initialization_parameters(model.states)
@@ -297,7 +328,7 @@ class FmiModel:
         self.parameters = fmu_parameters
 
     def add_state_initialization_parameters(self, states: List[InternalState]):
-        """Generate FmuInputVariables for initialization of states for the InternalState objects that have set start_value and name. The generated parameters are appended to self.parameters.
+        """Generate or modifies FmuInputVariables for initialization of states for the InternalState objects that have set start_value and name or have set initialization_variable. Any generated parameters are appended to self.parameters.
 
         Args:
             states (List[InternalState]): List of states from JSON interface
@@ -305,11 +336,37 @@ class FmiModel:
         """
         init_parameters: List[FmiInputVariable] = []
 
-        value_reference_start = self.get_total_variable_number()  # TODO: Biggest used value reference + 1
+        value_reference_start = (
+            self.get_total_variable_number()
+        )  # TODO: Biggest used value reference + 1, will this always be correct?
         current_state_index_state = 0
         for i, state in enumerate(states):
             length = len(range_list_expanded(state.agent_output_indexes))
-            if state.start_value is not None:
+            if state.initialization_variable is not None:
+                variable_name = state.initialization_variable
+                variable_name_input_index = [i for i, inp in enumerate(self.inputs) if inp.name == variable_name]
+                variable_name_parameter_index = [
+                    i for i, param in enumerate(self.parameters) if param.name == variable_name
+                ]
+                if len(variable_name_input_index) + len(variable_name_parameter_index) > 1:
+                    raise ValueError(
+                        f"Found {len(variable_name_input_index) + len(variable_name_parameter_index)} FMU inputs or parameters with same name (={variable_name}) when trying to use for state initialization. Variables must have a unique name."
+                    )
+
+                if len(variable_name_input_index) + len(variable_name_parameter_index) == 0:
+                    raise ValueError(
+                        f"Did not find any FMU variables for use for initialization with name={variable_name} for state with agent_output_indexes={state.agent_output_indexes}."
+                    )
+                agent_state_init_indexes = list(range(current_state_index_state, current_state_index_state + length))
+
+                if len(variable_name_input_index) == 1:
+                    self.inputs[variable_name_input_index[0]].agent_state_init_indexes.append(agent_state_init_indexes)
+                if len(variable_name_parameter_index) == 1:
+                    self.parameters[variable_name_parameter_index[0]].agent_state_init_indexes.append(
+                        agent_state_init_indexes
+                    )
+
+            elif state.start_value is not None:
                 if state.name is None:
                     raise ValueError(
                         f"State with index {i} has state_value (!= None) without having a name. Either give it a name or set start_value = None"
@@ -405,8 +462,19 @@ class FmiModel:
             for variable_index, input_index in enumerate(input_indexes):
                 input_mapping.append((input_index, inp.variable_references[variable_index]))
 
-            for variable_index, state_init_index in enumerate(inp.agent_state_init_indexes):
-                state_init_mapping.append((state_init_index, inp.variable_references[variable_index]))
+            num_variable_references = len(inp.variable_references)
+            for state_init_indexes in inp.agent_state_init_indexes:
+                num_state_init_indexes = len(state_init_indexes)
+                for variable_index, state_init_index in enumerate(state_init_indexes):
+                    if variable_index >= num_variable_references:
+                        if not self.state_initialization_reuse:
+                            warnings.warn(
+                                f"Too few variables in {inp.name} (={num_variable_references}) to initialize all states (={num_state_init_indexes}). To initialize all states set state_initialization_reuse=true in interface json or provide a variable with length >={num_state_init_indexes}",
+                                stacklevel=1,
+                            )
+                            break
+                        variable_index = variable_index % num_variable_references
+                    state_init_mapping.append((state_init_index, inp.variable_references[variable_index]))
 
         for out in self.outputs:
             output_indexes = range_list_expanded(out.agent_output_indexes)
