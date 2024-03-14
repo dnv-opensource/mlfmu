@@ -12,10 +12,13 @@ from mlfmu.utils.fmi_builder import generate_model_description
 from mlfmu.utils.signals import range_list_expanded
 
 # Hard coded values for testing functionality
-absolute_path = Path().absolute()
+path_to_this_file = Path(os.path.abspath(__file__))
+absolute_path = path_to_this_file.parent.parent
+fmu_build_folder = absolute_path / "fmu_build"
+# absolute_path = Path().absolute()
 # TODO: I had some problems with this absolute_path.parent.parent, so I changed it to this to make it work.
 # These are just temporary hard coded values that should be provided by the user. So it isn't that important.
-template_parent_path = absolute_path / "templates" / "fmu"
+template_parent_path = fmu_build_folder / "templates" / "fmu"
 json_interface = absolute_path / "examples" / "wind_generator" / "config" / "interface.json"
 fmu_src_path = absolute_path / "examples" / "wind_generator"
 onnx_path = absolute_path / "examples" / "wind_generator" / "config" / "example.onnx"
