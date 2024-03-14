@@ -255,7 +255,7 @@ def build_fmu(
     cmake_command = ["cmake", *cmake_set_folders, "--preset", "conan-default"]
 
     cmake_build_command = ["cmake", "--build", ".", "-j", "14", "--config", "Release"]
-
+    os.chdir(fmu_build_folder)
     _ = subprocess.run(conan_install_command)
     _ = subprocess.run(cmake_command)
     os.chdir(fmu_build_path)
