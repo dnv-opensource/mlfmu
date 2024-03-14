@@ -91,13 +91,13 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
         raise ValueError(
             f"The number of total output indexes for all outputs in the interface file(={num_fmu_outputs}) cannot exceed the output size of the ml model (={onnx.output_size})"
         )
-    if num_onnx_states > min(onnx.state_size, onnx.output_size):
+    if num_onnx_states > onnx.state_size:
         raise ValueError(
-            f"The number of total output indexes for all states in the interface file(={num_onnx_states}) cannot exceed either the state input size (={onnx.state_size}) or the output size of the ml model (={onnx.output_size})"
+            f"The number of total output indexes for all states in the interface file(={num_onnx_states}) cannot exceed either the state input size (={onnx.state_size})"
         )
-    if num_onnx_state_init > min(onnx.state_size, num_fmu_variables):
+    if num_onnx_state_init > onnx.state_size:
         raise ValueError(
-            f"The number of state that are initialized in the interface file(={num_onnx_state_init}) cannot exceed either the state input size (={onnx.state_size}) or the number of fmu variables (={num_fmu_variables})"
+            f"The number of state that are initialized in the interface file(={num_onnx_state_init}) cannot exceed either the state input size (={onnx.state_size})"
         )
 
     # Flatten vectors to comply with template requirements -> onnx-index, variable-reference, onnx-index, variable-reference ...
