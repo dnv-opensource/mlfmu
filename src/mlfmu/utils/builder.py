@@ -255,6 +255,10 @@ def build_fmu(
     cmake_command = ["cmake", *cmake_set_folders, "--preset", "conan-default"]
 
     cmake_build_command = ["cmake", "--build", ".", "-j", "14", "--config", "Release"]
+
+    cmake_presets_file = Path(fmu_build_folder) / "CMakeUserPresets.json"
+    cmake_presets_file.unlink(missing_ok=True)
+
     os.chdir(fmu_build_folder)
     _ = subprocess.run(conan_install_command)
     _ = subprocess.run(cmake_command)
