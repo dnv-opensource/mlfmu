@@ -124,7 +124,7 @@ class MlFmuProcess:
         self.command = command
 
         if self.command == MlFmuCommand.BUILD:
-            temp_folder = tempfile.TemporaryDirectory(prefix="mlfmu_")
+            temp_folder = tempfile.TemporaryDirectory(prefix="mlfmu_", delete=False)
             self.build_folder = Path(temp_folder.name) / "build"
             self.source_folder = Path(temp_folder.name) / "src"
 
