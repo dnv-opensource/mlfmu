@@ -136,7 +136,6 @@ def main():
     # Invoke API
     run(
         command=command,
-        logger=logger,
         interface_file=interface_file,
         model_file=model_file,
         fmu_path=fmu_path,
