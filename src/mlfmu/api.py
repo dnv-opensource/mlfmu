@@ -143,7 +143,7 @@ class MlFmuProcess:
             else:
                 self.interface_file = interface_file
 
-            if self.ml_model_file is None:
+            if ml_model_file is None:
                 # Check if there is a onnx file in current working directory. If it exists use it.
                 model_file_match = find_default_file(current_folder, "onnx", "model")
                 if model_file_match is None:
