@@ -384,7 +384,9 @@ class FmiModel:
                     length=length,
                     is_array=is_array,
                     agent_input_indexes=[],
-                    agent_state_init_indexes=list(range(current_state_index_state, current_state_index_state + length)),
+                    agent_state_init_indexes=[
+                        list(range(current_state_index_state, current_state_index_state + length))
+                    ],
                 )
                 init_parameters.append(init_param)
                 value_reference_start += length
