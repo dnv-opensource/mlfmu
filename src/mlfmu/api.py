@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 
 class MlFmuCommand(Enum):
     BUILD = "build"
-    GENERATE = "generate-code"
-    COMPILE = "build-code"
+    GENERATE = "codegen"
+    COMPILE = "compile"
 
     @staticmethod
     def from_string(command_string: str):
