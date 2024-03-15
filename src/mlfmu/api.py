@@ -1,5 +1,6 @@
 import logging
 import os
+import shutil
 import tempfile
 from enum import Enum
 from pathlib import Path
@@ -27,7 +28,6 @@ class MlFmuCommand(Enum):
 
 def run(
     command: MlFmuCommand,
-    logger: logging.Logger,
     interface_file: Optional[str],
     model_file: Optional[str],
     fmu_path: Optional[str],
@@ -51,112 +51,40 @@ def run(
         interface_file=Path(interface_file) if interface_file is not None else None,
         ml_model_file=Path(model_file) if model_file is not None else None,
         fmu_output_folder=Path(fmu_path) if fmu_path is not None else None,
-        logger=logger,
     )
     process.run()
 
     return
 
 
-def find_default_file(dir: Path, file_extension: str, default_name: Optional[str] = None):
-    # Check if there is a file with correct file extension in current working directory. If it exists use it.
-    matching_files: List[Path] = []
-
-    for file in os.listdir(dir):
-        file_path = dir / file
-        if file_path.is_file() and file_path.suffix.lstrip(".") == file_extension:
-            matching_files.append(file_path)
-
-    if len(matching_files) == 0:
-        return
-
-    if len(matching_files) == 1:
-        return matching_files[0]
-
-    # If there are more matches on file extension. Use the one that matches the default name
-    if default_name is None:
-        return
-
-    name_matches = [file for file in matching_files if default_name in file.stem]
-
-    if len(name_matches) == 0:
-        return
-
-    if len(name_matches) == 1:
-        return name_matches[0]
-
-    # If more multiple name matches use the exact match if it exists
-    name_exact_matches = [file for file in matching_files if default_name == file.stem]
-
-    if len(name_exact_matches) == 1:
-        return name_matches[0]
-    return
-
-
-class MlFmuProcess:
-    """Top level class encapsulating the mlfmu process."""
-
-    command: MlFmuCommand
+class MlFmuBuilder:
     fmu_name: Optional[str] = None
     build_folder: Optional[Path] = None
     source_folder: Optional[Path] = None
     ml_model_file: Optional[Path] = None
     interface_file: Optional[Path] = None
     fmu_output_folder: Optional[Path] = None
-    logger: logging.Logger
-    files_to_not_clean: List[Path] = []
+    delete_build_folders: bool = False
 
     def __init__(
         self,
-        command: MlFmuCommand,
-        logger: logging.Logger,
-        source_folder: Optional[Path] = None,
-        ml_model_file: Optional[Path] = None,
+        fmu_name: Optional[str] = None,
         interface_file: Optional[Path] = None,
+        ml_model_file: Optional[Path] = None,
+        source_folder: Optional[Path] = None,
         fmu_output_folder: Optional[Path] = None,
+        build_folder: Optional[Path] = None,
+        delete_build_folders: bool = False,
     ):
-        self._run_number: int = 0
-        self._max_number_of_runs: int = 1
-        self.terminate: bool = False
+        self.fmu_name = fmu_name
+        self.interface_file = interface_file
+        self.ml_model_file = ml_model_file
+        self.source_folder = source_folder
+        self.fmu_output_folder = fmu_output_folder
+        self.build_folder = build_folder
+        self.delete_build_folders = delete_build_folders
 
-        self.logger = logger
-
-        self.command = command
-
-        if self.command == MlFmuCommand.BUILD:
-            temp_folder = tempfile.TemporaryDirectory(prefix="mlfmu_", delete=False)
-            self.build_folder = Path(temp_folder.name) / "build"
-            self.source_folder = Path(temp_folder.name) / "src"
-
-            current_folder = Path(os.getcwd())
-
-            self.fmu_output_folder = current_folder if fmu_output_folder is None else fmu_output_folder
-
-            if interface_file is None:
-                # Find a default file if it exists
-                interface_file_match = find_default_file(current_folder, "json", "interface")
-                if interface_file_match is None:
-                    raise FileNotFoundError(
-                        "No interface file provided and no good match found ion current working directory."
-                    )
-                self.interface_file = interface_file_match
-            else:
-                self.interface_file = interface_file
-
-            if ml_model_file is None:
-                # Check if there is a onnx file in current working directory. If it exists use it.
-                model_file_match = find_default_file(current_folder, "onnx", "model")
-                if model_file_match is None:
-                    raise FileNotFoundError(
-                        "No model file provided and no good match found ion current working directory."
-                    )
-                self.ml_model_file = model_file_match
-            else:
-                self.ml_model_file = ml_model_file
-
-        return
-
-    def _build_fmu(self):
+    def build(self):
         # TODO: Raise errors
         if self.source_folder is None:
             raise
@@ -174,7 +102,8 @@ class MlFmuProcess:
             fmi_model = builder.generate_fmu_files(self.source_folder, self.ml_model_file, self.interface_file)
         except Exception as e:
             print(e)
-            # TODO: cleanup
+            if self.delete_build_folders:
+                self.delete_source()
             return
 
         self.fmu_name = fmi_model.name
@@ -184,11 +113,12 @@ class MlFmuProcess:
             fmu_save_path=self.fmu_output_folder,
         )
 
-        # TODO: Clean up generated source and build files
-
+        if self.delete_build_folders:
+            self.delete_source()
+            self.delete_build()
         pass
 
-    def _generate_code(self):
+    def generate(self):
         # TODO: Raise errors
         if self.source_folder is None:
             raise
@@ -197,13 +127,15 @@ class MlFmuProcess:
         if self.interface_file is None:
             raise
         try:
-            _ = builder.generate_fmu_files(self.source_folder, self.ml_model_file, self.interface_file)
+            fmi_model = builder.generate_fmu_files(self.source_folder, self.ml_model_file, self.interface_file)
+            self.fmu_name = fmi_model.name
         except Exception as e:
             print(e)
-            # TODO: Clean up
+            if self.delete_build_folders:
+                self.delete_source()
             return
 
-    def _build_source_code(self):
+    def compile(self):
         if self.source_folder is None:
             raise
         if self.build_folder is None:
@@ -222,8 +154,107 @@ class MlFmuProcess:
         except Exception as e:
             print(e)
 
-        # TODO: Clean up generated source and build files
+        if self.delete_build_folders:
+            self.delete_build()
         pass
+
+    def delete_source(self):
+        if self.source_folder is not None and self.source_folder.exists():
+            shutil.rmtree(self.source_folder)
+
+    def delete_build(self):
+        if self.build_folder is not None and self.build_folder.exists():
+            shutil.rmtree(self.build_folder)
+
+
+class MlFmuProcess:
+    """Top level class encapsulating the mlfmu process."""
+
+    command: MlFmuCommand
+    builder: MlFmuBuilder
+    temp_folder: Optional[tempfile.TemporaryDirectory[str]] = None
+
+    def __init__(
+        self,
+        command: MlFmuCommand,
+        source_folder: Optional[Path] = None,
+        ml_model_file: Optional[Path] = None,
+        interface_file: Optional[Path] = None,
+        fmu_output_folder: Optional[Path] = None,
+    ):
+        self._run_number: int = 0
+        self._max_number_of_runs: int = 1
+        self.terminate: bool = False
+
+        self.command = command
+
+        fmu_name: Optional[str] = None
+        build_folder: Optional[Path] = None
+
+        current_folder = Path(os.getcwd())
+        # For
+        if self.command == MlFmuCommand.BUILD or self.command == MlFmuCommand.GENERATE:
+            if interface_file is None:
+                # Find a default file if it exists
+                interface_file_match = self._find_default_file(current_folder, "json", "interface")
+                if interface_file_match is None:
+                    raise FileNotFoundError(
+                        "No interface file provided and no good match found ion current working directory."
+                    )
+                interface_file = interface_file_match
+            else:
+                interface_file = interface_file
+
+            if ml_model_file is None:
+                # Check if there is a onnx file in current working directory. If it exists use it.
+                model_file_match = self._find_default_file(current_folder, "onnx", "model")
+                if model_file_match is None:
+                    raise FileNotFoundError(
+                        "No model file provided and no good match found ion current working directory."
+                    )
+                ml_model_file = model_file_match
+            else:
+                ml_model_file = ml_model_file
+
+        if self.command == MlFmuCommand.BUILD or self.command == MlFmuCommand.COMPILE:
+            self.temp_folder = self.temp_folder or tempfile.TemporaryDirectory(prefix="mlfmu_", delete=False)
+            build_folder = Path(self.temp_folder.name) / "build"
+            fmu_output_folder = current_folder if fmu_output_folder is None else fmu_output_folder
+
+        if self.command == MlFmuCommand.BUILD:
+            self.temp_folder = self.temp_folder or tempfile.TemporaryDirectory(prefix="mlfmu_", delete=False)
+            source_folder = Path(self.temp_folder.name) / "src"
+        elif self.command == MlFmuCommand.GENERATE:
+            source_folder = source_folder or current_folder
+        elif self.command == MlFmuCommand.COMPILE:
+            if source_folder is None:
+                # If source folde ris not provide try to find one in current folder that is compatible with the tool
+                # I.e a folder that contains everything needed for compilation
+                for dir, _, _ in os.walk(current_folder):
+                    try:
+                        possible_source_folder = Path(dir)
+                        builder.validate_fmu_source_files(possible_source_folder)
+                        source_folder = possible_source_folder
+                        break
+                    except Exception:
+                        continue
+
+            if source_folder is None:
+                raise
+            fmu_name = source_folder.stem
+            source_folder = source_folder.parent
+
+        self.builder = MlFmuBuilder(
+            fmu_name,
+            interface_file,
+            ml_model_file,
+            source_folder,
+            fmu_output_folder,
+            build_folder,
+            delete_build_folders=False,
+        )
+
+        return
 
     def run(self):
         """Run the mlfmu process.
@@ -269,6 +300,41 @@ class MlFmuProcess:
         self._max_number_of_runs = value
         return
 
+    @staticmethod
+    def _find_default_file(dir: Path, file_extension: str, default_name: Optional[str] = None):
+        # Check if there is a file with correct file extension in current working directory. If it exists use it.
+        matching_files: List[Path] = []
+
+        for file in os.listdir(dir):
+            file_path = dir / file
+            if file_path.is_file() and file_path.suffix.lstrip(".") == file_extension:
+                matching_files.append(file_path)
+
+        if len(matching_files) == 0:
+            return
+
+        if len(matching_files) == 1:
+            return matching_files[0]
+
+        # If there are more matches on file extension. Use the one that matches the default name
+        if default_name is None:
+            return
+
+        name_matches = [file for file in matching_files if default_name in file.stem]
+
+        if len(name_matches) == 0:
+            return
+
+        if len(name_matches) == 1:
+            return name_matches[0]
+
+        # If more multiple name matches use the exact match if it exists
+        name_exact_matches = [file for file in matching_files if default_name == file.stem]
+
+        if len(name_exact_matches) == 1:
+            return name_matches[0]
+        return
+
     def _run_process(self):
         """Execute a single run of the mlfmu process."""
         self._run_number += 1
@@ -278,8 +344,19 @@ class MlFmuProcess:
         logger.info(f"Successfully finished run {self._run_number}")
 
         if self.command == MlFmuCommand.BUILD:
-            self._build_fmu()
+            self.builder.build()
+        elif self.command == MlFmuCommand.GENERATE:
+            self.builder.generate()
+        elif self.command == MlFmuCommand.COMPILE:
+            self.builder.compile()
 
+        if self.temp_folder is not None:
+            temp_folder_path = Path(self.temp_folder.name)
+            if temp_folder_path.exists():
+                try:
+                    shutil.rmtree(temp_folder_path)
+                except Exception as e:
+                    print(e)
         return
 
 
