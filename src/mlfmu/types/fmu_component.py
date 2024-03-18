@@ -5,7 +5,7 @@ from functools import reduce
 from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, StringConstraints, root_validator
+from pydantic import BaseModel, ConfigDict, StringConstraints, model_validator
 from pydantic.fields import Field
 from typing_extensions import Annotated
 
@@ -101,7 +101,8 @@ class InternalState(BaseModelConfig):
         examples=["10", "10:20", "30"],
     )
 
-    @root_validator(allow_reuse=True, skip_on_failure=True)
+    @model_validator(mode="before")
+    @classmethod
     def check_only_one_initialization(cls, values: Dict[str, Any]):
         init_var = "initialization_variable" in values and values["initialization_variable"] is not None
         name = "name" in values and values["name"] is not None
