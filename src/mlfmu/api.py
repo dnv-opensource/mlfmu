@@ -89,17 +89,23 @@ class MlFmuBuilder:
         self.root_directory = root_directory or Path(os.getcwd())
 
     def build(self):
-        # TODO: Raise errors
-
         self.source_folder = self.source_folder or self.default_build_source_folder()
 
         self.ml_model_file = self.ml_model_file or self.default_model_file()
         if self.ml_model_file is None:
-            raise
+            raise FileNotFoundError(
+                "No model file was provided and no obvious model file found in current working directory (os.getcwd())"
+            )
+        if not self.ml_model_file.exists():
+            raise FileNotFoundError(f"The given model file (={self.ml_model_file}) does not exist.")
 
         self.interface_file = self.interface_file or self.default_interface_file()
         if self.interface_file is None:
-            raise
+            raise FileNotFoundError(
+                "No interface json file was provided and no obvious interface file found in current working directory (os.getcwd())"
+            )
+        if not self.interface_file.exists():
+            raise FileNotFoundError(f"The given interface json file (={self.interface_file}) does not exist.")
 
         self.build_folder = self.build_folder or self.default_build_folder()
 
@@ -127,17 +133,23 @@ class MlFmuBuilder:
         pass
 
     def generate(self):
-        # TODO: Raise errors
-
         self.source_folder = self.source_folder or self.default_generate_source_folder()
 
         self.ml_model_file = self.ml_model_file or self.default_model_file()
         if self.ml_model_file is None:
-            raise
+            raise FileNotFoundError(
+                "No model file was provided and no obvious model file found in current working directory (os.getcwd())"
+            )
+        if not self.ml_model_file.exists():
+            raise FileNotFoundError(f"The given model file (={self.ml_model_file}) does not exist.")
 
         self.interface_file = self.interface_file or self.default_interface_file()
         if self.interface_file is None:
-            raise
+            raise FileNotFoundError(
+                "No interface json file was provided and no obvious interface file found in current working directory (os.getcwd())"
+            )
+        if not self.interface_file.exists():
+            raise FileNotFoundError(f"The given interface json file (={self.interface_file}) does not exist.")
 
         try:
             fmi_model = builder.generate_fmu_files(self.source_folder, self.ml_model_file, self.interface_file)
@@ -156,7 +168,9 @@ class MlFmuBuilder:
         if self.fmu_name is None or self.source_folder is None:
             source_child_folder = self.default_compile_source_folder()
             if source_child_folder is None:
-                raise
+                raise FileNotFoundError(
+                    f"No valid FMU source directory found anywhere inside the current working directory or any given source path (={self.source_folder})."
+                )
             self.fmu_name = source_child_folder.stem
             self.source_folder = source_child_folder.parent
 

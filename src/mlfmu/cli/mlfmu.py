@@ -126,7 +126,9 @@ def main():
     command: Optional[MlFmuCommand] = MlFmuCommand.from_string(args.command)
 
     if command is None:
-        raise
+        raise ValueError(
+            f"The given command (={args.command}) does not match any of the existing commands (={[command.value for command in MlFmuCommand]})."
+        )
 
     interface_file = args.interface_file if "interface_file" in args else None
     model_file = args.model_file if "model_file" in args else None
