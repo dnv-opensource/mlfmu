@@ -3,11 +3,12 @@ import sys
 from argparse import ArgumentError
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, Union
+from typing import List, Optional, Union
 
 import pytest
 from pytest import MonkeyPatch
 
+from mlfmu.api import MlFmuCommand
 from mlfmu.cli import mlfmu
 from mlfmu.cli.mlfmu import _argparser, main
 
@@ -21,26 +22,24 @@ class CliArgs:
     verbose: bool = False
     log: Union[str, None] = None
     log_level: str = field(default_factory=lambda: "WARNING")
-    config_file: Union[str, None] = field(default_factory=lambda: "test_config_file")  # noqa: N815
-    option: bool = False
+    command: str = ""
 
 
 @pytest.mark.parametrize(
     "inputs, expected",
     [
         ([], ArgumentError),
-        (["test_config_file"], CliArgs()),
-        (["test_config_file", "-q"], CliArgs(quiet=True)),
-        (["test_config_file", "--quiet"], CliArgs(quiet=True)),
-        (["test_config_file", "-v"], CliArgs(verbose=True)),
-        (["test_config_file", "--verbose"], CliArgs(verbose=True)),
-        (["test_config_file", "-qv"], ArgumentError),
-        (["test_config_file", "--log", "logFile"], CliArgs(log="logFile")),
-        (["test_config_file", "--log"], ArgumentError),
-        (["test_config_file", "--log-level", "INFO"], CliArgs(log_level="INFO")),
-        (["test_config_file", "--log-level"], ArgumentError),
-        (["test_config_file", "--option"], CliArgs(option=True)),
-        (["test_config_file", "-o"], ArgumentError),
+        (["asd"], ArgumentError),
+        (["build", "-q"], CliArgs(quiet=True, command="build")),
+        (["build", "--quiet"], CliArgs(quiet=True, command="build")),
+        (["build", "-v"], CliArgs(verbose=True, command="build")),
+        (["build", "--verbose"], CliArgs(verbose=True, command="build")),
+        (["build", "-qv"], ArgumentError),
+        (["build", "--log", "logFile"], CliArgs(log="logFile", command="build")),
+        (["build", "--log"], ArgumentError),
+        (["build", "--log-level", "INFO"], CliArgs(log_level="INFO", command="build")),
+        (["build", "--log-level"], ArgumentError),
+        (["build", "-o"], ArgumentError),
     ],
 )
 def test_cli(
@@ -58,6 +57,8 @@ def test_cli(
         args_expected: CliArgs = expected
         args = parser.parse_args()
         # Assert args
+        print(args)
+        print(args_expected)
         for key in args_expected.__dataclass_fields__:
             assert args.__getattribute__(key) == args_expected.__getattribute__(key)
     elif issubclass(expected, Exception):
@@ -84,28 +85,28 @@ class ConfigureLoggingArgs:
     "inputs, expected",
     [
         ([], ArgumentError),
-        (["test_config_file"], ConfigureLoggingArgs()),
-        (["test_config_file", "-q"], ConfigureLoggingArgs(log_level_console="ERROR")),
+        (["build"], ConfigureLoggingArgs()),
+        (["build", "-q"], ConfigureLoggingArgs(log_level_console="ERROR")),
         (
-            ["test_config_file", "--quiet"],
+            ["build", "--quiet"],
             ConfigureLoggingArgs(log_level_console="ERROR"),
         ),
-        (["test_config_file", "-v"], ConfigureLoggingArgs(log_level_console="INFO")),
+        (["build", "-v"], ConfigureLoggingArgs(log_level_console="INFO")),
         (
-            ["test_config_file", "--verbose"],
+            ["build", "--verbose"],
             ConfigureLoggingArgs(log_level_console="INFO"),
         ),
-        (["test_config_file", "-qv"], ArgumentError),
+        (["build", "-qv"], ArgumentError),
         (
-            ["test_config_file", "--log", "logFile"],
+            ["build", "--log", "logFile"],
             ConfigureLoggingArgs(log_file=Path("logFile")),
         ),
-        (["test_config_file", "--log"], ArgumentError),
+        (["build", "--log"], ArgumentError),
         (
-            ["test_config_file", "--log-level", "INFO"],
+            ["build", "--log-level", "INFO"],
             ConfigureLoggingArgs(log_level_file="INFO"),
         ),
-        (["test_config_file", "--log-level"], ArgumentError),
+        (["build", "--log-level"], ArgumentError),
     ],
 )
 def test_logging_configuration(
@@ -129,8 +130,11 @@ def test_logging_configuration(
         args.log_level_file = log_level_file
 
     def fake_run(
-        config_file: Path,
-        option: bool,
+        command: str,
+        interface_file: Optional[str],
+        model_file: Optional[str],
+        fmu_path: Optional[str],
+        source_folder: Optional[str],
     ):
         pass
 
@@ -158,17 +162,18 @@ def test_logging_configuration(
 @dataclass()
 class ApiArgs:
     # Values that main() is expected to pass to run() by default when invoking the API
-    config_file: Path = field(default_factory=lambda: Path("test_config_file"))
-    option: bool = False
+    command: Optional[MlFmuCommand] = None
+    interface_file: Optional[str] = None
+    model_file: Optional[str] = None
+    fmu_path: Optional[str] = None
+    source_folder: Optional[str] = None
 
 
 @pytest.mark.parametrize(
     "inputs, expected",
     [
         ([], ArgumentError),
-        (["test_config_file"], ApiArgs()),
-        (["test_config_file", "--option"], ApiArgs(option=True)),
-        (["test_config_file", "-o"], ArgumentError),
+        (["build"], ApiArgs()),
     ],
 )
 def test_api_invokation(
@@ -183,11 +188,17 @@ def test_api_invokation(
     args: ApiArgs = ApiArgs()
 
     def fake_run(
-        config_file: Path,
-        option: bool = False,
+        command: str,
+        interface_file: Optional[str],
+        model_file: Optional[str],
+        fmu_path: Optional[str],
+        source_folder: Optional[str],
     ):
-        args.config_file = config_file
-        args.option = option
+        args.command = MlFmuCommand.from_string(command)
+        args.interface_file = interface_file
+        args.model_file = model_file
+        args.fmu_path = fmu_path
+        args.source_folder = source_folder
 
     monkeypatch.setattr(mlfmu, "run", fake_run)
     # Execute
