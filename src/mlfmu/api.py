@@ -361,22 +361,3 @@ class MlFmuProcess:
         elif self.command == MlFmuCommand.COMPILE:
             self.builder.compile()
         return
-
-
-def _do_cool_stuff(run_number: int) -> str:
-    """Do cool stuff.
-
-    Converts the passed in run number to a string.
-
-    Parameters
-    ----------
-    run_number : int
-        the run number
-
-    Returns
-    -------
-    str
-        the run number converted to string
-    """
-    result: str = ""
-    return result
