@@ -64,7 +64,9 @@ def _argparser() -> argparse.ArgumentParser:
 
     # Main command
     # build command to go from config to compiled fmu
-    build_parser = sub_parsers.add_parser(MlFmuCommand.BUILD.value, help="Build FMU from interface and model files")
+    build_parser = sub_parsers.add_parser(
+        MlFmuCommand.BUILD.value, help="Build FMU from interface and model files", parents=[parser], add_help=False
+    )
 
     # Add options for build command
     _ = build_parser.add_argument("--interface-file", type=str, help="JSON file describing the FMU following schema")
@@ -74,7 +76,10 @@ def _argparser() -> argparse.ArgumentParser:
     # Split the main build command into steps for customization
     # generate-code command to go from config to generated fmu source code
     code_generation_parser = sub_parsers.add_parser(
-        MlFmuCommand.GENERATE.value, help="Generate FMU source code from interface and model files"
+        MlFmuCommand.GENERATE.value,
+        help="Generate FMU source code from interface and model files",
+        parents=[parser],
+        add_help=False,
     )
 
     # Add options for code generation command
@@ -88,7 +93,9 @@ def _argparser() -> argparse.ArgumentParser:
     )
 
     # build-code command to go from fmu source code to compiled fmu
-    build_code_parser = sub_parsers.add_parser(MlFmuCommand.COMPILE.value, help="Build FMU from FMU source code")
+    build_code_parser = sub_parsers.add_parser(
+        MlFmuCommand.COMPILE.value, help="Build FMU from FMU source code", parents=[parser], add_help=False
+    )
 
     # Add option for fmu compilation
     _ = build_code_parser.add_argument(
