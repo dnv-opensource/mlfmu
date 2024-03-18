@@ -207,11 +207,11 @@ class MlFmuBuilder:
         return MlFmuBuilder._find_default_file(self.root_directory, "onnx", "model")
 
     def default_build_folder(self):
-        self.temp_folder = self.temp_folder or tempfile.TemporaryDirectory(prefix="mlfmu_", delete=True)
+        self.temp_folder = self.temp_folder or tempfile.TemporaryDirectory(prefix="mlfmu_")
         return Path(self.temp_folder.name) / "build"
 
     def default_build_source_folder(self):
-        self.temp_folder = self.temp_folder or tempfile.TemporaryDirectory(prefix="mlfmu_", delete=True)
+        self.temp_folder = self.temp_folder or tempfile.TemporaryDirectory(prefix="mlfmu_")
         return Path(self.temp_folder.name) / "src"
 
     def default_generate_source_folder(self):
