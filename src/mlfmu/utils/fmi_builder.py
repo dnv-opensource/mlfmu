@@ -1,8 +1,7 @@
 import datetime
+import importlib.metadata as metadata
 import logging
 from xml.etree.ElementTree import Element, ElementTree, SubElement, indent
-
-import pkg_resources
 
 from mlfmu.types.fmu_component import (
     FmiCausality,
@@ -41,7 +40,7 @@ def generate_model_description(fmu_model: FmiModel) -> ElementTree:
 
     t = datetime.datetime.now(datetime.timezone.utc)
     date_str = t.isoformat(timespec="seconds")
-    TOOL_VERSION = pkg_resources.get_distribution("MLFMU").version
+    TOOL_VERSION = metadata.version("mlfmu")
 
     # Root <fmiModelDescription> tag
     model_description = dict(
