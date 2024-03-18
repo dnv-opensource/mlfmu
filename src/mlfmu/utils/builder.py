@@ -11,19 +11,11 @@ from mlfmu.types.onnx_model import ONNXModel
 from mlfmu.utils.fmi_builder import generate_model_description
 from mlfmu.utils.signals import range_list_expanded
 
-# Hard coded values for testing functionality
+# Paths to files needed for build
 path_to_this_file = Path(os.path.abspath(__file__))
 absolute_path = path_to_this_file.parent.parent
 fmu_build_folder = absolute_path / "fmu_build"
-# absolute_path = Path().absolute()
-# TODO: I had some problems with this absolute_path.parent.parent, so I changed it to this to make it work.
-# These are just temporary hard coded values that should be provided by the user. So it isn't that important.
 template_parent_path = fmu_build_folder / "templates" / "fmu"
-json_interface = absolute_path / "examples" / "wind_generator" / "config" / "interface.json"
-fmu_src_path = absolute_path / "examples" / "wind_generator"
-onnx_path = absolute_path / "examples" / "wind_generator" / "config" / "example.onnx"
-build_path = absolute_path / "build_fmu"
-save_fmu_path = absolute_path / "fmus"
 
 
 # Replacing all the template strings with their corresponding values and saving to new file
@@ -265,11 +257,3 @@ def build_fmu(
     os.chdir(fmu_build_path)
     _ = subprocess.run(cmake_build_command)
     os.chdir(os.getcwd())
-
-
-if __name__ == "__main__":
-    fmi_model = generate_fmu_files(fmu_src_path=fmu_src_path, onnx_path=onnx_path, interface_spec_path=json_interface)
-
-    fmu_src_path_with_name = fmu_src_path / fmi_model.name
-
-    build_fmu(fmu_src_path_with_name, build_path, save_fmu_path)
