@@ -15,14 +15,14 @@ logger = logging.getLogger(__name__)
 def _argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="mlfmu",
-        # usage="%(prog)s [options [args]]",
         epilog="_________________mlfmu___________________",
         prefix_chars="-",
         add_help=True,
-        # description=("mlfmu config_file --option"),
     )
 
-    console_verbosity = parser.add_mutually_exclusive_group(required=False)
+    common_args_parser = argparse.ArgumentParser(add_help=False)
+
+    console_verbosity = common_args_parser.add_mutually_exclusive_group(required=False)
 
     _ = console_verbosity.add_argument(
         "-q",
@@ -40,7 +40,7 @@ def _argparser() -> argparse.ArgumentParser:
         default=False,
     )
 
-    _ = parser.add_argument(
+    _ = common_args_parser.add_argument(
         "--log",
         action="store",
         type=str,
@@ -49,7 +49,7 @@ def _argparser() -> argparse.ArgumentParser:
         required=False,
     )
 
-    _ = parser.add_argument(
+    _ = common_args_parser.add_argument(
         "--log-level",
         action="store",
         type=str,
@@ -65,7 +65,10 @@ def _argparser() -> argparse.ArgumentParser:
     # Main command
     # build command to go from config to compiled fmu
     build_parser = sub_parsers.add_parser(
-        MlFmuCommand.BUILD.value, help="Build FMU from interface and model files", parents=[parser], add_help=False
+        MlFmuCommand.BUILD.value,
+        help="Build FMU from interface and model files",
+        parents=[common_args_parser],
+        add_help=True,
     )
 
     # Add options for build command
@@ -78,8 +81,8 @@ def _argparser() -> argparse.ArgumentParser:
     code_generation_parser = sub_parsers.add_parser(
         MlFmuCommand.GENERATE.value,
         help="Generate FMU source code from interface and model files",
-        parents=[parser],
-        add_help=False,
+        parents=[common_args_parser],
+        add_help=True,
     )
 
     # Add options for code generation command
@@ -94,7 +97,7 @@ def _argparser() -> argparse.ArgumentParser:
 
     # build-code command to go from fmu source code to compiled fmu
     build_code_parser = sub_parsers.add_parser(
-        MlFmuCommand.COMPILE.value, help="Build FMU from FMU source code", parents=[parser], add_help=False
+        MlFmuCommand.COMPILE.value, help="Build FMU from FMU source code", parents=[common_args_parser], add_help=True
     )
 
     # Add option for fmu compilation
