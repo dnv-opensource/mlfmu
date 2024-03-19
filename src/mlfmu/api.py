@@ -39,10 +39,16 @@ def run(
 
     Parameters
     ----------
-
-    Raises
-    ------
-
+    command: MlFmuCommand
+        which command in the mlfmu process that should be run
+    interface_file: Optional[str]
+        the path to the file containing the FMU interface. Will be inferred if not provided.
+    model_file: Optional[str]
+        the path to the ml model file. Will be inferred if not provided.
+    fmu_path: Optional[str]
+        the path to where the built FMU should be saved. Will be inferred if not provided.
+    source_folder: Optional[str]
+        the path to where the FMU source code is located. Will be inferred if not provided.
     """
 
     process = MlFmuProcess(
@@ -58,6 +64,8 @@ def run(
 
 
 class MlFmuBuilder:
+    """Class for executing the different commands in the mlfmu process."""
+
     fmu_name: Optional[str] = None
     build_folder: Optional[Path] = None
     source_folder: Optional[Path] = None
@@ -89,6 +97,17 @@ class MlFmuBuilder:
         self.root_directory = root_directory or Path(os.getcwd())
 
     def build(self):
+        """
+        Build an FMU from ml_model_file and interface_file and saves it to fmu_output_folder.
+
+        If the paths to the necessary files and directories are not given the function will try to find files and directories that match the ones needed.
+
+        Raises
+        ------
+        FileNotFoundError
+            if ml_model_file or interface_file do not exists or is not set and cannot be easily inferred.
+        ---
+        """
         self.source_folder = self.source_folder or self.default_build_source_folder()
 
         self.ml_model_file = self.ml_model_file or self.default_model_file()
@@ -130,9 +149,18 @@ class MlFmuBuilder:
             self.delete_source()
             self.delete_build()
             self.delete_temp_folder()
-        pass
 
     def generate(self):
+        """
+        Generate FMU c++ source code and model description from ml_model_file and interface_file and saves it to source_folder.
+
+        If the paths to the necessary files and directories are not given the function will try to find files and directories that match the ones needed.
+
+        Raises
+        ------
+        FileNotFoundError
+            if ml_model_file or interface_file do not exists or is not set and cannot be easily inferred.
+        """
         self.source_folder = self.source_folder or self.default_generate_source_folder()
 
         self.ml_model_file = self.ml_model_file or self.default_model_file()
@@ -158,9 +186,18 @@ class MlFmuBuilder:
             print(e)
             if self.delete_build_folders:
                 self.delete_source()
-            return
 
     def compile(self):
+        """
+        Compile FMU from FMU c++ source code and model description contained in source_folder and saves it to fmu_output_folder.
+
+        If the paths to the necessary files and directories are not given the function will try to find files and directories that match the ones needed.
+
+        Raises
+        ------
+        FileNotFoundError
+            if source_folder or fmu_name is not set and cannot be easily inferred.
+        """
         self.build_folder = self.build_folder or self.default_build_folder()
 
         self.fmu_output_folder = self.fmu_output_folder or self.default_fmu_output_folder()
@@ -186,38 +223,49 @@ class MlFmuBuilder:
         if self.delete_build_folders:
             self.delete_build()
             self.delete_temp_folder()
-        pass
 
     def delete_source(self):
+        """Delete the source folder if it exists."""
         if self.source_folder is not None and self.source_folder.exists():
             shutil.rmtree(self.source_folder)
 
     def delete_build(self):
+        """Delete the build folder if it exists."""
         if self.build_folder is not None and self.build_folder.exists():
             shutil.rmtree(self.build_folder)
 
     def delete_temp_folder(self):
+        """Delete the temp folder if it exists."""
         if self.temp_folder is not None and Path(self.temp_folder.name).exists():
             shutil.rmtree(Path(self.temp_folder.name))
 
     def default_interface_file(self):
+        """Return the path to a interface json file inside self.root_directory if it can be inferred."""
         return MlFmuBuilder._find_default_file(self.root_directory, "json", "interface")
 
     def default_model_file(self):
+        """Return the path to a ml model file inside self.root_directory if it can be inferred."""
         return MlFmuBuilder._find_default_file(self.root_directory, "onnx", "model")
 
     def default_build_folder(self):
+        """Return the path to a build folder inside the temp_folder. Creates the temp_folder if it is not set."""
         self.temp_folder = self.temp_folder or tempfile.TemporaryDirectory(prefix="mlfmu_")
         return Path(self.temp_folder.name) / "build"
 
     def default_build_source_folder(self):
+        """Return the path to a src folder inside the temp_folder. Creates the temp_folder if it is not set."""
         self.temp_folder = self.temp_folder or tempfile.TemporaryDirectory(prefix="mlfmu_")
         return Path(self.temp_folder.name) / "src"
 
     def default_generate_source_folder(self):
+        """Return the path to the default source folder for the generate process."""
         return self.root_directory
 
     def default_compile_source_folder(self):
+        """Return the path to the default source folder for the compile process.
+
+        Searches inside self.source_folder and self.root_directory for a folder that contains a folder structure and files that is required to be valid ml fmu source code.
+        """
         search_folders: List[Path] = []
         if self.source_folder is not None:
             search_folders.append(self.source_folder)
@@ -245,10 +293,12 @@ class MlFmuBuilder:
         return source_folder
 
     def default_fmu_output_folder(self):
+        """Return the path to the default fmu output folder."""
         return self.root_directory
 
     @staticmethod
     def _find_default_file(dir: Path, file_extension: str, default_name: Optional[str] = None):
+        """Return a file inside dir with the file extension that matches file_extension. If there are multiple matches it uses the closest match to default_name if given. Return None if there is no clear match."""
         # Check if there is a file with correct file extension in current working directory. If it exists use it.
         matching_files: List[Path] = []
 
