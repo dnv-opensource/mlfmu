@@ -2,10 +2,10 @@ import warnings
 from dataclasses import dataclass
 from enum import Enum
 from functools import reduce
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, StringConstraints, root_validator
+from pydantic import BaseModel, ConfigDict, StringConstraints, model_validator
 from pydantic.fields import Field
 from typing_extensions import Annotated
 
@@ -101,11 +101,11 @@ class InternalState(BaseModelConfig):
         examples=["10", "10:20", "30"],
     )
 
-    @root_validator(allow_reuse=True, skip_on_failure=True)
-    def check_only_one_initialization(cls, values: Dict[str, Any]):
-        init_var = "initialization_variable" in values and values["initialization_variable"] is not None
-        name = "name" in values and values["name"] is not None
-        start_value = "start_value" in values and values["start_value"] is not None
+    @model_validator(mode="after")
+    def check_only_one_initialization(self):
+        init_var = self.initialization_variable is not None
+        name = self.name is not None
+        start_value = self.start_value is not None
 
         if init_var and (start_value or name):
             raise ValueError(
@@ -119,7 +119,7 @@ class InternalState(BaseModelConfig):
             raise ValueError(
                 "start_value is set without name being set. Both fields needs to be set for the state initialization to be valid"
             )
-        return values
+        return self
 
 
 class InputVariable(Variable):
@@ -384,7 +384,9 @@ class FmiModel:
                     length=length,
                     is_array=is_array,
                     agent_input_indexes=[],
-                    agent_state_init_indexes=list(range(current_state_index_state, current_state_index_state + length)),
+                    agent_state_init_indexes=[
+                        list(range(current_state_index_state, current_state_index_state + length))
+                    ],
                 )
                 init_parameters.append(init_param)
                 value_reference_start += length

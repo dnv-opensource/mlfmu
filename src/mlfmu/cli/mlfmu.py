@@ -4,9 +4,9 @@
 import argparse
 import logging
 from pathlib import Path
-from typing import Union
+from typing import Optional, Union
 
-from mlfmu.api import run
+from mlfmu.api import MlFmuCommand, run
 from mlfmu.utils.logger import configure_logging
 
 logger = logging.getLogger(__name__)
@@ -15,29 +15,14 @@ logger = logging.getLogger(__name__)
 def _argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="mlfmu",
-        usage="%(prog)s config_file [options [args]]",
         epilog="_________________mlfmu___________________",
         prefix_chars="-",
         add_help=True,
-        description=("mlfmu config_file --option"),
     )
 
-    _ = parser.add_argument(
-        "config_file",
-        metavar="config_file",
-        type=str,
-        help="name of the file containing the mlfmu configuration.",
-    )
+    common_args_parser = argparse.ArgumentParser(add_help=False)
 
-    _ = parser.add_argument(
-        "--option",
-        action="store_true",
-        help="example option.",
-        default=False,
-        required=False,
-    )
-
-    console_verbosity = parser.add_mutually_exclusive_group(required=False)
+    console_verbosity = common_args_parser.add_mutually_exclusive_group(required=False)
 
     _ = console_verbosity.add_argument(
         "-q",
@@ -55,7 +40,7 @@ def _argparser() -> argparse.ArgumentParser:
         default=False,
     )
 
-    _ = parser.add_argument(
+    _ = common_args_parser.add_argument(
         "--log",
         action="store",
         type=str,
@@ -64,7 +49,7 @@ def _argparser() -> argparse.ArgumentParser:
         required=False,
     )
 
-    _ = parser.add_argument(
+    _ = common_args_parser.add_argument(
         "--log-level",
         action="store",
         type=str,
@@ -72,6 +57,57 @@ def _argparser() -> argparse.ArgumentParser:
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
         default="WARNING",
         required=False,
+    )
+
+    # Create a sub parser for each command
+    sub_parsers = parser.add_subparsers(dest="command", title="Available commands", metavar="command", required=True)
+
+    # Main command
+    # build command to go from config to compiled fmu
+    build_parser = sub_parsers.add_parser(
+        MlFmuCommand.BUILD.value,
+        help="Build FMU from interface and model files",
+        parents=[common_args_parser],
+        add_help=True,
+    )
+
+    # Add options for build command
+    _ = build_parser.add_argument("--interface-file", type=str, help="JSON file describing the FMU following schema")
+    _ = build_parser.add_argument("--model-file", type=str, help="ONNX file containing the ML Model")
+    _ = build_parser.add_argument("--fmu-path", type=str, help="Path to where the built FMU should be saved")
+
+    # Split the main build command into steps for customization
+    # generate-code command to go from config to generated fmu source code
+    code_generation_parser = sub_parsers.add_parser(
+        MlFmuCommand.GENERATE.value,
+        help="Generate FMU source code from interface and model files",
+        parents=[common_args_parser],
+        add_help=True,
+    )
+
+    # Add options for code generation command
+    _ = code_generation_parser.add_argument(
+        "--interface-file", type=str, help="json file describing the FMU following schema"
+    )
+    _ = code_generation_parser.add_argument("--model-file", type=str, help="onnx file containing the ML Model")
+    _ = code_generation_parser.add_argument(
+        "--fmu-source-path",
+        help="Path to where the generated FMU source code should be saved. Given path/to/folder the files can be found in path/to/folder/[FmuName]",
+    )
+
+    # build-code command to go from fmu source code to compiled fmu
+    build_code_parser = sub_parsers.add_parser(
+        MlFmuCommand.COMPILE.value, help="Build FMU from FMU source code", parents=[common_args_parser], add_help=True
+    )
+
+    # Add option for fmu compilation
+    _ = build_code_parser.add_argument(
+        "--fmu-source-path",
+        type=str,
+        help="Path to the folder where the FMU source code is located. The folder needs to have the same name as the FMU. E.g. path/to/folder/[FmuName]",
+    )
+    _ = build_code_parser.add_argument(
+        "--fmu-path", type=str, help="Path to where the where the built FMU should be saved"
     )
 
     return parser
@@ -97,24 +133,25 @@ def main():
     log_level_file: str = args.log_level
     configure_logging(log_level_console, log_file, log_level_file)
 
-    config_file: Path = Path(args.config_file)
-    option: bool = args.option
+    command: Optional[MlFmuCommand] = MlFmuCommand.from_string(args.command)
 
-    # Check whether mlfmu config file exists
-    if not config_file.is_file():
-        logger.error(f"mlfmu.py: File {config_file} not found.")
-        return
+    if command is None:
+        raise ValueError(
+            f"The given command (={args.command}) does not match any of the existing commands (={[command.value for command in MlFmuCommand]})."
+        )
 
-    logger.info(
-        f"Start mlfmu.py with following arguments:\n"
-        f"\t config_file: \t{config_file}\n"
-        f"\t option: \t\t\t{option}\n"
-    )
+    interface_file = args.interface_file if "interface_file" in args else None
+    model_file = args.model_file if "model_file" in args else None
+    fmu_path = args.fmu_path if "fmu_path" in args else None
+    source_folder = args.fmu_source_path if "fmu_source_path" in args else None
 
     # Invoke API
     run(
-        config_file=config_file,
-        option=option,
+        command=command,
+        interface_file=interface_file,
+        model_file=model_file,
+        fmu_path=fmu_path,
+        source_folder=source_folder,
     )
 
 

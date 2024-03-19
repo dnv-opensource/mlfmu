@@ -11,16 +11,11 @@ from mlfmu.types.onnx_model import ONNXModel
 from mlfmu.utils.fmi_builder import generate_model_description
 from mlfmu.utils.signals import range_list_expanded
 
-# Hard coded values for testing functionality
-absolute_path = Path().absolute()
-# TODO: I had some problems with this absolute_path.parent.parent, so I changed it to this to make it work.
-# These are just temporary hard coded values that should be provided by the user. So it isn't that important.
-template_parent_path = absolute_path / "templates" / "fmu"
-json_interface = absolute_path / "examples" / "wind_generator" / "config" / "interface.json"
-fmu_src_path = absolute_path / "examples" / "wind_generator"
-onnx_path = absolute_path / "examples" / "wind_generator" / "config" / "example.onnx"
-build_path = absolute_path / "build_fmu"
-save_fmu_path = absolute_path / "fmus"
+# Paths to files needed for build
+path_to_this_file = Path(os.path.abspath(__file__))
+absolute_path = path_to_this_file.parent.parent
+fmu_build_folder = absolute_path / "fmu_build"
+template_parent_path = fmu_build_folder / "templates" / "fmu"
 
 
 # Replacing all the template strings with their corresponding values and saving to new file
@@ -175,8 +170,7 @@ def generate_fmu_files(
 
     if error:
         # Display error and finish workflow
-        print(error)
-        return
+        raise error
 
     # Create ONNXModel and FmiModel instances -> load some metadata
     onnx_model = ONNXModel(onnx_path=onnx_path, time_input=bool(component_model.uses_time))
@@ -223,13 +217,13 @@ def validate_fmu_source_files(fmu_path: os.PathLike[str]):
 
 
 def build_fmu(
-    fmi_model: FmiModel,
     fmu_src_path: os.PathLike[str],
     fmu_build_path: os.PathLike[str],
     fmu_save_path: os.PathLike[str],
 ):
-    validate_fmu_source_files(Path(fmu_src_path) / fmi_model.name)
-
+    fmu_src_path = Path(fmu_src_path)
+    validate_fmu_source_files(fmu_src_path)
+    fmu_name = fmu_src_path.stem
     conan_install_command = [
         "conan",
         "install",
@@ -246,27 +240,20 @@ def build_fmu(
     cmake_set_folders = [
         f"-DCMAKE_BINARY_DIR={str(fmu_build_path)}",
         f"-DFMU_OUTPUT_DIR={str(fmu_save_path)}",
-        f"-DFMU_NAMES={fmi_model.name}",
-        f"-DFMU_SOURCE_PATH={str(fmu_src_path)}",
+        f"-DFMU_NAMES={fmu_name}",
+        f"-DFMU_SOURCE_PATH={str(fmu_src_path.parent)}",
     ]
 
     cmake_command = ["cmake", *cmake_set_folders, "--preset", "conan-default"]
 
     cmake_build_command = ["cmake", "--build", ".", "-j", "14", "--config", "Release"]
 
+    cmake_presets_file = Path(fmu_build_folder) / "CMakeUserPresets.json"
+    cmake_presets_file.unlink(missing_ok=True)
+
+    os.chdir(fmu_build_folder)
     _ = subprocess.run(conan_install_command)
     _ = subprocess.run(cmake_command)
     os.chdir(fmu_build_path)
     _ = subprocess.run(cmake_build_command)
     os.chdir(os.getcwd())
-
-    # TODO: Clean up.
-
-    pass
-
-
-if __name__ == "__main__":
-    fmi_model = generate_fmu_files(fmu_src_path=fmu_src_path, onnx_path=onnx_path, interface_spec_path=json_interface)
-    if fmi_model is None:
-        exit()
-    build_fmu(fmi_model, fmu_src_path, build_path, save_fmu_path)

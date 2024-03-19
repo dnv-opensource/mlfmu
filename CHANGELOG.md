@@ -6,6 +6,21 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ## [Unreleased]
 
 ### Changed
+* Moved CMake + conan + c++ package files and folders with cpp code inside src folder to be included in package
+* Replace pkg_resources with importlib.metadata for getting packages version to work in python 3.12
+* Replace deprecated root_validator with model_validator in pydanitc class
+* Remove unnecessary hard coded values in utils/builder.py 
+* Add MlFmuBuilder class to generate code and compile FMU
+  * Find default paths to files and directories if not given in cli
+  * Run functions in utils/builder.py according to which command is being run
+  * Clean up temporary/build files after the process is done
+* Complete cli interface
+  * Add subparsers to cli argparser to handle several different commands
+  * Create MlFmuBuilder from args and run code according to command
+* Change cli test to match the new cli interface/parser
+
+### Changed
+
 * Default agent_(input/output)_indexes is [] by default instead of None
 * Updated doc by running publish-interface-docs
 * Added feature to be able to initialize states using previously defined parameters or inputs
