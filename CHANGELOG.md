@@ -6,6 +6,9 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ## [Unreleased]
 
 ### Changed
+* Add conan dependency to pyproject.toml
+
+### Changed
 * Moved CMake + conan + c++ package files and folders with cpp code inside src folder to be included in package
 * Replace pkg_resources with importlib.metadata for getting packages version to work in python 3.12
 * Replace deprecated root_validator with model_validator in pydanitc class
