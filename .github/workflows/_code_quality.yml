@@ -49,6 +49,6 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
       - name: Install pyright
-        run: pip install pyright==1.1.352
+        run: pip install pyright==1.1.360
       - name: Run pyright
         run: pyright .
