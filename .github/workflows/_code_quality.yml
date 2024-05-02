@@ -15,7 +15,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Install ruff
-        run: pip install ruff==0.3.0
+        run: pip install ruff==0.4.2
       - name: Run ruff format
         run: ruff format --diff .
 
@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Install ruff
-        run: pip install ruff==0.3.0
+        run: pip install ruff==0.4.2
       - name: Run ruff check
         run: ruff check --diff .
 
@@ -49,6 +49,6 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
       - name: Install pyright
-        run: pip install pyright==1.1.352
+        run: pip install pyright==1.1.360
       - name: Run pyright
         run: pyright .
