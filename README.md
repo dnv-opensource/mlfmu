@@ -1,9 +1,10 @@
 # mlfmu
+
 mlfmu is an example package
 
 mlfmu supports
-* ..
 
+* ..
 
 ## Installation
 
@@ -22,7 +23,13 @@ from mlfmu import ...
 CLI:
 
 ```sh
-mlfmu ...
+mlfmu --help
+```
+
+shows the general usage. You can then also access specific usage, e.g.
+
+```sh
+mlfmu build --help
 ```
 
 _For more examples and usage, please refer to mlfmu's [documentation][mlfmu_docs]._
@@ -78,7 +85,7 @@ _For more examples and usage, please refer to mlfmu's [documentation][mlfmu_docs
     If you are on Windows, the resulting pip install command will most likely look something like this:
 
     ```sh
-    (.venv) $ pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+    (.venv) $ pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
     ```
 
     _Hint:_ If you are unsure which cuda version to indicate in above `pip install .. /cuXXX` command, you can use the shell command `nvidia-smi` on your local system to find out the cuda version supported by the current graphics driver installed on your system. When then generating the `pip install` command with the wizard from the [PyTorch website](https://pytorch.org/get-started/locally/), select the cuda version that matches the major version of what your graphics driver supports (major version must match, minor version may deviate).
@@ -88,9 +95,11 @@ _For more examples and usage, please refer to mlfmu's [documentation][mlfmu_docs
     ```sh
     (.venv) $ pip install -r requirements-dev.txt
     ```
+
     This should return without errors.
 
     Finally, install mlfmu itself, yet not as a regular package but as an _editable_ package instead, using the pip install option -e:
+
     ```sh
     (.venv) $ pip install -e .
     ```
@@ -101,22 +110,33 @@ _For more examples and usage, please refer to mlfmu's [documentation][mlfmu_docs
     (.venv) $ pytest .
     ```
 
+6. Run an example:
+
+    ```sh
+    (.venv) $ cd .\examples\wind_generator\config\
+    (.venv) $ mlfmu build
+    ```
+
 ## Meta
 
 All code in mlfmu is DNV intellectual property and for DNV internal use only.
 
 Copyright (c) 2024 [DNV](https://www.dnv.com) AS. All rights reserved.
 
-Author One - [@LinkedIn](https://www.linkedin.com/in/authorone) - author.one@dnv.com
+Kristoffer Skare - [@LinkedIn](https://www.linkedin.com/in/kristoffer-skare-19606a1a1/) - <kristoffer.skare@dnv.com>
 
-Author Two - [@LinkedIn](https://www.linkedin.com/in/authortwo) - author.two@dnv.com
+Jorge Luis Mendez - [@LinkedIn](https://www.linkedin.com/in/authortwo) - <jorge.luis.mendez@dnv.com>
 
-Author Three - [@LinkedIn](https://www.linkedin.com/in/authorthree) - author.three@dnv.com
+Stephanie Kemna - [@LinkedIn](https://www.linkedin.com/in/stephaniekemna/) - <stephanie.kemna@dnv.com>
 
-@TODO: (1) Adapt to chosen license (or delete if no license is applied). <br>
-@TODO: (2) Adapt or delete the license file (LICENSE.md) <br>
-@TODO: (3) Adapt or delete the license entry in setup.cfg <br>
+Author 4 - [@LinkedIn](https://www.linkedin.com/in/name/) - <first.lastname@dnv.com>
+
+```diff
+- TODO: (1) Adapt to chosen license (or delete if no license is applied). <br>
+- TODO: (2) Adapt or delete the license file (LICENSE.md) <br>
+- TODO: (3) Adapt or delete the license entry in setup.cfg <br>
 Distributed under the XYZ license. See [LICENSE](LICENSE.md) for more information.
+```
 
 [https://github.com/dnv-innersource/mlfmu](https://github.com/dnv-innersource/mlfmu)
 
