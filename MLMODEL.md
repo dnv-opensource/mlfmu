@@ -2,13 +2,12 @@
 
 ## Onnx file
 
-There are some requirements put on the onnx file to be compatible with this tool. This is for the tool to know how to connect the inputs and outputs of the onnx file to the FMU to use it correctly.
+There are some requirements for the onnx file to be compatible with this tool. This is so that the ML FMU tool knows how to connect the inputs and outputs of the onnx file to the FMU, to use it correctly.
 
-If the model takes a single input and has a single output it is already compatible as long as the input and output is shaped as (1, X) and can be directly connected to the variables of the FMU. 
-
-
+If the model takes a single input and has a single output it is already compatible as long as the input and output is shaped as (1, X) and can be directly connected to the variables of the FMU.
 
 ### The possible configuration of inputs and outputs of the model
+
 ```mermaid
 graph TD;
 subgraph 0["Only direct inputs"]
@@ -37,13 +36,8 @@ end
 
 ```
 
-
-
-
-
-
-
 ## Usage in FMU
+
 ```mermaid
 graph TD;
 
@@ -53,10 +47,10 @@ graph TD;
 
     previous_outputs["previous outputs"] --> state
     state --> Model
-    
+
     simulator-->time
     time-->Model
-   
+
     Model-->outputs
     outputs-->fmu_outputs["FMU outputs"]
 
@@ -70,14 +64,12 @@ graph TD;
 
 ```
 
-
 ## Tips and tricks
-
-
 
 ## Examples
 
 ### Model that only uses "pure" inputs and outputs
+
 ```python
 class Model():
     num_inputs: int = 2
@@ -89,15 +81,13 @@ class Model():
         # Do something with the inputs
         outputs = self.layers(inputs)
 
-        return outputs 
+        return outputs
 ```
-
-
-
 
 ### Model using every input type
 
-Say we have trained a ML model to predict the derivatives of outputs from some data as shown below:
+Say we have trained an ML model to predict the derivatives of outputs from some data as shown below:
+
 ```python
 class DerivativePredictor():
     def call(self, all_inputs):
@@ -109,13 +99,13 @@ class DerivativePredictor():
         return derivative
 ```
 
-However, the FMU we want to create cannot use the same inputs and outputs as the trained ML model. 
+However, the FMU we want to create cannot use the same inputs and outputs as the trained ML model.
 
-We do not want to have previous inputs and outputs as inputs to the FMU. Instead we want it to remember the previous inputs and outputs itself. To do this we need to use the state inside the generated MLFMU using this tool. 
+We do not want to have previous inputs and outputs as inputs to the FMU. Instead we want it to remember the previous inputs and outputs itself. To do this we need to use the state inside the generated MLFMU using this tool.
 
-We also do not want the FMU to output the derivative, but instead use the derivative to integrate the outputs. This makes it possible for the outputs them selves to be the output of the FMU. 
+We also do not want the FMU to output the derivative, but instead use the derivative to integrate the outputs. This makes it possible for the outputs themselves to be the output of the FMU.
 
-To do this we need to make a wrapper around the trained ML model so that it is compatible with the tool and what we want the generated FMU to do.  
+To do this we need to make a wrapper around the trained ML model so that it is compatible with the tool and what we want the generated FMU to do.
 
 ``` python
 class ModelWrapper():
@@ -141,7 +131,6 @@ class ModelWrapper():
 
         # Do other calculation to get data that needs to be output from the FMU
         outputs = previous_outputs + dt * output_derivative
-
 
         # Format outputs from the model to contain everything that needs to output from the FMU and/or saved as state
         # Saving the state is easier if outputs are in the same order as they are expected to be saved in state
