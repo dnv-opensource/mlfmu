@@ -41,6 +41,7 @@ _For more examples and usage, please refer to mlfmu's [documentation][mlfmu_docs
 
     ```sh
     git clone https://github.com/dnv-innersource/mlfmu path/to/your/dev/mlfmu
+    git submodule update --init --recursive
     ```
 
 4. In the mlfmu root folder:
