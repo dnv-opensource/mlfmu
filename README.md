@@ -81,6 +81,10 @@ onnx.save(onnx_model, path/to/save)
 ```sh
 mlfmu build --interface-file Interface.json --model-file model.onnx
 ```
+or if the files is in the current working directory:
+```sh
+mlfmu build
+```
 
 _For more examples and usage, please refer to mlfmu's [documentation][mlfmu_docs]._
 
