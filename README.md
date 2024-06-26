@@ -140,7 +140,37 @@ mlfmu compile --fmu-source-path path/to/generated/source
 ```
 
 ### Using class
-TODO: Write about possibility of using the class in a script for the same behavior
+
+In addition to the command line interface one can use the same functionality of the tool through a python class. 
+
+1. Import `MlFmuBuilder` and create instance of it
+```python
+from mlfmu.api import MlFmuBuilder
+from pathlib import Path
+
+builder = MlFmuBuilder(
+    ml_model_file = Path("path/to/model.onnx")
+    interface_file = Path("path/to/interface.json")
+)
+```
+2. Call the same commands using the class
+    
+- Run `build`
+
+```python
+builder.build()
+```
+
+- Run `codegen` and then `compile`
+
+```python
+builder.generate()
+
+# Do something ...
+
+builder.compile()
+```
+
 
 ## Development Setup
 
