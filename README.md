@@ -20,7 +20,7 @@ pip install mlfmu
 
 1. Define the architecture of your ML model and prepare the model to receive the inputs following to MLFMU's input format:
 
-```
+```python
 class MlModel(tf.keras.Model):
     ...
     def call(self, inputs):
@@ -34,7 +34,7 @@ class MlModel(tf.keras.Model):
 ```
 
 2. Train the model and save it as ONNX file:
-```
+```python
 import onnx
 
 ml_model = MlModel()
@@ -47,7 +47,7 @@ onnx.save(onnx_model, path/to/save)
 ```
 
 3. Prepare FMU interface specification:
-```
+```json
 // Interface.json
 {
     "name": "MyMLFMU",
