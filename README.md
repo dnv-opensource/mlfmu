@@ -21,6 +21,7 @@ pip install mlfmu
 1. Define the architecture of your ML model and prepare the model to receive the inputs following to MLFMU's input format:
 
 ```python
+# Training Ketas model
 class MlModel(tf.keras.Model):
     ...
     def call(self, inputs):
@@ -32,6 +33,7 @@ class MlModel(tf.keras.Model):
         return outputs
     ...
 ```
+Note: This example uses a Keras model for demonstration purposes. However, the tool is flexible and can accommodate other frameworks such as PyTorch, TensorFlow, Scikit-learn, and more.
 
 2. Train the model and save it as ONNX file:
 ```python
@@ -109,7 +111,7 @@ This will result in a folder containing the source structured as below.
 └── modelDescription.xml
 ```
 
-Of these generated files it is only recommended to modify `fmu.cpp`. 
+Of these generated files it is only recommended to modify `fmu.cpp`.
 In this file one can e.g. modify the `DoStep` function of the generated FMU class.
 
 ```cpp
@@ -141,7 +143,7 @@ mlfmu compile --fmu-source-path path/to/generated/source
 
 ### Using class
 
-In addition to the command line interface one can use the same functionality of the tool through a python class. 
+In addition to the command line interface one can use the same functionality of the tool through a python class.
 
 1. Import `MlFmuBuilder` and create instance of it
 ```python
@@ -154,7 +156,7 @@ builder = MlFmuBuilder(
 )
 ```
 2. Call the same commands using the class
-    
+
 - Run `build`
 
 ```python
