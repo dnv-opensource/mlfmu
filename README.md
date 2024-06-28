@@ -2,8 +2,8 @@
 
 MLFMU serves as a tool for developers looking to integrate machine learning models into simulation environments. It enables the creation of Functional Mock-up Units (FMUs), which are simulation models that adhere to the [FMI standard](https://fmi-standard.org/), from trained machine learning models exported in the [ONNX](https://onnx.ai/) format. The mlfmu package streamlines the process of transforming ONNX models into FMUs, facilitating their use in a wide range of simulation platforms that support the FMI standard such as the [Open Simulation Platform](https://open-simulation-platform.github.io/) or DNV's [Simulation Trust Center](https://store.veracity.com/simulation-trust-center)
 
-
 ## Features
+
 - Compile trained ML models into FMUs (Functional Mock-up Units).
 - Easy to integrate in building pipelines.
 - Declarative solution, just define what the inputs/outputs/parameters of your co-simulation model should look like and MLFMU will take care of the rest.
@@ -21,7 +21,7 @@ pip install mlfmu
 1. Define the architecture of your ML model and prepare the model to receive the inputs following to MLFMU's input format:
 
 ```python
-# Training Ketas model
+# Training Keras model
 class MlModel(tf.keras.Model):
     ...
     def call(self, inputs):
@@ -33,9 +33,11 @@ class MlModel(tf.keras.Model):
         return outputs
     ...
 ```
+
 Note: This example uses a Keras model for demonstration purposes. However, the tool is flexible and can accommodate other frameworks such as PyTorch, TensorFlow, Scikit-learn, and more.
 
-2. Train the model and save it as ONNX file:
+2. Train the model and save it as an ONNX file:
+
 ```python
 import onnx
 
@@ -49,6 +51,7 @@ onnx.save(onnx_model, path/to/save)
 ```
 
 3. Prepare FMU interface specification:
+
 ```json
 // Interface.json
 {
@@ -80,10 +83,13 @@ onnx.save(onnx_model, path/to/save)
 ```
 
 4. Compile FMU:
+
 ```sh
 mlfmu build --interface-file Interface.json --model-file model.onnx
 ```
-or if the files is in the current working directory:
+
+or if the files are in your current working directory:
+
 ```sh
 mlfmu build
 ```
@@ -93,7 +99,8 @@ _For more examples and usage, please refer to mlfmu's [documentation][mlfmu_docs
 ## Advanced Usage
 
 ### Editing generated FMU source
-The command `mlfmu build` will both generate the c++ source code for the mlfmu and compile it automatically. However, it is possible to split this into two steps where it is possible to edit the source code to change the behavior of the resulting FMU.
+
+The command `mlfmu build` will both generate the C++ source code for the mlfmu and compile it automatically. However, it is possible to split this into two steps where it is possible to edit the source code to change the behavior of the resulting FMU.
 
  ```sh
  mlfmu codegen --interface-file Interface.json --model-file model.onnx --fmu-source-path path/to/generated/source
@@ -101,7 +108,7 @@ The command `mlfmu build` will both generate the c++ source code for the mlfmu a
 
 This will result in a folder containing the source structured as below.
 
-```
+```sh
 [FmuName]
 ├── resources
 │   └── *.onnx
@@ -111,7 +118,7 @@ This will result in a folder containing the source structured as below.
 └── modelDescription.xml
 ```
 
-Of these generated files it is only recommended to modify `fmu.cpp`.
+Of these generated files, it is only recommended to modify `fmu.cpp`.
 In this file one can e.g. modify the `DoStep` function of the generated FMU class.
 
 ```cpp
@@ -135,7 +142,7 @@ private:
 };
 ```
 
-After doing the modification to the source code one can simply run the `complie` command to complete the process.
+After doing the modification to the source code, one can simply run the `compile` command to complete the process.
 
 ```sh
 mlfmu compile --fmu-source-path path/to/generated/source
@@ -143,9 +150,10 @@ mlfmu compile --fmu-source-path path/to/generated/source
 
 ### Using class
 
-In addition to the command line interface one can use the same functionality of the tool through a python class.
+In addition to the command line interface, one can use the same functionality of the tool through a Python class.
 
-1. Import `MlFmuBuilder` and create instance of it
+1. Import `MlFmuBuilder` and create an instance of it:
+
 ```python
 from mlfmu.api import MlFmuBuilder
 from pathlib import Path
@@ -155,7 +163,8 @@ builder = MlFmuBuilder(
     interface_file = Path("path/to/interface.json")
 )
 ```
-2. Call the same commands using the class
+
+2. Call the same commands using the class:
 
 - Run `build`
 
@@ -172,7 +181,6 @@ builder.generate()
 
 builder.compile()
 ```
-
 
 ## Development Setup
 
