@@ -66,7 +66,15 @@ graph TD;
 
 ## Tips and tricks
 
+```diff
+- TODO
+```
+
 ## Examples
+
+```diff
+- TODO
+```
 
 ### Model that only uses "pure" inputs and outputs
 
@@ -74,6 +82,8 @@ graph TD;
 class Model():
     num_inputs: int = 2
     num_outputs: int = 2
+
+    ...
 
     def call(self, all_inputs):
         inputs, *_ = all_inputs

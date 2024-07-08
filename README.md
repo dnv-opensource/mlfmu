@@ -18,39 +18,60 @@ pip install mlfmu
 
 ## Creating ML FMUs
 
-1. Define the architecture of your ML model and prepare the model to receive the inputs following to MLFMU's input format:
+### Create your own ML model
+
+Before you use this mlfmu tool, you should create your machine learning (ML) model, using whatever your preferred tool is.
+
+1. Define the architecture of your ML model and prepare the model to receive the inputs following to MLFMU's input format.
+
+> Note 1: This example subclasses a Keras model for demonstration purposes. However, the tool is flexible and can accommodate other frameworks such as PyTorch, TensorFlow, Scikit-learn, and more.
+
+> Note 2: We showcase a simple example here. For more detailed information on how you can prepare your model to be compatible with this tool, see [MLMODEL.md](MLMODEL.md)
 
 ```python
-# Training Keras model
+# Create your ML model
 class MlModel(tf.keras.Model):
+    def init(self, num_inputs = 2):
+        # 1 hidden layer, 1 output layer
+        self.hidden_layer = tf.keras.layers.Dense(512, activation=tf.nn.relu)
+        self.output_layer = tf.keras.layers.Dense(1, activation=None)
+
     ...
-    def call(self, inputs):
-        inputs, state, time = inputs
+
+    def call(self, all_inputs): # model forward pass
+        # unpack inputs
+        inputs, *_ = all_inputs
 
         # Do something with the inputs
-        outputs = self.layers(inputs)
+        # Here we have 1 hidden layer
+        d1 = self.hidden_layer(inputs)
+        outputs = self.output_layer(d1)
 
         return outputs
     ...
 ```
 
-Note: This example uses a Keras model for demonstration purposes. However, the tool is flexible and can accommodate other frameworks such as PyTorch, TensorFlow, Scikit-learn, and more.
-
-2. Train the model and save it as an ONNX file:
+2. Train your model, then save it as an ONNX file, e.g.:
 
 ```python
 import onnx
 
 ml_model = MlModel()
-ml_model.compile(loss='mse')
-ml_model.fit(training_dataset)
+# compile: configure model for training
+ml_model.compile(optimizer=tf.optimizers.RMSProp, loss='mse')
+# fit: train your ML model for some number of epochs
+ml_model.fit(training_dataset, epochs=nr_epochs)
 
-# Save trained model as ONNX at specified path
+# Save the trained model as ONNX at a specified path
 onnx_model = tf2onnx.convert.from_keras(ml_model)
-onnx.save(onnx_model, path/to/save)
+onnx.save(onnx_model, 'path/to/save')
 ```
 
-3. Prepare FMU interface specification:
+### Preparing for and using MLFMU
+
+Given that you have an ML model, you now need to:
+
+1. Prepare the FMU interface specification (.json), to specify your FMU's inputs, parameters, and output, map these to the ML model's inputs and output (`agentInputIndexes`) and to specify whether it uses time (`usesTime`).
 
 ```json
 // Interface.json
@@ -82,7 +103,7 @@ onnx.save(onnx_model, path/to/save)
 }
 ```
 
-4. Compile FMU:
+2. Compile the FMU:
 
 ```sh
 mlfmu build --interface-file Interface.json --model-file model.onnx
@@ -94,93 +115,11 @@ or if the files are in your current working directory:
 mlfmu build
 ```
 
-_For more examples and usage, please refer to mlfmu's [documentation][mlfmu_docs]._
+# Extended documentation
 
-## Advanced Usage
+For more explanation on the ONNX file structure and inputs/outputs for your model, please refer to mlfmu's [MLMODEL.md](MLMODEL.md).
 
-### Editing generated FMU source
-
-The command `mlfmu build` will both generate the C++ source code for the mlfmu and compile it automatically. However, it is possible to split this into two steps where it is possible to edit the source code to change the behavior of the resulting FMU.
-
- ```sh
- mlfmu codegen --interface-file Interface.json --model-file model.onnx --fmu-source-path path/to/generated/source
- ```
-
-This will result in a folder containing the source structured as below.
-
-```sh
-[FmuName]
-├── resources
-│   └── *.onnx
-├── sources
-│   ├── fmu.cpp
-│   └── model_definitions.h
-└── modelDescription.xml
-```
-
-Of these generated files, it is only recommended to modify `fmu.cpp`.
-In this file one can e.g. modify the `DoStep` function of the generated FMU class.
-
-```cpp
-class FmuName : public OnnxFmu
-{
-public:
-    FmuName(cppfmu::FMIString fmuResourceLocation)
-        : OnnxFmu(fmuResourceLocation)
-    { }
-
-    bool DoStep(cppfmu::FMIReal currentCommunicationPoint, cppfmu::FMIReal dt, cppfmu::FMIBoolean newStep,
-        cppfmu::FMIReal& endOfStep) override
-    {
-        // Implement custom behavior here
-        // ...
-
-        // Call the base class implementation
-        return OnnxFmu::DoStep(currentCommunicationPoint, dt, newStep, endOfStep);
-    }
-private:
-};
-```
-
-After doing the modification to the source code, one can simply run the `compile` command to complete the process.
-
-```sh
-mlfmu compile --fmu-source-path path/to/generated/source
-```
-
-### Using class
-
-In addition to the command line interface, one can use the same functionality of the tool through a Python class.
-
-1. Import `MlFmuBuilder` and create an instance of it:
-
-```python
-from mlfmu.api import MlFmuBuilder
-from pathlib import Path
-
-builder = MlFmuBuilder(
-    ml_model_file = Path("path/to/model.onnx")
-    interface_file = Path("path/to/interface.json")
-)
-```
-
-2. Call the same commands using the class:
-
-- Run `build`
-
-```python
-builder.build()
-```
-
-- Run `codegen` and then `compile`
-
-```python
-builder.generate()
-
-# Do something ...
-
-builder.compile()
-```
+For advanced usage options, e.g. editing the generated FMU source code, or using the tool via a Python class, please refer to mlfmu's [ADVANCED.md](ADVANCED.md).
 
 ## Development Setup
 
@@ -301,4 +240,3 @@ Distributed under the XYZ license. See [LICENSE](LICENSE.md) for more informatio
 For your contribution, please make sure you follow the [STYLEGUIDE](STYLEGUIDE.md) before creating the Pull Request.
 
 <!-- Markdown link & img dfn's -->
-[mlfmu_docs]: https://dnv-innersource.github.io/mlfmu/README.html
