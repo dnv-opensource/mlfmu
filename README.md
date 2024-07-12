@@ -67,6 +67,9 @@ onnx_model = tf2onnx.convert.from_keras(ml_model)
 onnx.save(onnx_model, 'path/to/save')
 ```
 
+3. (Optional) You may want to check your onnx file to make sure it produces the right output. You can do this by loading the onnx file and (using the same test input) compare the onnx model predictions to your original model predictions.
+You can also check the model using Netron: <https://netron.app/> or <https://github.com/lutzroeder/netron>
+
 ### Preparing for and using MLFMU
 
 Given that you have an ML model, you now need to:
