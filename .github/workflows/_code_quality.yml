@@ -8,7 +8,7 @@ jobs:
     name: ruff format
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip' # cache pip dependencies
@@ -24,7 +24,7 @@ jobs:
     name: ruff check
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip' # cache pip dependencies
@@ -40,7 +40,7 @@ jobs:
     name: pyright
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip' # cache pip dependencies
