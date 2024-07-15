@@ -6,6 +6,25 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ## [Unreleased]
 
 ### Dependencies
+* Updated to ruff==0.5.1  (from ruff==0.4.2)
+* Updated to pyright==1.1.371  (from pyright==1.1.360)
+* Updated to sourcery==1.21  (from sourcery==1.16)
+* Updated to dictIO>=0.3.4  (from dictIO>=0.3.4)
+* Updated to sphinx-argparse-cli>=1.16  (from sphinx-argparse-cli>=1.15)
+* Updated to furo>=2024.5  (from furo>=2024.4)
+* Updated to setup-python@v5  (from setup-python@v4)
+* Updated to actions-gh-pages@v4  (from actions-gh-pages@v3)
+* Updated to upload-artifact@v4  (from upload-artifact@v3)
+* GitHub workflows: Replaced pip install tox with pip install tox-uv
+* GitHub workflows: Removed cache: 'pip' for tox-uv compatibility
+* GitHub workflows: Install dependencies: change singleline run statements to multiline run statements
+* GitHub workflows: Add step to install 'uv' package
+* GitHub workflows: Add step to install 'uv' package
+* GitHub workflows: Install dependencies: change from 'pip install' to 'uv pip install'
+* GitHub workflow _test_future.yml : updated Python version to 3.13.0-alpha - 3.13.0
+* GitHub workflow _test_future.yml : updated name of test job to 'test313'
+
+### Dependencies
 * updated to ruff==0.4.2  (from ruff==0.3.0)
 * updated to pyright==1.1.360  (from pyright==1.1.352)
 * updated to sourcery==1.16  (from sourcery==1.15)
