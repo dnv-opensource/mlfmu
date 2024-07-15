@@ -15,7 +15,8 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install build and twine
-        run: pip install build twine
+        run: |
+          pip install build twine
       - name: Run build
         run: python -m build
       - name: Run twine check

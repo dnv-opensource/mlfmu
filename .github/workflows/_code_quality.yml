@@ -12,9 +12,11 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
       - name: Install ruff
-        run: pip install ruff==0.5.1
+        run: |
+          pip install ruff==0.5.1
       - name: Run ruff format
         run: ruff format --diff .
 
@@ -27,9 +29,11 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
       - name: Install ruff
-        run: pip install ruff==0.5.1
+        run: |
+          pip install ruff==0.5.1
       - name: Run ruff check
         run: ruff check --diff .
 
@@ -46,6 +50,7 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
       - name: Install pyright
-        run: pip install pyright==1.1.371
+        run: |
+          pip install pyright==1.1.371
       - name: Run pyright
         run: pyright .
