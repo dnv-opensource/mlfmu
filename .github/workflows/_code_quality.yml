@@ -15,7 +15,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Install ruff
-        run: pip install ruff==0.4.2
+        run: pip install ruff==0.5.1
       - name: Run ruff format
         run: ruff format --diff .
 
@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Install ruff
-        run: pip install ruff==0.4.2
+        run: pip install ruff==0.5.1
       - name: Run ruff check
         run: ruff check --diff .
 
