@@ -19,7 +19,7 @@ jobs:
           python -m pip install uv
       - name: Install build and twine
         run: |
-          pip install build twine
+          uv pip install --system build twine
       - name: Run build
         run: python -m build
       - name: Run twine check
