@@ -26,6 +26,6 @@ jobs:
           python-version: ${{ matrix.python.version }}
           cache: 'pip' # cache pip dependencies
       - name: Install tox
-        run: python -m pip install tox
+        run: python -m pip install tox-uv
       - name: Run pytest
         run: tox -e ${{matrix.python.toxenv}}-${{matrix.platform.toxenv}}
