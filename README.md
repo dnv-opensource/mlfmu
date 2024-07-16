@@ -180,6 +180,10 @@ For advanced usage options, e.g. editing the generated FMU source code, or using
 
     _Hint:_ If you are unsure which cuda version to indicate in above `pip install .. /cuXXX` command, you can use the shell command `nvidia-smi` on your local system to find out the cuda version supported by the current graphics driver installed on your system. When then generating the `pip install` command with the wizard from the [PyTorch website](https://pytorch.org/get-started/locally/), select the cuda version that matches the major version of what your graphics driver supports (major version must match, minor version may deviate).
 
+    > Note: We use conan for building the FMU. For the conan building to work later on, you will need the Visual Studio Build tools 2022 to be installed. It is best to do this **before** installing conan (which we install via pip install of requirements). You can download and install the Build Tools for VS 2022 (for free) from <https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022>
+
+    > Note 2: After you install conan, you want to make sure it has the correct build profile. You can auto-detect and create the profile by running `conan profile detect`. After this, you can check the profile in `C:\Users\<USRNAM>\.conan2\profiles\.default` (replace <USRNAM> with your username). You want to `compiler=msvc`, `compiler.cppstd=17`, `compiler.version=193` (for Windows).
+
     Install mlfmu's dependencies. <br>
 
     ```sh
