@@ -1,6 +1,5 @@
 import logging
 import os
-import shutil
 import tempfile
 from enum import Enum
 from pathlib import Path
@@ -12,8 +11,10 @@ __ALL__ = ["run", "MlFmuProcess"]
 
 logger = logging.getLogger(__name__)
 
+
 class MlFmuCommand(Enum):
     """Enum class for the different commands in the mlfmu process."""
+
     BUILD = "build"
     GENERATE = "codegen"
     COMPILE = "compile"
@@ -100,8 +101,8 @@ class MlFmuBuilder:
         Generates FMU C++ source code and model description from the machine learning model file and interface file.
     compile(self)
         Compiles the FMU from the FMU C++ source code and model description.
-
     """
+
     fmu_name: Optional[str] = None
     build_folder: Optional[Path] = None
     source_folder: Optional[Path] = None
@@ -328,8 +329,8 @@ class MlFmuBuilder:
     @staticmethod
     def _find_default_file(dir: Path, file_extension: str, default_name: Optional[str] = None):
         """
-            Return a file inside dir with the file extension that matches file_extension.
-            If there are multiple matches it uses the closest match to default_name if given. Return None if there is no clear match.
+        Return a file inside dir with the file extension that matches file_extension.
+        If there are multiple matches it uses the closest match to default_name if given. Return None if there is no clear match.
         """
         # Check if there is a file with correct file extension in current working directory. If it exists use it.
         matching_files: List[Path] = []
@@ -372,7 +373,8 @@ class MlFmuProcess:
     This class encapsulates the functionality to run the ML FMU process in a self-terminated loop.
     It provides methods to control the execution of the process and manage the number of runs.
 
-    Attributes:
+    Attributes
+    ----------
         command (MlFmuCommand): The command to be executed by the process.
         builder (MlFmuBuilder): The builder object responsible for building the FMU.
 
