@@ -113,7 +113,7 @@ def _argparser() -> argparse.ArgumentParser:
         help="Path to the folder where the FMU source code is located. The folder needs to have the same name as the FMU. E.g. path/to/folder/[FmuName]",
     )
     _ = build_code_parser.add_argument(
-        "--fmu-path", type=str, help="Path to where the where the built FMU should be saved."
+        "--fmu-path", type=str, help="Path to where the built FMU should be saved."
     )
 
     return parser
