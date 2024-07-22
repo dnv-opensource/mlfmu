@@ -378,7 +378,8 @@ class MlFmuProcess:
         command (MlFmuCommand): The command to be executed by the process.
         builder (MlFmuBuilder): The builder object responsible for building the FMU.
 
-    Args:
+    Args
+    ----
         command (MlFmuCommand): The command to be executed by the process.
         source_folder (Optional[Path]): The path to the source folder.
         ml_model_file (Optional[Path]): The path to the ML model file.
