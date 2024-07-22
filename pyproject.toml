@@ -37,7 +37,7 @@ dependencies = [
     "dictIO>=0.3.3",
     "pydantic>=2.6",
     "json-schema-for-humans>=0.4.7",
-    "onnxruntime>=1.17.0",
+    "onnxruntime==1.18.1",
     "conan>=2.1",
 ]
 
