@@ -138,6 +138,7 @@ For advanced usage options, e.g. editing the generated FMU source code, or using
 
     ```sh
     git clone https://github.com/dnv-innersource/mlfmu path/to/your/dev/mlfmu
+    git submodule update --init --recursive
     ```
 
 4. In the mlfmu root folder:
