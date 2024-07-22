@@ -142,7 +142,7 @@ For advanced usage options, e.g. editing the generated FMU source code, or using
 
 4. In the mlfmu root folder:
 
-    Create a Python virtual environment:
+    Create a Python virtual environment, e.g. (you can also make a conda environment):
 
     ```sh
     python -m venv .venv
@@ -162,7 +162,7 @@ For advanced usage options, e.g. editing the generated FMU source code, or using
     source .venv/bin/activate
     ```
 
-    Update pip and setuptools:
+    Install/update pip and setuptools:
 
     ```sh
     (.venv) $ python -m pip install --upgrade pip setuptools
@@ -206,6 +206,14 @@ For advanced usage options, e.g. editing the generated FMU source code, or using
     (.venv) $ cd .\examples\wind_generator\config\
     (.venv) $ mlfmu build
     ```
+
+As an alternative, you can run from the main directory:
+
+```sh
+mlfmu build --interface-file .\examples\wind_generator\config\interface.json --model-file .\examples\wind_generator\config\example.onnx
+```
+
+Note; wherever you run the build command from, is where the FMU file will be created, unless you specify otherwise with `--fmu-path`.
 
 ## Meta
 
