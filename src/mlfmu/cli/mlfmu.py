@@ -62,9 +62,7 @@ def _argparser() -> argparse.ArgumentParser:
     )
 
     # Create a sub parser for each command
-    sub_parsers = parser.add_subparsers(
-        dest="command", title="Available commands", metavar="command", required=True
-    )
+    sub_parsers = parser.add_subparsers(dest="command", title="Available commands", metavar="command", required=True)
 
     # Main command
     # build command to go from config to compiled fmu
@@ -82,12 +80,8 @@ def _argparser() -> argparse.ArgumentParser:
         type=str,
         help="JSON file describing the FMU following schema",
     )
-    _ = build_parser.add_argument(
-        "-m", "--model-file", type=str, help="ONNX file containing the ML Model"
-    )
-    _ = build_parser.add_argument(
-        "-f", "--fmu-path", type=str, help="Path to where the built FMU should be saved"
-    )
+    _ = build_parser.add_argument("-m", "--model-file", type=str, help="ONNX file containing the ML Model")
+    _ = build_parser.add_argument("-f", "--fmu-path", type=str, help="Path to where the built FMU should be saved")
 
     # Split the main build command into steps for customization
     # generate-code command to go from config to generated fmu source code
@@ -128,9 +122,7 @@ def _argparser() -> argparse.ArgumentParser:
         type=str,
         help="Path to the folder where the FMU source code is located. The folder needs to have the same name as the FMU. E.g. path/to/folder/[FmuName]",
     )
-    _ = build_code_parser.add_argument(
-        "--fmu-path", type=str, help="Path to where the built FMU should be saved."
-    )
+    _ = build_code_parser.add_argument("--fmu-path", type=str, help="Path to where the built FMU should be saved.")
 
     return parser
 
