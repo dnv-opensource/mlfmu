@@ -11,7 +11,6 @@ from mlfmu.utils.logger import configure_logging
 
 logger = logging.getLogger(__name__)
 
-
 def _argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="mlfmu",
@@ -51,6 +50,7 @@ def _argparser() -> argparse.ArgumentParser:
     )
 
     _ = common_args_parser.add_argument(
+        "-ll",
         "--log-level",
         action="store",
         type=str,
