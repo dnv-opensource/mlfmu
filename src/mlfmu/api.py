@@ -25,9 +25,6 @@ class MlFmuCommand(Enum):
             return None
         return matches[0]
 
-    def __del__(self):
-        logger.debug("MlFmuCommand: __del__ called")
-
 # run for mlfmu
 def run(
     command: MlFmuCommand,
@@ -137,14 +134,9 @@ class MlFmuBuilder:
         logger.debug(f"Created temp folder: {self.temp_folder_path}")
 
     def __del__(self):
-        logger.debug("MlFmuBuilder: __del__ called")
-        # This should automatically delete the temporary directory (goes out of scope).
-        if (self.temp_folder_path.exists()):
-            try:
-                self.temp_folder.cleanup()
-            except Exception as ex:
-                logger.error("Exception when trying to delete temp_folder: %s", ex)
-                print(ex)
+        logger.debug("MlFmuBuilder: destructor called, removing temporary build directory.")
+        # The destructor should automatically delete the temporary directory (goes out of scope).
+
 
     def build(self):
         """
@@ -158,7 +150,7 @@ class MlFmuBuilder:
             if ml_model_file or interface_file do not exists or is not set and cannot be easily inferred.
         ---
         """
-        logger.info("MLFmuBuilder: Start build")
+        logger.debug("MLFmuBuilder: Start build")
         # specify folders and filenames for building
         self.source_folder = self.source_folder or self.default_build_source_folder()
 
@@ -194,7 +186,7 @@ class MlFmuBuilder:
             fmu_build_path=self.build_folder,
             fmu_save_path=self.fmu_output_folder,
         )
-        logger.info("MLFmuBuilder: Done with build")
+        logger.debug("MLFmuBuilder: Done with build")
 
     def generate(self):
         """
@@ -207,7 +199,7 @@ class MlFmuBuilder:
         FileNotFoundError
             if ml_model_file or interface_file do not exists or is not set and cannot be easily inferred.
         """
-        logger.info("MLFmuBuilder: Start generate")
+        logger.debug("MLFmuBuilder: Start generate")
         # specify folders and filenames for generating
         self.source_folder = self.source_folder or self.default_generate_source_folder()
 
@@ -235,7 +227,7 @@ class MlFmuBuilder:
             logger.error("Exception when running generate_fmu_files: %s", ex)
             print(ex)
 
-        logger.info("MLFmuBuilder: Done with generate")
+        logger.debug("MLFmuBuilder: Done with generate")
 
     def compile(self):
         """
@@ -248,7 +240,7 @@ class MlFmuBuilder:
         FileNotFoundError
             if source_folder or fmu_name is not set and cannot be easily inferred.
         """
-        logger.info("MLFmuBuilder: Start compile")
+        logger.debug("MLFmuBuilder: Start compile")
         self.build_folder = self.build_folder or self.default_build_folder()
 
         self.fmu_output_folder = self.fmu_output_folder or self.default_fmu_output_folder()
@@ -268,11 +260,11 @@ class MlFmuBuilder:
                 fmu_build_path=self.build_folder,
                 fmu_save_path=self.fmu_output_folder,
             )
-            logger.info("MLFmuBuilder: Done with build")
+            logger.debug("MLFmuBuilder: Done with build (via compile)")
         except Exception as ex:
             logger.error("Error while running build_fmu: %s", ex)
             print(ex)
-        logger.info("MLFmuBuilder: Done with compile")
+        logger.debug("MLFmuBuilder: Done with compile")
 
 
     def default_interface_file(self):
@@ -421,9 +413,6 @@ class MlFmuProcess:
             build_folder=build_folder
         )
 
-    def __del__(self):
-        logger.debug("MlFmuProcess: __del__ called")
-
     def run(self):
         """Run the mlfmu process.
 
@@ -478,7 +467,7 @@ class MlFmuProcess:
         """Execute a single run of the mlfmu process."""
         self._run_number += 1
 
-        logger.info(f"MlFmuProcess: Start run {self._run_number}")
+        logger.debug(f"MlFmuProcess: Start run {self._run_number}")
 
         if self.command == MlFmuCommand.BUILD:
             self.builder.build()
@@ -487,6 +476,6 @@ class MlFmuProcess:
         elif self.command == MlFmuCommand.COMPILE:
             self.builder.compile()
 
-        logger.info(f"MlFmuProcess: Successfully finished run {self._run_number}")
+        logger.debug(f"MlFmuProcess: Successfully finished run {self._run_number}")
 
         return
