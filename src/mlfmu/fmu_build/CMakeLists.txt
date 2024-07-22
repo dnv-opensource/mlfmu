@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.9)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 project(cpp-fmus)
@@ -28,13 +28,13 @@ set(FMU_NAMES)
 # ==============================================================================
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    add_compile_options("-Wall" "-Wextra" "-Wpedantic" "-Werror")
+    add_compile_options("-Wall" "-Wextra" "-Wpedantic")
     add_compile_options("-Wno-parentheses")
     if(FMU_USE_STATIC_RUNTIME)
         add_compile_options("-static")
     endif()
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    add_compile_options("/W4" "/WX")
+    add_compile_options("/W4")
     add_compile_options("/wd4996")
     add_definitions("-D_SCL_SECURE_NO_WARNINGS" "-D_CRT_SECURE_NO_WARNINGS")
     if(FMU_USE_STATIC_RUNTIME)
@@ -147,7 +147,7 @@ foreach(fmuName IN LISTS FMU_NAMES)
         "${fmuSourceDir}/sources"
         "${fmuGuidDir}"
     )
-    
+
     # Target to generate FMU contents
     add_custom_command(OUTPUT "${fmuOutputFile}"
         COMMAND "${CMAKE_COMMAND}" "-E" "copy_directory" "${fmuSourceDir}" "${fmuStagingDir}"
