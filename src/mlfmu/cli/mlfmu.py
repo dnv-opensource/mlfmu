@@ -62,7 +62,9 @@ def _argparser() -> argparse.ArgumentParser:
     )
 
     # Create a sub parser for each command
-    sub_parsers = parser.add_subparsers(dest="command", title="Available commands", metavar="command", required=True)
+    sub_parsers = parser.add_subparsers(
+        dest="command", title="Available commands", metavar="command", required=True
+    )
 
     # Main command
     # build command to go from config to compiled fmu
@@ -75,10 +77,17 @@ def _argparser() -> argparse.ArgumentParser:
 
     # Add options for build command
     _ = build_parser.add_argument(
-        "-i", "--interface-file", type=str, help="JSON file describing the FMU following schema"
+        "-i",
+        "--interface-file",
+        type=str,
+        help="JSON file describing the FMU following schema",
     )
-    _ = build_parser.add_argument("-m", "--model-file", type=str, help="ONNX file containing the ML Model")
-    _ = build_parser.add_argument("-f", "--fmu-path", type=str, help="Path to where the built FMU should be saved")
+    _ = build_parser.add_argument(
+        "-m", "--model-file", type=str, help="ONNX file containing the ML Model"
+    )
+    _ = build_parser.add_argument(
+        "-f", "--fmu-path", type=str, help="Path to where the built FMU should be saved"
+    )
 
     # Split the main build command into steps for customization
     # generate-code command to go from config to generated fmu source code
@@ -91,10 +100,14 @@ def _argparser() -> argparse.ArgumentParser:
 
     # Add options for code generation command
     _ = code_generation_parser.add_argument(
-        "--interface-file", type=str, help="json file describing the FMU following schema (e.g. interface.json)."
+        "--interface-file",
+        type=str,
+        help="json file describing the FMU following schema (e.g. interface.json).",
     )
     _ = code_generation_parser.add_argument(
-        "--model-file", type=str, help="onnx file containing the ML Model (e.g. example.onnx)."
+        "--model-file",
+        type=str,
+        help="onnx file containing the ML Model (e.g. example.onnx).",
     )
     _ = code_generation_parser.add_argument(
         "--fmu-source-path",
@@ -103,7 +116,10 @@ def _argparser() -> argparse.ArgumentParser:
 
     # build-code command to go from fmu source code to compiled fmu
     build_code_parser = sub_parsers.add_parser(
-        MlFmuCommand.COMPILE.value, help="Build FMU from FMU source code", parents=[common_args_parser], add_help=True
+        MlFmuCommand.COMPILE.value,
+        help="Build FMU from FMU source code",
+        parents=[common_args_parser],
+        add_help=True,
     )
 
     # Add option for fmu compilation
