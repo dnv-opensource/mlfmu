@@ -39,6 +39,4 @@ def configure_logging(
         file_handler.setFormatter(file_formatter)
         root_logger.addHandler(file_handler)
 
-    logging.getLogger("farn").setLevel(logging.WARNING)
-
     return
