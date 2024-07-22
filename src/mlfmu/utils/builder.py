@@ -1,6 +1,8 @@
 import os
 import shutil
 import subprocess
+import logging
+
 from pathlib import Path
 from typing import List, Optional
 
@@ -17,6 +19,7 @@ absolute_path = path_to_this_file.parent.parent
 fmu_build_folder = absolute_path / "fmu_build"
 template_parent_path = fmu_build_folder / "templates" / "fmu"
 
+logger = logging.getLogger(__name__)
 
 # Replacing all the template strings with their corresponding values and saving to new file
 def format_template_file(template_path: Path, save_path: Path, data: dict[str, str]):
@@ -236,24 +239,42 @@ def build_fmu(
         "-o",
         "shared=True",
     ]
-
     cmake_set_folders = [
         f"-DCMAKE_BINARY_DIR={str(fmu_build_path)}",
         f"-DFMU_OUTPUT_DIR={str(fmu_save_path)}",
         f"-DFMU_NAMES={fmu_name}",
         f"-DFMU_SOURCE_PATH={str(fmu_src_path.parent)}",
     ]
-
     cmake_command = ["cmake", *cmake_set_folders, "--preset", "conan-default"]
-
     cmake_build_command = ["cmake", "--build", ".", "-j", "14", "--config", "Release"]
 
-    cmake_presets_file = Path(fmu_build_folder) / "CMakeUserPresets.json"
-    cmake_presets_file.unlink(missing_ok=True)
-
+    # Change directory to the build folder
     os.chdir(fmu_build_folder)
-    _ = subprocess.run(conan_install_command)
-    _ = subprocess.run(cmake_command)
+
+    # Run conan install, cmake, cmake build
+    logger.debug("Builder: Run conan install")
+    try:
+        _ = subprocess.run(conan_install_command, check=True)
+    except subprocess.CalledProcessError as ex:
+        logger.error("Exception in conan install %s", ex)
+        print(ex)
+
+    logger.debug("Builder: Run cmake")
+    try:
+        _ = subprocess.run(cmake_command, check=True)
+    except subprocess.CalledProcessError as ex:
+        logger.error("Exception in cmake %s", ex)
+        print(ex)
+
     os.chdir(fmu_build_path)
-    _ = subprocess.run(cmake_build_command)
-    os.chdir(os.getcwd())
+    logger.debug("Builder: Run cmake build")
+    try:
+        _ = subprocess.run(cmake_build_command, check=True)
+    except subprocess.CalledProcessError as ex:
+        logger.error("Exception in cmake build: %s", ex)
+        print(ex)
+
+    logger.debug("Builder: Done with build_fmu")
+
+    # Return to original working directory (leave build dir)
+    os.chdir(absolute_path)
