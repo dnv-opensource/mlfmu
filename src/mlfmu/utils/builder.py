@@ -20,6 +20,7 @@ template_parent_path = fmu_build_folder / "templates" / "fmu"
 
 logger = logging.getLogger(__name__)
 
+
 # Replacing all the template strings with their corresponding values and saving to new file
 def format_template_file(template_path: Path, save_path: Path, data: dict[str, str]):
     # TODO: Need to check that these calls are safe from a cybersecurity point of view

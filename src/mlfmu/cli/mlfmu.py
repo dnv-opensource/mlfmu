@@ -11,6 +11,7 @@ from mlfmu.utils.logger import configure_logging
 
 logger = logging.getLogger(__name__)
 
+
 def _argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="mlfmu",
@@ -73,7 +74,9 @@ def _argparser() -> argparse.ArgumentParser:
     )
 
     # Add options for build command
-    _ = build_parser.add_argument("-i", "--interface-file", type=str, help="JSON file describing the FMU following schema")
+    _ = build_parser.add_argument(
+        "-i", "--interface-file", type=str, help="JSON file describing the FMU following schema"
+    )
     _ = build_parser.add_argument("-m", "--model-file", type=str, help="ONNX file containing the ML Model")
     _ = build_parser.add_argument("-f", "--fmu-path", type=str, help="Path to where the built FMU should be saved")
 
@@ -90,7 +93,9 @@ def _argparser() -> argparse.ArgumentParser:
     _ = code_generation_parser.add_argument(
         "--interface-file", type=str, help="json file describing the FMU following schema (e.g. interface.json)."
     )
-    _ = code_generation_parser.add_argument("--model-file", type=str, help="onnx file containing the ML Model (e.g. example.onnx).")
+    _ = code_generation_parser.add_argument(
+        "--model-file", type=str, help="onnx file containing the ML Model (e.g. example.onnx)."
+    )
     _ = code_generation_parser.add_argument(
         "--fmu-source-path",
         help="Path to where the generated FMU source code should be saved. Given path/to/folder the files can be found in path/to/folder/[FmuName]",

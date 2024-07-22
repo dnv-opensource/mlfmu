@@ -26,6 +26,7 @@ class MlFmuCommand(Enum):
             return None
         return matches[0]
 
+
 # run for mlfmu
 def run(
     command: MlFmuCommand,
@@ -137,7 +138,6 @@ class MlFmuBuilder:
     def __del__(self):
         logger.debug("MlFmuBuilder: destructor called, removing temporary build directory.")
         # The destructor should automatically delete the temporary directory (goes out of scope).
-
 
     def build(self):
         """
@@ -266,7 +266,6 @@ class MlFmuBuilder:
             logger.error("Error while running build_fmu: %s", ex)
             print(ex)
         logger.debug("MLFmuBuilder: Done with compile")
-
 
     def default_interface_file(self):
         """Return the path to a interface json file inside self.root_directory if it can be inferred."""
@@ -413,7 +412,7 @@ class MlFmuProcess:
             ml_model_file=ml_model_file,
             source_folder=source_folder,
             fmu_output_folder=fmu_output_folder,
-            build_folder=build_folder
+            build_folder=build_folder,
         )
 
     def run(self):
