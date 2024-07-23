@@ -1,6 +1,6 @@
 # mlfmu
 
-MLFMU serves as a tool for developers looking to integrate machine learning models into simulation environments. It enables the creation of Functional Mock-up Units (FMUs), which are simulation models that adhere to the [FMI standard](https://fmi-standard.org/), from trained machine learning models exported in the [ONNX](https://onnx.ai/) format. The mlfmu package streamlines the process of transforming ONNX models into FMUs, facilitating their use in a wide range of simulation platforms that support the FMI standard such as the [Open Simulation Platform](https://open-simulation-platform.github.io/) or DNV's [Simulation Trust Center](https://store.veracity.com/simulation-trust-center)
+MLFMU serves as a tool for developers looking to integrate machine learning models into simulation environments. It enables the creation of Functional Mock-up Units (FMUs), which are simulation models that adhere to the FMI standard (<https://fmi-standard.org/>), from trained machine learning models exported in the ONNX format (<https://onnx.ai/>). The mlfmu package streamlines the process of transforming ONNX models into FMUs, facilitating their use in a wide range of simulation platforms that support the FMI standard such as the [Open Simulation Platform](https://open-simulation-platform.github.io/) or DNV's [Simulation Trust Center](https://store.veracity.com/simulation-trust-center)
 
 ## Features
 
@@ -138,11 +138,12 @@ For advanced usage options, e.g. editing the generated FMU source code, or using
 
     ```sh
     git clone https://github.com/dnv-innersource/mlfmu path/to/your/dev/mlfmu
+    git submodule update --init --recursive
     ```
 
 4. In the mlfmu root folder:
 
-    Create a Python virtual environment:
+    Create a Python virtual environment, e.g. (you can also make a conda environment):
 
     ```sh
     python -m venv .venv
@@ -162,7 +163,7 @@ For advanced usage options, e.g. editing the generated FMU source code, or using
     source .venv/bin/activate
     ```
 
-    Update pip and setuptools:
+    Install/update pip and setuptools:
 
     ```sh
     (.venv) $ python -m pip install --upgrade pip setuptools
@@ -170,7 +171,7 @@ For advanced usage options, e.g. editing the generated FMU source code, or using
 
     (Optional) If you want PyTorch cuda support on your local machine
     (i.e. to use your GPU for torch operations), you should preferably install PyTorch with cuda support first, before installing all other dependendencies.
-    On the official [PyTorch website](https://pytorch.org/get-started/locally/)
+    On the official PyTorch website at <https://pytorch.org/get-started/locally/>,
     you can generate a pip install command matching your local machine's operating system, using a wizard.
     If you are on Windows, the resulting pip install command will most likely look something like this:
 
@@ -178,7 +179,11 @@ For advanced usage options, e.g. editing the generated FMU source code, or using
     (.venv) $ pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
     ```
 
-    _Hint:_ If you are unsure which cuda version to indicate in above `pip install .. /cuXXX` command, you can use the shell command `nvidia-smi` on your local system to find out the cuda version supported by the current graphics driver installed on your system. When then generating the `pip install` command with the wizard from the [PyTorch website](https://pytorch.org/get-started/locally/), select the cuda version that matches the major version of what your graphics driver supports (major version must match, minor version may deviate).
+    _Hint:_ If you are unsure which cuda version to indicate in above `pip install .. /cuXXX` command, you can use the shell command `nvidia-smi` on your local system to find out the cuda version supported by the current graphics driver installed on your system. When then generating the `pip install` command with the wizard from <https://pytorch.org/get-started/locally/>, select the cuda version that matches the major version of what your graphics driver supports (major version must match, minor version may deviate).
+
+    > Note: We use conan for building the FMU. For the conan building to work later on, you will need the Visual Studio Build tools 2022 to be installed. It is best to do this **before** installing conan (which we install via pip install of requirements). You can download and install the Build Tools for VS 2022 (for free) from <https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022>.
+
+    > Note 2: After you install conan, you want to make sure it has the correct build profile. You can auto-detect and create the profile by running `conan profile detect`. After this, you can check the profile in `C:\Users\<USRNAM>\.conan2\profiles\.default` (replace `<USRNAM>` with your username). You want to `compiler=msvc`, `compiler.cppstd=17`, `compiler.version=193` (for Windows).
 
     Install mlfmu's dependencies. <br>
 
@@ -206,6 +211,14 @@ For advanced usage options, e.g. editing the generated FMU source code, or using
     (.venv) $ cd .\examples\wind_generator\config\
     (.venv) $ mlfmu build
     ```
+
+As an alternative, you can run from the main directory:
+
+```sh
+mlfmu build --interface-file .\examples\wind_generator\config\interface.json --model-file .\examples\wind_generator\config\example.onnx
+```
+
+Note; wherever you run the build command from, is where the FMU file will be created, unless you specify otherwise with `--fmu-path`.
 
 ## Meta
 

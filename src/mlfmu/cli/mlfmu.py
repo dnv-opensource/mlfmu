@@ -41,19 +41,21 @@ def _argparser() -> argparse.ArgumentParser:
     )
 
     _ = common_args_parser.add_argument(
+        "-l",
         "--log",
         action="store",
         type=str,
-        help="name of log file. If specified, this will activate logging to file.",
+        help="name of log file. If specified, this will activate logging to file. If not, it does not log to file, only console.",
         default=None,
         required=False,
     )
 
     _ = common_args_parser.add_argument(
+        "-ll",
         "--log-level",
         action="store",
         type=str,
-        help="log level applied to logging to file.",
+        help="log level applied to logging to file. Default: WARNING.",
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
         default="WARNING",
         required=False,
@@ -72,9 +74,14 @@ def _argparser() -> argparse.ArgumentParser:
     )
 
     # Add options for build command
-    _ = build_parser.add_argument("--interface-file", type=str, help="JSON file describing the FMU following schema")
-    _ = build_parser.add_argument("--model-file", type=str, help="ONNX file containing the ML Model")
-    _ = build_parser.add_argument("--fmu-path", type=str, help="Path to where the built FMU should be saved")
+    _ = build_parser.add_argument(
+        "-i",
+        "--interface-file",
+        type=str,
+        help="JSON file describing the FMU following schema",
+    )
+    _ = build_parser.add_argument("-m", "--model-file", type=str, help="ONNX file containing the ML Model")
+    _ = build_parser.add_argument("-f", "--fmu-path", type=str, help="Path to where the built FMU should be saved")
 
     # Split the main build command into steps for customization
     # generate-code command to go from config to generated fmu source code
@@ -87,9 +94,15 @@ def _argparser() -> argparse.ArgumentParser:
 
     # Add options for code generation command
     _ = code_generation_parser.add_argument(
-        "--interface-file", type=str, help="json file describing the FMU following schema"
+        "--interface-file",
+        type=str,
+        help="json file describing the FMU following schema (e.g. interface.json).",
     )
-    _ = code_generation_parser.add_argument("--model-file", type=str, help="onnx file containing the ML Model")
+    _ = code_generation_parser.add_argument(
+        "--model-file",
+        type=str,
+        help="onnx file containing the ML Model (e.g. example.onnx).",
+    )
     _ = code_generation_parser.add_argument(
         "--fmu-source-path",
         help="Path to where the generated FMU source code should be saved. Given path/to/folder the files can be found in path/to/folder/[FmuName]",
@@ -97,7 +110,10 @@ def _argparser() -> argparse.ArgumentParser:
 
     # build-code command to go from fmu source code to compiled fmu
     build_code_parser = sub_parsers.add_parser(
-        MlFmuCommand.COMPILE.value, help="Build FMU from FMU source code", parents=[common_args_parser], add_help=True
+        MlFmuCommand.COMPILE.value,
+        help="Build FMU from FMU source code",
+        parents=[common_args_parser],
+        add_help=True,
     )
 
     # Add option for fmu compilation
@@ -106,9 +122,7 @@ def _argparser() -> argparse.ArgumentParser:
         type=str,
         help="Path to the folder where the FMU source code is located. The folder needs to have the same name as the FMU. E.g. path/to/folder/[FmuName]",
     )
-    _ = build_code_parser.add_argument(
-        "--fmu-path", type=str, help="Path to where the where the built FMU should be saved"
-    )
+    _ = build_code_parser.add_argument("--fmu-path", type=str, help="Path to where the built FMU should be saved.")
 
     return parser
 
@@ -132,6 +146,7 @@ def main():
     log_file: Union[Path, None] = Path(args.log) if args.log else None
     log_level_file: str = args.log_level
     configure_logging(log_level_console, log_file, log_level_file)
+    logger.info("Logging to file: %s", log_file)
 
     command: Optional[MlFmuCommand] = MlFmuCommand.from_string(args.command)
 
@@ -146,14 +161,22 @@ def main():
     source_folder = args.fmu_source_path if "fmu_source_path" in args else None
 
     # Invoke API
-    run(
-        command=command,
-        interface_file=interface_file,
-        model_file=model_file,
-        fmu_path=fmu_path,
-        source_folder=source_folder,
-    )
+    try:
+        run(
+            command=command,
+            interface_file=interface_file,
+            model_file=model_file,
+            fmu_path=fmu_path,
+            source_folder=source_folder,
+        )
+    except Exception as ex:
+        logger.error("Unhandled exception in run: %s", ex)
+        print(ex)
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as ex:
+        logger.error("Unhandled exception in main: %s", ex)
+        print(ex)
