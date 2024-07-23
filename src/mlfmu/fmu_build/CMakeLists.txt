@@ -34,7 +34,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang
         add_compile_options("-static")
     endif()
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    add_compile_options("/W3")
+    add_compile_options("/W4")
     add_compile_options("/wd4996")
     add_definitions("-D_SCL_SECURE_NO_WARNINGS" "-D_CRT_SECURE_NO_WARNINGS")
     if(FMU_USE_STATIC_RUNTIME)
