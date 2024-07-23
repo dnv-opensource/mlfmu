@@ -1,4 +1,4 @@
-dictIO>=0.3.3
+dictIO>=0.3.4
 pydantic>=2.6
 json-schema-for-humans>=0.4.7
 onnxruntime==1.18.1

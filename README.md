@@ -220,6 +220,8 @@ mlfmu build --interface-file .\examples\wind_generator\config\interface.json --m
 
 Note; wherever you run the build command from, is where the FMU file will be created, unless you specify otherwise with `--fmu-path`.
 
+For more options, see `mlfmu --help` or `mlfmu build --help`.
+
 ## Meta
 
 All code in mlfmu is DNV intellectual property and for DNV internal use only.
@@ -241,8 +243,6 @@ Author 4 - [@LinkedIn](https://www.linkedin.com/in/name/) - <first.lastname@dnv.
 Distributed under the XYZ license. See [LICENSE](LICENSE.md) for more information.
 ```
 
-[https://github.com/dnv-innersource/mlfmu](https://github.com/dnv-innersource/mlfmu)
-
 ## Contributing
 
 1. Fork it (<https://github.com/dnv-innersource/mlfmu/fork>) (Note: this is currently disabled for this repo. For DNV internal development, continue with the next step.)
@@ -254,5 +254,9 @@ Distributed under the XYZ license. See [LICENSE](LICENSE.md) for more informatio
 7. Create a new Pull Request in GitHub
 
 For your contribution, please make sure you follow the [STYLEGUIDE](STYLEGUIDE.md) before creating the Pull Request.
+
+## Errors & fixes
+
+- If you get an error similar to `..\fmu.cpp(4,10): error C1083: Cannot open include file: 'cppfmu_cs.hpp': No such file or directory`, you are missing cppfmu. This is a submodule to this repository. Make sure that you do a `git submodule update --init --recursive` in the top level folder.
 
 <!-- Markdown link & img dfn's -->
