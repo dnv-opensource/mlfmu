@@ -14,7 +14,8 @@ logger = logging.getLogger(__name__)
 
 
 def requires_start(var: FmiVariable) -> bool:
-    """Test if a variable requires a start attribute.
+    """
+    Test if a variable requires a start attribute.
 
     Returns
     -------
@@ -28,9 +29,11 @@ def requires_start(var: FmiVariable) -> bool:
 
 
 def generate_model_description(fmu_model: FmiModel) -> ElementTree:
-    """Generate FMU modelDescription as XML.
+    """
+    Generate FMU modelDescription as XML.
 
-    Args:
+    Args
+    ----
         fmu_model (FmiModel): Object representation of FMI slave instance
 
     Returns

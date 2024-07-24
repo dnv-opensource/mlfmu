@@ -48,6 +48,20 @@ class BaseModelConfig(BaseModel):
 
 
 class Variable(BaseModelConfig):
+    """
+    Represents a variable in an FMU component.
+
+    Attributes
+    ----------
+        name (str): Unique name for the port.
+        type (Optional[FmiVariableType]): Data type as defined by FMI standard, defaults to Real.
+        description (Optional[str]): Short FMU variable description.
+        variability (Optional[FmiVariability]): Signal variability as defined by FMI.
+        start_value (Optional[Union[float, str, bool, int]]): Initial value of the signal at time step 1. Type should match the variable type.
+        is_array (Optional[bool]): When dealing with an array signal, it is essential to specify the LENGTH parameter. Arrays are indexed starting from 0, and FMU signals will be structured as SIGNAL_NAME[0], SIGNAL_NAME[1], and so forth. By default, this feature is set to False.
+        length (Optional[int]): Defines the number of entries in the signal if the signal is array.
+    """
+
     name: str = Field(
         None,
         description="Unique name for the port.",
@@ -76,6 +90,23 @@ class Variable(BaseModelConfig):
 
 
 class InternalState(BaseModelConfig):
+    """
+    Represents an internal state of an FMU component.
+
+    Attributes
+    ----------
+        name (Optional[str]): Unique name for the state. Only needed if start_value is set (!= None).
+            Initialization FMU parameters will be generated using this name.
+        description (Optional[str]): Short description of the FMU variable.
+        start_value (Optional[float]): The default value of the parameter used for initialization.
+            If this field is set, parameters for initialization will be automatically generated for these states.
+        initialization_variable (Optional[str]): The name of an input or parameter in the same model interface
+            that should be used to initialize this state.
+        agent_output_indexes (List[str]): Index or range of indices of agent outputs that will be stored as
+            internal states and will be fed as inputs in the next time step. Note: the FMU signal and the
+            agent outputs need to have the same length.
+    """
+
     name: Optional[str] = Field(
         None,
         description="Unique name for state. Only needed if start_value is set (!= None). Initialization FMU parameters will be generated using this name",
@@ -103,6 +134,21 @@ class InternalState(BaseModelConfig):
 
     @model_validator(mode="after")
     def check_only_one_initialization(self):
+        """
+        Check if only one state initialization method is used at a time.
+
+        Raises a ValueError if multiple state initialization methods are used simultaneously.
+
+        Returns
+        -------
+            self: The FMU component instance.
+
+        Raises
+        ------
+            ValueError: If initialization_variable is set and either start_value or name is also set.
+            ValueError: If name is set without start_value being set.
+            ValueError: If start_value is set without name being set.
+        """
         init_var = self.initialization_variable is not None
         name = self.name is not None
         start_value = self.start_value is not None
@@ -123,6 +169,19 @@ class InternalState(BaseModelConfig):
 
 
 class InputVariable(Variable):
+    """
+    Represents an input variable for an FMU component.
+
+    Attributes
+    ----------
+        agent_input_indexes (List[str]): Index or range of indices of agent inputs to which this FMU signal shall be linked to.
+            Note: The FMU signal and the agent inputs need to have the same length.
+
+    Examples
+    --------
+        An example of `agent_input_indexes` can be ["10", "10:20", "30"].
+    """
+
     agent_input_indexes: List[
         Annotated[
             str,
@@ -136,6 +195,19 @@ class InputVariable(Variable):
 
 
 class OutputVariable(Variable):
+    """
+    Represents an output variable in the FMU component.
+
+    Attributes
+    ----------
+        agent_output_indexes (List[str]): Index or range of indices of agent outputs that will be linked to this output signal.
+            Note: The FMU signal and the agent outputs need to have the same length.
+
+    Examples
+    --------
+        An example of `agent_output_indexes` can be ["10", "10:20", "30"].
+    """
+
     agent_output_indexes: List[
         Annotated[
             str,
@@ -143,13 +215,29 @@ class OutputVariable(Variable):
         ]
     ] = Field(
         [],
-        description="Index or range of indices of agent outputs that will be linked to this output signal. Note: the FMU signal and the agent outputs need to have the same length.",
+        description="Index or range of indices of agent outputs that will be linked to this output signal. Note: The FMU signal and the agent outputs need to have the same length.",
         examples=["10", "10:20", "30"],
     )
 
 
 @dataclass
 class FmiInputVariable(InputVariable):
+    """
+    Represents an input variable in an FMI component.
+
+    Attributes
+    ----------
+        causality (FmiCausality): The causality of the input variable.
+        variable_references (List[int]): List of variable references.
+        agent_state_init_indexes (List[List[int]]): List of agent state initialization indexes.
+
+    Args
+    ----
+        **kwargs: Additional keyword arguments to initialize the input variable.
+            - causality (FmiCausality): The causality of the input variable.
+            - variable_references (List[int]): List of variable references.
+    """
+
     causality: FmiCausality
     variable_references: List[int] = []
     agent_state_init_indexes: List[List[int]] = []
@@ -162,6 +250,21 @@ class FmiInputVariable(InputVariable):
 
 @dataclass
 class FmiOutputVariable(OutputVariable):
+    """
+    Represent an output variable in an FMI component.
+
+    Attributes
+    ----------
+        causality (FmiCausality): The causality of the output variable.
+        variable_references (List[int]): The list of variable references associated with the output variable.
+
+    Args
+    ----
+        **kwargs: Additional keyword arguments to initialize the output variable.
+            - causality (FmiCausality): The causality of the output variable. Defaults to FmiCausality.OUTPUT.
+            - variable_references (List[int]): The list of variable references associated with the output variable. Defaults to an empty list.
+    """
+
     causality: FmiCausality
     variable_references: List[int] = []
 
@@ -173,6 +276,20 @@ class FmiOutputVariable(OutputVariable):
 
 @dataclass
 class FmiVariable:
+    """
+    Represents a variable in an FMU component.
+
+    Attributes
+    ----------
+        name (str): The name of the variable.
+        variable_reference (int): The reference ID of the variable. Default: 0
+        type (FmiVariableType): The type of the variable.
+        start_value (Union[bool, str, int, float]): The initial value of the variable. Default: 0
+        causality (FmiCausality): The causality of the variable.
+        description (str): The description of the variable.
+        variability (FmiVariability): The variability of the variable.
+    """
+
     name: str = ""
     variable_reference: int = 0
     type: FmiVariableType = FmiVariableType.REAL
@@ -183,6 +300,25 @@ class FmiVariable:
 
 
 class ModelComponent(BaseModelConfig):
+    """
+    Represents a simulation model component.
+
+    Attributes
+    ----------
+        name (str): The name of the simulation model.
+        version (str): The version number of the model.
+        author (Optional[str]): Name or email of the model's author.
+        description (Optional[str]): Brief description of the model.
+        copyright (Optional[str]): Copyright line for use in full license text.
+        license (Optional[str]): License text or file name (relative to source files).
+        inputs (List[InputVariable]): List of input signals of the simulation model.
+        outputs (List[OutputVariable]): List of output signals of the simulation model.
+        parameters (List[InputVariable]): List of parameter signals of the simulation model.
+        states (List[InternalState]): Internal states that will be stored in the simulation model's memory, these will be passed as inputs to the agent in the next time step.
+        uses_time (Optional[bool]): Whether the agent consumes time data from co-simulation algorithm.
+        state_initialization_reuse (bool): Whether variables are allowed to be reused for state initialization when initialization_variable is used for state initialization. If set to true the variable referred to in initialization_variable will be repeated for the state initialization until the entire state is initialized.
+    """
+
     name: str = Field(None, description="The name of the simulation model.")
     version: str = Field("0.0.1", description="The version number of the model.")
     author: Optional[str] = Field(None, description="Name or email of the model's author.")
@@ -219,6 +355,35 @@ class ModelComponent(BaseModelConfig):
 
 
 class FmiModel:
+    """
+    Represents an FMU model with its associated properties and variables.
+
+    Attributes
+    ----------
+        name (str): The name of the FMU model.
+        guid (Optional[UUID]): The globally unique identifier of the FMU model.
+        inputs (List[FmiInputVariable]): The list of input variables for the FMU model.
+        outputs (List[FmiOutputVariable]): The list of output variables for the FMU model.
+        parameters (List[FmiInputVariable]): The list of parameter variables for the FMU model.
+        author (Optional[str]): The author of the FMU model.
+        version (str): The version of the FMU model.
+        description (Optional[str]): The description of the FMU model.
+        copyright (Optional[str]): The copyright information of the FMU model.
+        license (Optional[str]): The license information of the FMU model.
+        state_initialization_reuse (bool): Indicates whether the FMU model reuses state initialization.
+
+    Methods
+    -------
+        __init__(self, model: ModelComponent): Initializes the FmiModel object with a ModelComponent object.
+        add_variable_references(self, inputs: List[InputVariable], parameters: List[InputVariable], outputs: List[OutputVariable]):
+            Assigns variable references to inputs, parameters, and outputs from the user interface to the FMU model class.
+        add_state_initialization_parameters(self, states: List[InternalState]):
+            Generates or modifies FmuInputVariables for initialization of states for the InternalState objects.
+        format_fmi_variable(self, var: Union[FmiInputVariable, FmiOutputVariable]) -> List[FmiVariable]:
+            Gets an inclusive list of variables from an interface variable definition.
+
+    """
+
     name: str = ""
     guid: Optional[UUID] = None
     inputs: List[FmiInputVariable] = []
@@ -250,9 +415,11 @@ class FmiModel:
         parameters: List[InputVariable],
         outputs: List[OutputVariable],
     ):
-        """Assign variable references to inputs, parameters and outputs from user interface to FMU model class.
+        """
+        Assign variable references to inputs, parameters and outputs from user interface to FMU model class.
 
-        Args:
+        Args
+        ----
             inputs (List[InputVariable]): List of input variables from JSON interface
             parameters (List[InputVariable]): List of model parameters from JSON interface
             outputs (List[InputVariable]): List of output variables from JSON interface
@@ -328,12 +495,14 @@ class FmiModel:
         self.parameters = fmu_parameters
 
     def add_state_initialization_parameters(self, states: List[InternalState]):
-        """Generate or modifies FmuInputVariables for initialization of states for the InternalState objects that have set start_value and name or have set initialization_variable. Any generated parameters are appended to self.parameters.
-
-        Args:
-            states (List[InternalState]): List of states from JSON interface
-
         """
+        Generate or modifies FmuInputVariables for initialization of states for the InternalState objects that have set start_value and name or have set initialization_variable. Any generated parameters are appended to self.parameters.
+
+        Args
+        ----
+            states (List[InternalState]): List of states from JSON interface
+        """
+
         init_parameters: List[FmiInputVariable] = []
 
         value_reference_start = (
@@ -394,10 +563,12 @@ class FmiModel:
         self.parameters = [*self.parameters, *init_parameters]
 
     def format_fmi_variable(self, var: Union[FmiInputVariable, FmiOutputVariable]) -> List[FmiVariable]:
-        """Get an inclusive list of variables from an interface variable definition.
+        """
+        Get an inclusive list of variables from an interface variable definition.
            Vectors are separated as N number of signals, being N the size of the array.
 
-        Args:
+        Args
+        ----
             var (FmiInputVariable, FmiOutputVariable): Interface variable definition with the variable references.
 
         Returns
@@ -448,7 +619,8 @@ class FmiModel:
     def get_template_mapping(
         self,
     ) -> Tuple[List[Tuple[int, int]], List[Tuple[int, int]], List[Tuple[int, int]]]:
-        """Calculate the index to value reference mapping between onnx inputs/outputs/state to fmu variables.
+        """
+        Calculate the index to value reference mapping between onnx inputs/outputs/state to fmu variables.
 
         Returns
         -------

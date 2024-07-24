@@ -25,7 +25,7 @@ class CliArgs:
     command: str = ""
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # type: ignore
     "inputs, expected",
     [
         ([], ArgumentError),
@@ -45,17 +45,34 @@ class CliArgs:
 def test_cli(
     inputs: List[str],
     expected: Union[CliArgs, type],
-    monkeypatch: MonkeyPatch,
+    monkeypatch: MonkeyPatch,  # type: ignore
 ):
+    """
+    Test the command-line interface (CLI) of the 'mlfmu' program.
+
+    Args
+    ----
+        inputs (List[str]): A list of input arguments to be passed to the CLI.
+        expected (Union[CliArgs, type]): The expected output of the CLI. It can be either an instance of the `CliArgs` class or a subclass of `Exception`.
+        monkeypatch (MonkeyPatch): A pytest fixture that allows patching of objects at runtime.
+
+    Raises
+    ------
+        AssertionError: If the `expected` argument is neither an instance of `CliArgs` nor a subclass of `Exception`.
+    """
+
     # sourcery skip: no-conditionals-in-tests
     # sourcery skip: no-loop-in-tests
+
     # Prepare
-    monkeypatch.setattr(sys, "argv", ["mlfmu"] + inputs)
+    monkeypatch.setattr(sys, "argv", ["mlfmu"] + inputs)  # type: ignore
     parser = _argparser()
+
     # Execute
     if isinstance(expected, CliArgs):
         args_expected: CliArgs = expected
         args = parser.parse_args()
+
         # Assert args
         print(args)
         print(args_expected)
@@ -63,8 +80,9 @@ def test_cli(
             assert args.__getattribute__(key) == args_expected.__getattribute__(key)
     elif issubclass(expected, Exception):
         exception: type = expected
+
         # Assert that expected exception is raised
-        with pytest.raises((exception, SystemExit)):
+        with pytest.raises((exception, SystemExit)):  # type: ignore
             args = parser.parse_args()
     else:
         raise AssertionError()
@@ -81,7 +99,7 @@ class ConfigureLoggingArgs:
     log_level_file: str = field(default_factory=lambda: "WARNING")
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # type: ignore
     "inputs, expected",
     [
         ([], ArgumentError),
@@ -112,12 +130,27 @@ class ConfigureLoggingArgs:
 def test_logging_configuration(
     inputs: List[str],
     expected: Union[ConfigureLoggingArgs, type],
-    monkeypatch: MonkeyPatch,
+    monkeypatch: MonkeyPatch,  # type: ignore
 ):
+    """
+    Test the logging configuration of the `main` function in the `mlfmu` module.
+
+    Args
+    ----
+        inputs (List[str]): The list of input arguments to be passed to the `main` function.
+        expected (Union[ConfigureLoggingArgs, type]): The expected output of the `main` function. It can be an instance of `ConfigureLoggingArgs` or a subclass of `Exception`.
+        monkeypatch (MonkeyPatch): The monkeypatch fixture provided by pytest.
+
+    Raises
+    ----
+        AssertionError: If the `expected` argument is neither an instance of `ConfigureLoggingArgs` nor a subclass of `Exception`.
+    """
+
     # sourcery skip: no-conditionals-in-tests
     # sourcery skip: no-loop-in-tests
+
     # Prepare
-    monkeypatch.setattr(sys, "argv", ["mlfmu"] + inputs)
+    monkeypatch.setattr(sys, "argv", ["mlfmu"] + inputs)  # type: ignore
     args: ConfigureLoggingArgs = ConfigureLoggingArgs()
 
     def fake_configure_logging(
@@ -138,8 +171,8 @@ def test_logging_configuration(
     ):
         pass
 
-    monkeypatch.setattr(mlfmu, "configure_logging", fake_configure_logging)
-    monkeypatch.setattr(mlfmu, "run", fake_run)
+    monkeypatch.setattr(mlfmu, "configure_logging", fake_configure_logging)  # type: ignore
+    monkeypatch.setattr(mlfmu, "run", fake_run)  # type: ignore
     # Execute
     if isinstance(expected, ConfigureLoggingArgs):
         args_expected: ConfigureLoggingArgs = expected
@@ -150,7 +183,7 @@ def test_logging_configuration(
     elif issubclass(expected, Exception):
         exception: type = expected
         # Assert that expected exception is raised
-        with pytest.raises((exception, SystemExit)):
+        with pytest.raises((exception, SystemExit)):  # type: ignore
             main()
     else:
         raise AssertionError()
@@ -169,7 +202,7 @@ class ApiArgs:
     source_folder: Optional[str] = None
 
 
-@pytest.mark.parametrize(
+@pytest.mark.parametrize(  # type: ignore
     "inputs, expected",
     [
         ([], ArgumentError),
@@ -179,12 +212,26 @@ class ApiArgs:
 def test_api_invokation(
     inputs: List[str],
     expected: Union[ApiArgs, type],
-    monkeypatch: MonkeyPatch,
+    monkeypatch: MonkeyPatch,  # type: ignore
 ):
     # sourcery skip: no-conditionals-in-tests
     # sourcery skip: no-loop-in-tests
+    """
+    Test the invocation of the API function.
+
+    Args
+    ----
+        inputs (List[str]): The list of input arguments.
+        expected (Union[ApiArgs, type]): The expected output, either an instance of ApiArgs or an exception type.
+        monkeypatch (MonkeyPatch): The monkeypatch object for patching sys.argv.
+
+    Raises
+    ----
+        AssertionError: If the expected output is neither an instance of ApiArgs nor an exception type.
+    """
+
     # Prepare
-    monkeypatch.setattr(sys, "argv", ["mlfmu"] + inputs)
+    monkeypatch.setattr(sys, "argv", ["mlfmu"] + inputs)  # type: ignore
     args: ApiArgs = ApiArgs()
 
     def fake_run(
@@ -200,7 +247,7 @@ def test_api_invokation(
         args.fmu_path = fmu_path
         args.source_folder = source_folder
 
-    monkeypatch.setattr(mlfmu, "run", fake_run)
+    monkeypatch.setattr(mlfmu, "run", fake_run)  # type: ignore
     # Execute
     if isinstance(expected, ApiArgs):
         args_expected: ApiArgs = expected
@@ -211,7 +258,7 @@ def test_api_invokation(
     elif issubclass(expected, Exception):
         exception: type = expected
         # Assert that expected exception is raised
-        with pytest.raises((exception, SystemExit)):
+        with pytest.raises((exception, SystemExit)):  # type: ignore
             main()
     else:
         raise AssertionError()
