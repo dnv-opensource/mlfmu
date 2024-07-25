@@ -229,13 +229,13 @@ class FmiInputVariable(InputVariable):
     ----------
         causality (FmiCausality): The causality of the input variable.
         variable_references (List[int]): List of variable references.
-        agent_state_init_indexes (List[List[int]]): List of agent state initialization indexes.
+        agent_state_init_indexes (List[List[int]]): List of state initialization indexes for ONNX model - concerns mapping of FMU input variables to ONNX states.
 
     Args
     ----
         **kwargs: Additional keyword arguments to initialize the input variable.
-            - causality (FmiCausality): The causality of the input variable.
-            - variable_references (List[int]): List of variable references.
+            - causality (FmiCausality). Default: FmiCausality.INPUT
+            - variable_references (List[int]). Default: []
     """
 
     causality: FmiCausality
@@ -261,8 +261,8 @@ class FmiOutputVariable(OutputVariable):
     Args
     ----
         **kwargs: Additional keyword arguments to initialize the output variable.
-            - causality (FmiCausality): The causality of the output variable. Defaults to FmiCausality.OUTPUT.
-            - variable_references (List[int]): The list of variable references associated with the output variable. Defaults to an empty list.
+            - causality (FmiCausality). Default: FmiCausality.OUTPUT
+            - variable_references (List[int]). Default: []
     """
 
     causality: FmiCausality
@@ -497,7 +497,9 @@ class FmiModel:
 
     def add_state_initialization_parameters(self, states: List[InternalState]):
         """
-        Generate or modifies FmuInputVariables for initialization of states for the InternalState objects that have set start_value and name or have set initialization_variable. Any generated parameters are appended to self.parameters.
+        Generate or modifies FmuInputVariables for initialization of states for the InternalState objects
+        that have set start_value and name or have set initialization_variable.
+        Any generated parameters are appended to self.parameters.
 
         Args
         ----
