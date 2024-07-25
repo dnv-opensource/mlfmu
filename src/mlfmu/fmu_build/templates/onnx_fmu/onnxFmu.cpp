@@ -45,9 +45,10 @@ std::wstring OnnxFmu::formatOnnxPath(cppfmu::FMIString fmuResourceLocation)
 }
 
 /**
- * \brief Creates a session for the ONNX FMU.
+ * \brief Creates a session to the ONNX model.
  *
- * This function creates a session for the ONNX FMU using the specified ONNX model file.
+ * This function creates a session to the ONNX model, using the specified ONNX model file.
+ * This loads the weights of the model such that we can run predictions in the doStep function.
  *
  * \note The ONNX model file path must be set before calling this function.
  * \throws std::runtime_error if the session creation fails.
@@ -168,11 +169,11 @@ void OnnxFmu::GetBoolean(const cppfmu::FMIValueReference vr[], std::size_t nvr, 
 }
 
 /**
- * \brief Sets the ONNX inputs for the ONNX FMU.
+ * \brief Sets the ONNX inputs for the ONNX FMU, matching FMU variables with inputs of ONNX model.
  *
- * This function sets the ONNX inputs for the ONNX FMU by iterating over the ONNX input
- * value-reference index pairs and assigning the corresponding FMU variable's real value
- * to the ONNX input.
+ * This function matches the FMU variables with the inputs to the ONNX model.
+ * It iterates over the ONNX input value-reference index pairs and assigns the corresponding FMU
+ * variable's real value to the ONNX input.
  *
  * \returns `true` if the ONNX inputs are successfully set, `false` otherwise.
  */
@@ -230,7 +231,7 @@ bool OnnxFmu::GetOnnxOutputs()
 }
 
 /**
- * \brief Initializes the ONNX states of the ONNX FMU.
+ * \brief Initializes the ONNX states of the ONNX model.
  *
  * This function initializes the ONNX states of the ONNX FMU by assigning the initial values
  * of the ONNX states from the corresponding variables in the FMU.

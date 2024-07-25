@@ -43,7 +43,7 @@ def format_template_file(template_path: Path, save_path: Path, data: dict[str, s
 
 def create_model_description(fmu: FmiModel, src_path: Path):
     """
-    Compute XML structure for FMU and save it in a file.
+    Generate modelDescription.xml structure for FMU, and save it in a file.
 
     Args
     ----

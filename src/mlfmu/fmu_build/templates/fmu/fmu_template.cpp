@@ -19,7 +19,7 @@ class
         /**
          * \brief Constructs a new {FmuName} object.
          *
-         * \param fmuResourceLocation The location of the FMU resource.
+         * \param fmuResourceLocation The location of the resources of the FMU.
          */
         {FmuName}(cppfmu::FMIString fmuResourceLocation) : OnnxFmu(fmuResourceLocation) {}
 

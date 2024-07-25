@@ -102,9 +102,9 @@ class InternalState(BaseModelConfig):
             If this field is set, parameters for initialization will be automatically generated for these states.
         initialization_variable (Optional[str]): The name of an input or parameter in the same model interface
             that should be used to initialize this state.
-        agent_output_indexes (List[str]): Index or range of indices of agent outputs that will be stored as
+        agent_output_indexes (List[str]): Index or range of indices of agent (ONNX model) outputs that will be stored as
             internal states and will be fed as inputs in the next time step. Note: the FMU signal and the
-            agent outputs need to have the same length.
+            ONNX (agent) outputs need to have the same length.
     """
 
     name: Optional[str] = Field(
@@ -174,8 +174,8 @@ class InputVariable(Variable):
 
     Attributes
     ----------
-        agent_input_indexes (List[str]): Index or range of indices of agent inputs to which this FMU signal shall be linked to.
-            Note: The FMU signal and the agent inputs need to have the same length.
+        agent_input_indexes (List[str]): Index or range of indices of ONNX (agent) inputs to which this FMU signal shall be linked.
+            Note: The FMU signal and the ONNX (agent) inputs need to have the same length.
 
     Examples
     --------
@@ -301,7 +301,8 @@ class FmiVariable:
 
 class ModelComponent(BaseModelConfig):
     """
-    Represents a simulation model component.
+    Represents a simulation model component, used to generate the JSON schema for the model interface.
+    We define the structure of the FMU and how the inputs and outputs of the ONNX model correspond to the FMU variables.
 
     Attributes
     ----------
