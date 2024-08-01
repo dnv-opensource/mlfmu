@@ -45,7 +45,7 @@ std::wstring OnnxFmu::formatOnnxPath(cppfmu::FMIString fmuResourceLocation)
 }
 
 /**
- * \brief Creates a session to the ONNX model.
+ * \brief Creates a onnx runtime session for the model.
  *
  * This function creates a session to the ONNX model, using the specified ONNX model file.
  * This loads the weights of the model such that we can run predictions in the doStep function.
