@@ -11,10 +11,7 @@
  *
  * This class is derived from the OnnxFmu class and provides functionality specific to the {FmuName} FMU.
  */
-class
-{
-    FmuName
-} : public OnnxFmu {{
+class {FmuName} : public OnnxFmu {{
     public :
         /**
          * \brief Constructs a new {FmuName} object.
