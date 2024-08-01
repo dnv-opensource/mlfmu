@@ -44,13 +44,9 @@ cppfmu::UniquePtr<cppfmu::SlaveInstance> CppfmuInstantiateSlave(
     cppfmu::FMIString /*instanceName*/, cppfmu::FMIString fmuGUID, cppfmu::FMIString fmuResourceLocation,
     cppfmu::FMIString /*mimeType*/, cppfmu::FMIReal /*timeout*/, cppfmu::FMIBoolean /*visible*/,
     cppfmu::FMIBoolean /*interactive*/, cppfmu::Memory memory, cppfmu::Logger /*logger*/)
-{
-    {
-        if (std::strcmp(fmuGUID, FMU_UUID) != 0) {
-            {
-                throw std::runtime_error("FMU GUID mismatch");
-            }
-        }
-        return cppfmu::AllocateUnique<{FmuName}>(memory, fmuResourceLocation);
-    }
-}
+{{
+    if (std::strcmp(fmuGUID, FMU_UUID) != 0) {{
+        throw std::runtime_error("FMU GUID mismatch");
+    }}
+    return cppfmu::AllocateUnique<{FmuName}>(memory, fmuResourceLocation);
+}}
