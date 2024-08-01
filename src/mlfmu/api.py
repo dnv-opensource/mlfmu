@@ -439,40 +439,6 @@ class MlFmuProcess:
 
         return
 
-    @property
-    def run_number(self) -> int:
-        """Example for a read only property."""
-        return self._run_number
-
-    @property
-    def max_number_of_runs(self) -> int:
-        """
-        Example for a read/write property implemented through a pair of explicit
-        getter and setter methods (see below for the related setter method).
-        """
-        return self._max_number_of_runs
-
-    @max_number_of_runs.setter
-    def max_number_of_runs(self, value: int):
-        """
-        Setter method that belongs to above getter method.
-
-        Note that implementing specific getter- and setter methods is in most cases not necessary.
-        The same can be achieved by simply making the instance variable a public attribute.
-        I.e., declaring the instance variable in __init__() not as
-        self._max_number_of_runs: int = ..  # (-> private instance variable)
-        but as
-        self.max_number_of_runs: int = ..   # (-> public attribute)
-
-        However, in some cases the additional effort of implementing explicit getter- and setter- methods
-        as in this example can be reasoned, for instance if you have a need for increased control
-        and want be able to cancel or alter code execution, or write log messages whenever a property
-        gets reads or written from outside.
-        """
-
-        self._max_number_of_runs = value
-        return
-
     def _run_process(self):
         """Execute a single run of the mlfmu process."""
         self._run_number += 1
