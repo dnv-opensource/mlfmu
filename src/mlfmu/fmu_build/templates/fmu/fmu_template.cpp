@@ -18,7 +18,7 @@ class {FmuName} : public OnnxFmu {{
          *
          * \param fmuResourceLocation The location of the resources of the FMU.
          */
-        {FmuName}(cppfmu::FMIString fmuResourceLocation) : OnnxFmu(fmuResourceLocation) {}
+        {FmuName}(cppfmu::FMIString fmuResourceLocation) : OnnxFmu(fmuResourceLocation) {{}}
 
     private :
         // Add private members and functions here
