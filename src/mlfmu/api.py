@@ -136,8 +136,13 @@ class MlFmuBuilder:
         logger.debug(f"Created temp folder: {self.temp_folder_path}")
 
     def __del__(self):
+        """
+        Destructor for the MlFmuBuilder class.
+
+        This method is automatically called when the object is about to be destroyed.
+        The destructor should automatically delete the temporary directory (goes out of scope).
+        """
         logger.debug("MlFmuBuilder: destructor called, removing temporary build directory.")
-        # The destructor should automatically delete the temporary directory (goes out of scope).
 
     def build(self):
         """
@@ -191,7 +196,7 @@ class MlFmuBuilder:
 
     def generate(self):
         """
-        Generate FMU c++ source code and model description from ml_model_file and interface_file and saves it to source_folder.
+        Generate FMU C++ source code and model description from ml_model_file and interface_file and saves it to source_folder.
 
         If the paths to the necessary files and directories are not given the function will try to find files and directories that match the ones needed.
 
@@ -232,7 +237,7 @@ class MlFmuBuilder:
 
     def compile(self):
         """
-        Compile FMU from FMU c++ source code and model description contained in source_folder and saves it to fmu_output_folder.
+        Compile FMU from FMU C++ source code and model description contained in source_folder and saves it to fmu_output_folder.
 
         If the paths to the necessary files and directories are not given the function will try to find files and directories that match the ones needed.
 
@@ -416,7 +421,8 @@ class MlFmuProcess:
         )
 
     def run(self):
-        """Run the mlfmu process.
+        """
+        Run the mlfmu process.
 
         Runs the mlfmu process in a self-terminated loop.
         """
@@ -431,38 +437,6 @@ class MlFmuProcess:
                 self.terminate = True
             self.terminate = self._run_number >= self._max_number_of_runs
 
-        return
-
-    @property
-    def run_number(self) -> int:
-        """Example for a read only property."""
-        return self._run_number
-
-    @property
-    def max_number_of_runs(self) -> int:
-        """Example for a read/write property implemented through a pair of explicit
-        getter and setter methods (see below for the related setter method).
-        """
-        return self._max_number_of_runs
-
-    @max_number_of_runs.setter
-    def max_number_of_runs(self, value: int):
-        """Setter method that belongs to above getter method.
-
-        Note that implementing specific getter- and setter methods is in most cases not necessary.
-        The same can be achieved by simply making the instance variable a public attribute.
-        I.e., declaring the instance variable in __init__() not as
-        self._max_number_of_runs: int = ..  # (-> private instance variable)
-        but as
-        self.max_number_of_runs: int = ..   # (-> public attribute)
-
-        However, in some cases the additional effort of implementing explicit getter- and setter- methods
-        as in this example can be reasoned, for instance if you have a need for increased control
-        and want be able to cancel or alter code execution, or write log messages whenever a property
-        gets reads or written from outside.
-        """
-
-        self._max_number_of_runs = value
         return
 
     def _run_process(self):

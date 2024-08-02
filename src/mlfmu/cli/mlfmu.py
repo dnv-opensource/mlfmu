@@ -13,6 +13,14 @@ logger = logging.getLogger(__name__)
 
 
 def _argparser() -> argparse.ArgumentParser:
+    """
+    Create and return an ArgumentParser object for parsing command line arguments.
+
+    Returns
+    -------
+        argparse.ArgumentParser: The ArgumentParser object.
+    """
+
     parser = argparse.ArgumentParser(
         prog="mlfmu",
         epilog="_________________mlfmu___________________",
@@ -128,7 +136,8 @@ def _argparser() -> argparse.ArgumentParser:
 
 
 def main():
-    """Entry point for console script as configured in setup.cfg.
+    """
+    Entry point for console script as configured in setup.cfg.
 
     Runs the command line interface and parses arguments and options entered on the console.
     """
