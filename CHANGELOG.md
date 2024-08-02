@@ -28,7 +28,6 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 * Fmu Component json interface
   * Add name, description and start_value to state in the json interface
   * States changed from a single InternalState to a list of InternalState
-
 * Fixed typo from 'tunnable' to 'tunable'
 * Fixed number of onnx output check to be correct (1-3 and not always raising exception)
 * Fix correct fmi causality for parameters
@@ -47,6 +46,7 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 
 ### Added
 
+* Add .gitattributes to handle line endings, removed eol from .editorconfig
 * Add .github/pull_request_template.md for enabling PR templates on Github
 * Add conan dependency to pyproject.toml
 * Add MlFmuBuilder class to generate code and compile FMU
