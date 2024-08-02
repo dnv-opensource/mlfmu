@@ -13,6 +13,20 @@ def configure_logging(
     log_file: Union[Path, None] = None,
     log_level_file: str = "WARNING",
 ):  # sourcery skip: extract-duplicate-method, extract-method
+    """
+    Configure the logging settings for the application.
+
+    Args
+    ----
+        log_level_console (str): The log level for console output. Defaults to "WARNING".
+        log_file (Union[Path, None]): The path to the log file. Defaults to None.
+        log_level_file (str): The log level for file output. Defaults to "WARNING".
+
+    Raises
+    ------
+        ValueError: If an invalid log level is provided for console or file.
+    """
+
     log_level_console_numeric = getattr(logging, log_level_console.upper(), None)
     if not isinstance(log_level_console_numeric, int):
         raise ValueError(f"Invalid log level to console: {log_level_console_numeric}")

@@ -5,14 +5,37 @@ from typing import Any, List, Union
 import onnxruntime
 from onnxruntime import InferenceSession
 
-"""
-	ONNX Metadata class
-
-	Allows to import the ONNX file and figure out the input/output sizes.
-"""
-
 
 class ONNXModel:
+    """
+    ONNX Metadata class
+    Represents an ONNX model and provides methods to load inputs and outputs.
+    Allows to import the ONNX file and figure out the input/output sizes.
+
+    Attributes
+    ----------
+        filename (str): The name of the ONNX file.
+        states_name (str): The name of the internal states input.
+        state_size (int): The size of the internal states input.
+        input_name (str): The name of the main input.
+        input_size (int): The size of the main input.
+        output_name (str): The name of the output.
+        output_size (int): The size of the output.
+        time_input_name (str): The name of the time input.
+        time_input (bool): Flag indicating whether the model uses time input.
+        __onnx_path (Path): The path to the ONNX file.
+        __onnx_session (InferenceSession): The ONNX runtime inference session.
+
+    Methods
+    -------
+        __init__(onnx_path: Union[str, os.PathLike[str]], time_input: bool = False):
+            Initializes the ONNXModel object by loading the ONNX file and assigning model parameters.
+        load_inputs():
+            Loads the inputs from the ONNX file and assigns the input name and size.
+        load_outputs():
+            Loads the outputs from the ONNX file and assigns the output name and size.
+    """
+
     filename: str = ""
     states_name: str = ""
     state_size: int = 0
@@ -26,6 +49,14 @@ class ONNXModel:
     __onnx_session: InferenceSession
 
     def __init__(self, onnx_path: Union[str, os.PathLike[str]], time_input: bool = False):
+        """
+        Initialize the ONNXModel object by loading the ONNX file and assigning model parameters.
+
+        Args:
+            onnx_path (Union[str, os.PathLike[str]]): The path to the ONNX file.
+            time_input (bool, optional): Flag indicating whether the model uses time input. Defaults to False.
+        """
+
         # Load ONNX file into memory
         self.__onnx_path = onnx_path if isinstance(onnx_path, Path) else Path(onnx_path)
         self.__onnx_session = onnxruntime.InferenceSession(onnx_path)
@@ -38,6 +69,8 @@ class ONNXModel:
         self.load_outputs()
 
     def load_inputs(self):
+        """Load the inputs from the ONNX file and assign the input name and size."""
+
         # Get inputs from ONNX file
         inputs: List[Any] = self.__onnx_session.get_inputs()
         input_names = [inp.name for inp in inputs]  # type: ignore No typing support provided by ONNX library
@@ -70,6 +103,7 @@ class ONNXModel:
         self.state_size = num_states
 
     def load_outputs(self):
+        """Load the outputs from the ONNX file and assign the output name and size."""
         # Get outputs from ONNX file
         outputs: List[Any] = self.__onnx_session.get_outputs()
         output_names = [out.name for out in outputs]  # type: ignore

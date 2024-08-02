@@ -21,8 +21,17 @@ template_parent_path = fmu_build_folder / "templates" / "fmu"
 logger = logging.getLogger(__name__)
 
 
-# Replacing all the template strings with their corresponding values and saving to new file
 def format_template_file(template_path: Path, save_path: Path, data: dict[str, str]):
+    """
+    Replace all the template strings with their corresponding values and save to a new file.
+
+    Args
+    ----
+        template_path (Path): The path to the template file.
+        save_path (Path): The path to save the formatted file.
+        data (dict[str, str]): The data containing the values to replace in the template.
+    """
+
     # TODO: Need to check that these calls are safe from a cybersecurity point of view
     with open(template_path, "r", encoding="utf-8") as template_file:
         template_string = template_file.read()
@@ -33,23 +42,46 @@ def format_template_file(template_path: Path, save_path: Path, data: dict[str, s
 
 
 def create_model_description(fmu: FmiModel, src_path: Path):
-    # Compute XML structure for FMU
+    """
+    Generate modelDescription.xml structure for FMU, and save it in a file.
+
+    Args
+    ----
+        fmu (FmiModel): The FMI model.
+        src_path (Path): The path to save the model description file.
+    """
+
     xml_structure = generate_model_description(fmu_model=fmu)
 
     # Save in file
     xml_structure.write(src_path / "modelDescription.xml", encoding="utf-8")
 
 
-# Creating all the directories needed to put all the FMU files in
 def make_fmu_dirs(src_path: Path):
+    """
+    Create all the directories needed to put all the FMU files in.
+
+    Args
+    ----
+        src_path (Path): The path to the FMU source directory.
+    """
+
     sources_path = src_path / "sources"
     resources_path = src_path / "resources"
     sources_path.mkdir(parents=True, exist_ok=True)
     resources_path.mkdir(parents=True, exist_ok=True)
 
 
-# Creating and formatting all needed c++ files for FMU generation
 def create_files_from_templates(data: dict[str, str], fmu_src: Path):
+    """
+    Create and format all needed C++ files for FMU generation.
+
+    Args
+    ----
+        data (dict[str, str]): The data containing the values to format the template files.
+        fmu_src (Path): The path to the FMU source directory.
+    """
+
     sources_path = fmu_src / "sources"
     file_names = ["fmu.cpp", "model_definitions.h"]
 
@@ -65,8 +97,21 @@ def create_files_from_templates(data: dict[str, str], fmu_src: Path):
         format_template_file(template_path, save_path, data)
 
 
-# Function for generating the key value pairs needed to format the template files to valid c++
 def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: ModelComponent) -> dict[str, str]:
+    """
+    Generate the key-value pairs needed to format the template files to valid C++.
+
+    Args
+    ----
+        onnx (ONNXModel): The ONNX model.
+        fmi_model (FmiModel): The FMI model.
+        model_component (ModelComponent): The model component.
+
+    Returns
+    -------
+        dict[str, str]: The formatted template data.
+    """
+
     # Work out template mapping between ONNX and FMU ports
     inputs, outputs, state_init = fmi_model.get_template_mapping()
     state_output_indexes = [
@@ -138,15 +183,18 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
 def validate_interface_spec(
     spec: str,
 ) -> tuple[Optional[ValidationError], ModelComponent]:
-    """Parse and validate JSON data from interface file.
+    """
+    Parse and validate JSON data from the interface file.
 
-    Args:
-        spec (str): Contents of JSON file.
+    Args
+    ----
+        spec (str): Contents of the JSON file.
 
     Returns
     -------
-        The pydantic model instance that contains all the interface information.
+        tuple[Optional[ValidationError], ModelComponent]: The validation error (if any) and the validated model component. The pydantic model instance that contains all the interface information.
     """
+
     parsed_spec = ModelComponent.model_validate_json(json_data=spec, strict=True)
 
     try:
@@ -160,6 +208,20 @@ def validate_interface_spec(
 def generate_fmu_files(
     fmu_src_path: os.PathLike[str], onnx_path: os.PathLike[str], interface_spec_path: os.PathLike[str]
 ):
+    """
+    Generate FMU files based on the FMU source, ONNX model, and interface specification.
+
+    Args
+    ----
+        fmu_src_path (os.PathLike[str]): The path to the FMU source directory.
+        onnx_path (os.PathLike[str]): The path to the ONNX model file.
+        interface_spec_path (os.PathLike[str]): The path to the interface specification file.
+
+    Returns
+    -------
+        FmiModel: The FMI model.
+    """
+
     # Create Path instances for the path to the spec and ONNX file.
     onnx_path = Path(onnx_path)
     interface_spec_path = Path(interface_spec_path)
@@ -194,6 +256,17 @@ def generate_fmu_files(
 
 
 def validate_fmu_source_files(fmu_path: os.PathLike[str]):
+    """
+    Validate the FMU source files.
+
+    Args
+    ----
+        fmu_path (os.PathLike[str]): The path to the FMU source directory.
+
+    Raises
+    ------
+        FileNotFoundError: If required files are missing in the FMU source directory.
+    """
     fmu_path = Path(fmu_path)
 
     files_should_exist: List[str] = [
@@ -206,7 +279,7 @@ def validate_fmu_source_files(fmu_path: os.PathLike[str]):
 
     if len(files_not_exists) > 0:
         raise FileNotFoundError(
-            f"The files {files_not_exists} are not contained in the provided fmu source path ({fmu_path})"
+            f"The files {files_not_exists} are not contained in the provided FMU source path ({fmu_path})"
         )
 
     resources_dir = fmu_path / "resources"
@@ -215,7 +288,7 @@ def validate_fmu_source_files(fmu_path: os.PathLike[str]):
 
     if num_onnx_files < 1:
         raise FileNotFoundError(
-            f"There is no *.onnx file in the resource folder in the provided fmu source path ({fmu_path})"
+            f"There is no *.onnx file in the resource folder in the provided FMU source path ({fmu_path})"
         )
 
 
@@ -224,6 +297,20 @@ def build_fmu(
     fmu_build_path: os.PathLike[str],
     fmu_save_path: os.PathLike[str],
 ):
+    """
+    Build the FMU.
+
+    Args
+    ----
+        fmu_src_path (os.PathLike[str]): The path to the FMU source directory.
+        fmu_build_path (os.PathLike[str]): The path to the FMU build directory.
+        fmu_save_path (os.PathLike[str]): The path to save the built FMU.
+
+    Raises
+    ------
+        FileNotFoundError: If required files are missing in the FMU source directory.
+    """
+
     fmu_src_path = Path(fmu_src_path)
     validate_fmu_source_files(fmu_src_path)
     fmu_name = fmu_src_path.stem

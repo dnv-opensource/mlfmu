@@ -23,6 +23,14 @@ def generate_interface_schema(
     model: Union[BaseModel, ModelMetaclass],
     schema_dir: Union[str, os.PathLike[str], None] = None,
 ):
+    """
+    Generate a JSON interface schema file for the given model.
+
+    Args
+    ----
+        model (Union[BaseModel, ModelMetaclass]): The pydantic model for which to generate the schema.
+        schema_dir (Union[str, os.PathLike[str], None], optional): The directory where the schema file will be saved. Defaults to None.
+    """
     schema_dir_default = Path.cwd() / "docs/schema"
     schema_dir = schema_dir or schema_dir_default
     # Make sure schema_dir argument is of type Path. If not, cast it to Path type.
@@ -50,6 +58,15 @@ def generate_interface_docs(
     schema_dir: Union[str, os.PathLike[str], None] = None,
     docs_dir: Union[str, os.PathLike[str], None] = None,
 ):
+    """
+    Generate HTML documentation for the JSON interface schema files in the schema directory.
+
+    Args
+    ----
+        schema_dir (Union[str, os.PathLike[str], None], optional): The directory where the schema files are located. Defaults to None.
+        docs_dir (Union[str, os.PathLike[str], None], optional): The directory where the documentation files will be saved. Defaults to None.
+    """
+
     schema_dir_default = Path.cwd() / "docs/schema"
     schema_dir = schema_dir or schema_dir_default
 
@@ -99,6 +116,15 @@ def publish_interface_schema(
     schema_dir: Union[str, os.PathLike[str], None] = None,
     docs_dir: Union[str, os.PathLike[str], None] = None,
 ):
+    """
+    Publish the JSON schema and HTML documentation for the interface.
+
+    Args
+    ----
+        schema_dir (Union[str, os.PathLike[str], None], optional): The directory where the schema file will be saved. Defaults to None.
+        docs_dir (Union[str, os.PathLike[str], None], optional): The directory where the documentation files will be saved. Defaults to None.
+    """
+
     # Generate JSON schema
     generate_interface_schema(model=ModelComponent, schema_dir=schema_dir)
 
