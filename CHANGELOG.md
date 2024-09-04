@@ -5,6 +5,9 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### Dependencies
+* Updated to download-artifact@v4  (from download-artifact@v3)
+
 ### Changed
 
 * Added missing docstrings for py/cpp/h files with help of Github Copilot
