@@ -1,3 +1,5 @@
+"""Functions to configure logging for the application."""
+
 import logging
 import sys
 from pathlib import Path
@@ -11,28 +13,32 @@ def configure_logging(
     log_level_console: str = "WARNING",
     log_file: Path | None = None,
     log_level_file: str = "WARNING",
-):  # sourcery skip: extract-duplicate-method, extract-method
-    """
-    Configure the logging settings for the application.
+) -> None:
+    """Configure logging for the application, allowing for both console and file logging.
 
-    Args
-    ----
-        log_level_console (str): The log level for console output. Defaults to "WARNING".
-        log_file (Union[Path, None]): The path to the log file. Defaults to None.
-        log_level_file (str): The log level for file output. Defaults to "WARNING".
+    Sets the log levels and formats for the output, ensuring that logs are captured as specified.
+
+    Args:
+        log_level_console (str): The logging level for console output. Defaults to "WARNING".
+        log_file (Path | None): The path to the log file. If None, file logging is disabled. Defaults to None.
+        log_level_file (str): The logging level for file output. Defaults to "WARNING".
 
     Raises
     ------
-        ValueError: If an invalid log level is provided for console or file.
-    """
+        TypeError: If the provided log levels are invalid.
 
+    Examples
+    --------
+        configure_logging(log_level_console="INFO", log_file=Path("app.log"), log_level_file="DEBUG")
+    """
+    # sourcery skip: extract-duplicate-method, extract-method
     log_level_console_numeric = getattr(logging, log_level_console.upper(), None)
     if not isinstance(log_level_console_numeric, int):
-        raise ValueError(f"Invalid log level to console: {log_level_console_numeric}")
+        raise TypeError(f"Invalid log level to console: {log_level_console_numeric}")
 
     log_level_file_numeric = getattr(logging, log_level_file.upper(), None)
     if not isinstance(log_level_file_numeric, int):
-        raise ValueError(f"Invalid log level to file: {log_level_file_numeric}")
+        raise TypeError(f"Invalid log level to file: {log_level_file_numeric}")
 
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)
@@ -52,5 +58,7 @@ def configure_logging(
         file_formatter = logging.Formatter("%(asctime)s %(levelname)-8s %(message)s", "%Y-%m-%d %H:%M:%S")
         file_handler.setFormatter(file_formatter)
         root_logger.addHandler(file_handler)
+
+    logging.getLogger("mlfmu").setLevel(logging.WARNING)
 
     return
