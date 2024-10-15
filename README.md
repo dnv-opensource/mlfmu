@@ -1,3 +1,9 @@
+[![pypi](https://img.shields.io/pypi/v/mlfmu.svg?color=blue)](https://pypi.python.org/pypi/mlfmu)
+[![versions](https://img.shields.io/pypi/pyversions/mlfmu.svg?color=blue)](https://pypi.python.org/pypi/mlfmu)
+[![license](https://img.shields.io/pypi/l/mlfmu.svg)](https://github.com/dnv-innersource/mlfmu/blob/main/LICENSE)
+![ci](https://img.shields.io/github/actions/workflow/status/dnv-innersource/mlfmu/.github%2Fworkflows%2Fnightly_build.yml?label=ci)
+[![docs](https://img.shields.io/github/actions/workflow/status/dnv-innersource/mlfmu/.github%2Fworkflows%2Fpush_to_release.yml?label=docs)][mlfmu_docs]
+
 # mlfmu
 
 MLFMU serves as a tool for developers looking to integrate machine learning models into simulation environments. It enables the creation of Functional Mock-up Units (FMUs), which are simulation models that adhere to the FMI standard (<https://fmi-standard.org/>), from trained machine learning models exported in the ONNX format (<https://onnx.ai/>). The mlfmu package streamlines the process of transforming ONNX models into FMUs, facilitating their use in a wide range of simulation platforms that support the FMI standard such as the [Open Simulation Platform](https://open-simulation-platform.github.io/) or DNV's [Simulation Trust Center](https://store.veracity.com/simulation-trust-center)
@@ -124,103 +130,131 @@ For more explanation on the ONNX file structure and inputs/outputs for your mode
 
 For advanced usage options, e.g. editing the generated FMU source code, or using the tool via a Python class, please refer to mlfmu's [ADVANCED.md](ADVANCED.md).
 
+
 ## Development Setup
 
-1. Install Python 3.9 or higher, i.e. [Python 3.10](https://www.python.org/downloads/release/python-3104/) or [Python 3.11](https://www.python.org/downloads/release/python-3114/)
+### 1. Install uv
+This project uses `uv` as package manager.
+If you haven't already, install [uv](https://docs.astral.sh/uv), preferably using it's ["Standalone installer"](https://docs.astral.sh/uv/getting-started/installation/#__tabbed_1_2) method: <br>
+..on Windows:
+```sh
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+..on MacOS and Linux:
+```sh
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+(see [docs.astral.sh/uv](https://docs.astral.sh/uv/getting-started/installation/) for all / alternative installation methods.)
 
-2. Update pip and setuptools:
+Once installed, you can update `uv` to its latest version, anytime, by running:
+```sh
+uv self update
+```
 
-    ```sh
-    python -m pip install --upgrade pip setuptools
-    ```
+### 2. Install Python
+This project requires Python 3.10 or later. <br>
+If you don't already have a compatible version installed on your machine, the probably most comfortable way to install Python is through `uv`:
+```sh
+uv python install
+```
+This will install the latest stable version of Python into the uv Python directory, i.e. as a uv-managed version of Python.
 
-3. git clone the mlfmu repository into your local development directory:
+Alternatively, and if you want a standalone version of Python on your machine, you can install Python either via `winget`:
+```sh
+winget install --id Python.Python
+```
+or you can download and install Python from the [python.org](https://www.python.org/downloads/) website.
 
-    ```sh
-    git clone https://github.com/dnv-innersource/mlfmu path/to/your/dev/mlfmu
-    git submodule update --init --recursive
-    ```
+### 3. Clone the repository
+Clone the mlfmu repository into your local development directory:
+```sh
+git clone https://github.com/dnv-innersource/mlfmu path/to/your/dev/mlfmu
+git submodule update --init --recursive
+```
 
-4. In the mlfmu root folder:
+### 4. Install Conan
 
-    Create a Python virtual environment, e.g. (you can also make a conda environment):
+We use conan for building the FMU. For the conan building to work later on, you will need the Visual Studio Build tools 2022 to be installed. It is best to do this **before** installing conan (which gets installed as part of the package dependencies, see step 5). You can download and install the Build Tools for VS 2022 (for free) from <https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022>.
 
-    ```sh
-    python -m venv .venv
-    ```
+> Note: After you installed conan, you want to make sure it has the correct build profile. You can auto-detect and create the profile by running `conan profile detect`. After this, you can check the profile in `C:\Users\<USRNAM>\.conan2\profiles\.default` (replace `<USRNAM>` with your username). You want to `compiler=msvc`, `compiler.cppstd=17`, `compiler.version=193` (for Windows).
 
-    Activate the virtual environment:
 
-    ..on Windows:
+### 5. Install dependencies
+Run `uv sync` to create a virtual environment and install all project dependencies into it:
+```sh
+uv sync
+```
 
-    ```sh
-    > .venv\Scripts\activate.bat
-    ```
+### 6. (Optional) Install CUDA support
 
-    ..on Linux:
+If you want PyTorch cuda support on your local machine (i.e. to use your GPU for torch operations),
+you can manually install torch with CUDA support.
+> Note: Do this preferably _after_ running `uv sync`. That way you ensure a virtual environment exists, which is a prerequisite before you install torch with CUDA support using below `uv pip install` command.
 
-    ```sh
-    source .venv/bin/activate
-    ```
+To manually install torch with CUDA support, generate a `uv pip install` command matching your local machine's operating system using the wizard on the official [PyTorch website](https://pytorch.org/get-started/locally/).
+> Note: As we use `uv` as package manager, remember to replace `pip` in the command generated by the wizard with `uv pip`.
 
-    Install/update pip and setuptools:
+If you are on Windows, the resulting `uv pip install` command will most likely look something like this:
+```sh
+uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+```
 
-    ```sh
-    (.venv) $ python -m pip install --upgrade pip setuptools
-    ```
+_Hint:_ If you are unsure which cuda version to indicate in above `uv pip install .. /cuXXX` command, you can use the shell command `nvidia-smi` on your local system to find out the cuda version supported by the current graphics driver installed on your system. When then generating the `uv pip install` command with the wizard from the [PyTorch website](https://pytorch.org/get-started/locally/), select the cuda version that matches the major version of what your graphics driver supports (major version must match, minor version may deviate).
 
-    (Optional) If you want PyTorch cuda support on your local machine
-    (i.e. to use your GPU for torch operations), you should preferably install PyTorch with cuda support first, before installing all other dependendencies.
-    On the official PyTorch website at <https://pytorch.org/get-started/locally/>,
-    you can generate a pip install command matching your local machine's operating system, using a wizard.
-    If you are on Windows, the resulting pip install command will most likely look something like this:
 
-    ```sh
-    (.venv) $ pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-    ```
+### 7. (Optional) Activate the virtual environment
+When using `uv`, there is in almost all cases no longer a need to manually activate the virtual environment. <br>
+`uv` will find the `.venv` virtual environment in the working directory or any parent directory, and activate it on the fly whenever you run a command via `uv` inside your project folder structure:
+```sh
+uv run <command>
+```
 
-    _Hint:_ If you are unsure which cuda version to indicate in above `pip install .. /cuXXX` command, you can use the shell command `nvidia-smi` on your local system to find out the cuda version supported by the current graphics driver installed on your system. When then generating the `pip install` command with the wizard from <https://pytorch.org/get-started/locally/>, select the cuda version that matches the major version of what your graphics driver supports (major version must match, minor version may deviate).
+However, you still _can_ manually activate the virtual environment if needed.
+When developing in an IDE, for instance, this can in some cases be necessary depending on your IDE settings.
+To manually activate the virtual environment, run one of the "known" legacy commands: <br>
+..on Windows:
+```sh
+.venv\Scripts\activate.bat
+```
+..on Linux:
+```sh
+source .venv/bin/activate
+```
 
-    > Note: We use conan for building the FMU. For the conan building to work later on, you will need the Visual Studio Build tools 2022 to be installed. It is best to do this **before** installing conan (which we install via pip install of requirements). You can download and install the Build Tools for VS 2022 (for free) from <https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022>.
+### 8. Install pre-commit hooks
+The `.pre-commit-config.yaml` file in the project root directory contains a configuration for pre-commit hooks.
+To install the pre-commit hooks defined therein in your local git repository, run:
+```sh
+uv run pre-commit install
+```
 
-    > Note 2: After you install conan, you want to make sure it has the correct build profile. You can auto-detect and create the profile by running `conan profile detect`. After this, you can check the profile in `C:\Users\<USRNAM>\.conan2\profiles\.default` (replace `<USRNAM>` with your username). You want to `compiler=msvc`, `compiler.cppstd=17`, `compiler.version=193` (for Windows).
+All pre-commit hooks configured in `.pre-commit-config.yaml` will now run each time you commit changes.
 
-    Install mlfmu's dependencies. <br>
 
-    ```sh
-    (.venv) $ pip install -r requirements-dev.txt
-    ```
+### 9. Test that the installation works
+To test that the installation works, run pytest in the project root folder:
+```sh
+uv run pytest
+```
 
-    This should return without errors.
 
-    Finally, install mlfmu itself, yet not as a regular package but as an _editable_ package instead, using the pip install option -e:
+### 10. Run an example
 
-    ```sh
-    (.venv) $ pip install -e .
-    ```
-
-5. Test that the installation works (in the mlfmu root folder):
-
-    ```sh
-    (.venv) $ pytest .
-    ```
-
-6. Run an example:
-
-    ```sh
-    (.venv) $ cd .\examples\wind_generator\config\
-    (.venv) $ mlfmu build
-    ```
+```sh
+cd .\examples\wind_generator\config\
+uv run mlfmu build
+```
 
 As an alternative, you can run from the main directory:
 
 ```sh
-mlfmu build --interface-file .\examples\wind_generator\config\interface.json --model-file .\examples\wind_generator\config\example.onnx
+uv run mlfmu build --interface-file .\examples\wind_generator\config\interface.json --model-file .\examples\wind_generator\config\example.onnx
 ```
 
-Note; wherever you run the build command from, is where the FMU file will be created, unless you specify otherwise with `--fmu-path`.
+_Note_: wherever you run the build command from, is where the FMU file will be created, unless you specify otherwise with `--fmu-path`.
 
-For more options, see `mlfmu --help` or `mlfmu build --help`.
+For more options, see `uv run mlfmu --help` or `uv run mlfmu build --help`.
+
 
 ## Meta
 
@@ -234,14 +268,9 @@ Jorge Luis Mendez - [@LinkedIn](https://www.linkedin.com/in/jorgelmh/) - <jorge.
 
 Stephanie Kemna - [@LinkedIn](https://www.linkedin.com/in/stephaniekemna/) - <stephanie.kemna@dnv.com>
 
-Author 4 - [@LinkedIn](https://www.linkedin.com/in/name/) - <first.lastname@dnv.com>
+Distributed under the BSD 3-Clause license. See [LICENSE](LICENSE.md) for more information.
 
-```diff
-- TODO: (1) Adapt to chosen license (or delete if no license is applied). <br>
-- TODO: (2) Adapt or delete the license file (LICENSE.md) <br>
-- TODO: (3) Adapt or delete the license entry in setup.cfg <br>
-Distributed under the XYZ license. See [LICENSE](LICENSE.md) for more information.
-```
+[https://github.com/dnv-innersource/mlfmu](https://github.com/dnv-innersource/mlfmu)
 
 ## Contributing
 
@@ -260,3 +289,4 @@ For your contribution, please make sure you follow the [STYLEGUIDE](STYLEGUIDE.m
 - If you get an error similar to `..\fmu.cpp(4,10): error C1083: Cannot open include file: 'cppfmu_cs.hpp': No such file or directory`, you are missing cppfmu. This is a submodule to this repository. Make sure that you do a `git submodule update --init --recursive` in the top level folder.
 
 <!-- Markdown link & img dfn's -->
+[mlfmu_docs]: https://dnv-innersource.github.io/mlfmu/README.html

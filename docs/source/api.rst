@@ -1,7 +1,9 @@
-API Documentation
-=================
+API Reference
+=============
 
-.. toctree::
-   :maxdepth: 4
+.. autosummary::
+   :toctree: _autosummary
+   :template: custom-module.rst
+   :recursive:
 
    mlfmu

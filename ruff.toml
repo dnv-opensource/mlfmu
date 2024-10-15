@@ -1,0 +1,164 @@
+exclude = [
+    ".git",
+    ".venv",
+    "dist",
+    "*cache",
+    "**/__pycache__",
+    "src/folder_to_be_excluded",
+]
+src = [
+    "src",
+]
+line-length = 120
+target-version = "py310"
+
+[lint]
+# Settings for Ruff linter (invoked with `uv run ruff check`).
+# Start by including _all_ Ruff lint rules, then ignore selected rules as needed
+# https://docs.astral.sh/ruff/rules/
+select = [
+    "ALL",
+]
+ignore = [
+    # Ruff lint rules temporarily ignored, but which should be reactivated and resolved in the future.
+    "E501", # Line length too long
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D102", # Missing docstring in public method
+    "D103", # Missing docstring in public function
+    "D104", # Missing docstring in public package
+    "D105", # Missing docstring in magic method
+    "D107", # Missing docstring in __init__
+    "D202", # No blank lines allowed after function docstring
+    "D203", # 1 blank line required before class docstring
+    "D205", # 1 blank line required between summary line and description
+    "D212", # Multi-line docstring summary should start at the first line
+    "D213", # Multi-line docstring summary should start at the second line
+    "N806", # Variable in function should be lowercase  (uncomment if you want to allow Uppercase variable names in functions)
+    # Ruff lint rules considered as too strict and hence ignored
+    "ANN101",  # Missing type annotation for `self` argument in instance methods (NOTE: also listed as deprecated by Ruff)
+    "ANN102",  # Missing type annotation for `cls` argument in class methods (NOTE: also listed as deprecated by Ruff)
+    "FIX002",  # Line contains TODO, consider resolving the issue
+    "TD003",   # Missing issue link on the line following a TODO
+    "S101",    # Use of assert detected
+    "RET504",  # Unnecessary assignment to `result` before `return` statement
+    "EM101",   # Exception must not use a string literal, assign to variable first
+    "EM102",   # Exception must not use an f-string literal, assign to variable first
+    "TRY003",  # Avoid specifying long messages outside the exception class
+    "PLR1711", # Useless `return` statement at end of function
+    "G00",     # Logging statement uses string formatting ('G00' covers all rules flagging string formatting in logging, e.g. G001, G002, etc.)
+
+    # Ruff lint rules recommended to keep enabled,
+    # but which are typical candidates you might have a need to ignore,
+    # especially in the beginning or when refactoring an existing codebase,
+    # to avoid too many Ruff errors at once.
+    # -> Listed here for easy access and reference.
+    # (uncomment to ignore)
+    # "N803",   # Argument name should be lowercase (NOTE: ignore to allow capital arguments (e.g X) in scientific code)
+    # "N806",   # Variable in function should be lowercase (NOTE: ignore to allow capital variables (e.g X) in scientific code)
+    # "TCH002", # Move third-party import into a type-checking block
+    # "TCH003", # Move standard library import into a type-checking block
+
+    # Ruff lint rules known to be in conflict with Ruff formatter.
+    # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+    "W191",   # Tab-indentation (in conflict with Ruff formatter)
+    "E111",   # Indentation with invalid multiple (in conflict with Ruff formatter)
+    "E114",   # Indentation with invalid multiple comment (in conflict with Ruff formatter)
+    "E117",   # Over-indented (in conflict with Ruff formatter)
+    "D206",   # Indent with spaces (in conflict with Ruff formatter)
+    "D300",   # Triple single quotes (in conflict with Ruff formatter)
+    "Q000",   # Bad quotes in inline string (in conflict with Ruff formatter)
+    "Q001",   # Bad quotes in multi-line string (in conflict with Ruff formatter)
+    "Q002",   # Bad quotes in DocString (in conflict with Ruff formatter)
+    "Q003",   # Avoidable escaped quote (in conflict with Ruff formatter)
+    "COM812", # Missing trailing comma (in conflict with Ruff formatter)
+    "COM819", # Prohibited trailing comma (in conflict with Ruff formatter)
+    "ISC001", # Single-line implicit string concatenation (in conflict with Ruff formatter)
+    "ISC002", # Multi-line implicit string concatenation (in conflict with Ruff formatter)
+]
+# File patterns to be excluded from Ruff lint
+# (only needed for file patterns not already listed in the common `exclude` setting
+#  at top of this file, i.e. list here _additional_ excludes specific to Ruff lint.)
+exclude = [
+]
+allowed-confusables = [
+    "×", # used as dim multiplication sign in comments, such as `19×16×15×16×8×6×3 = 10,506,240 possible combinations of parameters`.
+]
+
+[lint.pep8-naming]
+ignore-names = [
+    "test_*",
+    "setUp",
+    "tearDown",
+]
+
+[lint.pylint]
+max-args = 7
+
+[lint.flake8-pytest-style]
+raises-require-match-for = [
+    "BaseException",
+    "Exception",
+    "OSError",
+    "IOError",
+    "EnvironmentError",
+    "socket.error",
+]
+
+[lint.per-file-ignores]
+# `__init__.py` specific ignores
+"__init__.py" = [
+    "F401", # {name} imported but unused (NOTE: ignored as imports in `__init__.py` files are almost never used inside the module, but are intended for namespaces)
+    "I001", # Import block is un-sorted or un-formatted
+]
+# `tests` specific ignores
+"tests/**/*" = [
+    "D",       # Missing docstrings
+    "ERA001",  # Found commented-out code
+    "PT006",   # Wrong type passed to first argument of `@pytest.mark.parametrize` (NOTE: ignored to allow parameters args as "args_1,arg_2,arg_3,..."
+    "S101",    # Use of assert detected
+    "PLR2004", # Magic value used in comparison
+    "ANN201",  # Missing return type annotation for public function
+    "ANN202",  # Missing return type annotation for private function
+    "INP001",  # File is part of an implicit namespace package. Add an `__init__.py`. (NOTE: tests are not intended to be a module, __init__.py hence not required.)
+    "SLF001",  # Private member accessed
+    "TRY004",  # Prefer `TypeError` exception for invalid type
+]
+# `stubs` specific ignores
+"stubs/**/*" = [
+    "D",       # Missing docstrings
+    "ERA001",  # Found commented-out code
+    "SLF001",  # Private member accessed
+    "F405",    # {name} may be undefined, or defined from star imports: {module}
+    "F403",    # from {name} import * used; unable to detect undefined names
+    "ANN",     # Missing type annotation
+    "N",       # Naming violations
+    "A001",    #  Variable {name} is shadowing a Python builtin
+    "A002",    # Argument {name} is shadowing a Python builtin
+    "FBT001",  # Boolean-typed positional argument in function definition
+    "PYI042",  # Type alias {name} should be CamelCase
+    "PYI002",  # complex if statement in stub
+    "PLR0913", # Too many arguments in function definition
+]
+# Jupyter notebook specific ignores
+"**/*.ipynb" = [
+    "D103",   # Missing docstring in public function
+    "T201",   # `print` found
+    "PGH003", # Use specific rule codes when ignoring type issues
+    "TCH002", # Move third-party import into a type-checking block
+]
+# `examples` specific ignores
+"examples/**/*" = [
+    "D",       # Missing docstrings
+    "S101",    # Use of assert detected
+    "PLR2004", # Magic value used in comparison
+    "INP001",  # File is part of an implicit namespace package. Add an `__init__.py`. (NOTE: tutorials are not intended to be a module, __init__.py hence not required.)
+    "T201",    # `print` found
+    "E402",    # Module level import not at top of cell
+]
+
+[lint.pydocstyle]
+convention = "numpy"
+
+[format]
+docstring-code-format = true
