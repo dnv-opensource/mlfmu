@@ -98,7 +98,6 @@ mypy_path = "stubs"
 files = [
     "src",
     "tests",
-    "examples",
 ]
 exclude = [
     "^src/mlfmu/fmu_build/cppfmu/",
