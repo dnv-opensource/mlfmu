@@ -2,8 +2,7 @@ import os
 from pathlib import Path
 from typing import Any
 
-import onnxruntime
-from onnxruntime import InferenceSession
+from onnxruntime import InferenceSession, NodeArg
 
 
 class ONNXModel:
@@ -64,7 +63,7 @@ class ONNXModel:
         """
         # Load ONNX file into memory
         self.__onnx_path = onnx_path if isinstance(onnx_path, Path) else Path(onnx_path)
-        self.__onnx_session = onnxruntime.InferenceSession(onnx_path)
+        self.__onnx_session = InferenceSession(onnx_path)
 
         # Assign model parameters
         self.filename = f"{self.__onnx_path.stem}.onnx"
@@ -76,8 +75,8 @@ class ONNXModel:
     def load_inputs(self) -> None:
         """Load the inputs from the ONNX file and assign the input name and size."""
         # Get inputs from ONNX file
-        inputs: list[Any] = self.__onnx_session.get_inputs()
-        input_names = [inp.name for inp in inputs]  # No typing support provided by ONNX library
+        inputs: list[NodeArg] = self.__onnx_session.get_inputs()
+        input_names = [inp.name for inp in inputs]
         input_shapes = [inp.shape for inp in inputs]
         self.input_name = input_names[0]
         self.input_size = input_shapes[0][1]
