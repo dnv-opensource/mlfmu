@@ -72,6 +72,9 @@ class Variable(BaseModelConfig):
         length (Optional[int]): Defines the number of entries in the signal if the signal is array.
     """
 
+    # TODO @KristofferSkare: The `name` field should not be optional, as it is required for the FMU component.
+    #      I think you should change its type from `str | None` to `str` and set `default` to `""`.
+    #      CLAROS, 2024-10-15
     name: str | None = Field(
         default=None,
         description="Unique name for the port.",
@@ -282,6 +285,11 @@ class OutputVariable(Variable):
     )
 
 
+# TODO @KristofferSkare: The `FmiInputVariable` and `FmiOutputVariable` classes are marked as `@dataclass`,
+#      but they inherit from (at its very root) pydantic's `BaseModel`.
+#      Let's discuss whether we can possibly remove the `@dataclass` decorator.
+#      Then also the manual `__init__` method in `FmiInputVariable` and `FmiOutputVariable` could be removed.
+#      CLAROS, 2024-10-15
 @dataclass
 class FmiInputVariable(InputVariable):
     """
@@ -506,7 +514,7 @@ class FmiModel:
     ) -> None:
         # TODO @KristofferSkare: Docstring is not correct. It documents a return value,
         #      but the method does not return anything. I suspect this might be a left-over after
-        #      refactoring from a function to an instance method?
+        #      turning this code from a function into an instance method at some point?
         #      CLAROS, 2024-10-15
         """
         Assign variable references to inputs, parameters and outputs from user interface to FMU model class.
@@ -526,6 +534,8 @@ class FmiModel:
         fmu_parameters: list[FmiInputVariable] = []
         fmu_outputs: list[FmiOutputVariable] = []
         fmi_variable: FmiInputVariable | FmiOutputVariable
+
+        var: InputVariable | OutputVariable
 
         for var in inputs:
             var_port_refs = []
@@ -664,7 +674,10 @@ class FmiModel:
             current_state_index_state += length
         self.parameters = [*self.parameters, *init_parameters]
 
-    def format_fmi_variable(self, var: FmiInputVariable | FmiOutputVariable) -> list[FmiVariable]:
+    def format_fmi_variable(
+        self,
+        var: FmiInputVariable | FmiOutputVariable,
+    ) -> list[FmiVariable]:
         """
         Get an inclusive list of variables from an interface variable definition.
 
@@ -713,6 +726,7 @@ class FmiModel:
 
     def get_fmi_model_variables(self) -> list[FmiVariable]:
         """Get a full list of all variables in ths FMU, including each index of vector ports."""
+        variables: list[FmiInputVariable | FmiOutputVariable]
         variables = [*self.inputs, *self.parameters, *self.outputs]
         fmi_variables = [self.format_fmi_variable(var) for var in variables]
 
