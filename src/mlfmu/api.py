@@ -1,11 +1,12 @@
+from __future__ import annotations
+
 import logging
 import os
 import tempfile
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional
 
-import mlfmu.utils.builder as builder
+from mlfmu.utils import builder
 
 __ALL__ = ["run", "MlFmuProcess"]
 
@@ -20,21 +21,19 @@ class MlFmuCommand(Enum):
     COMPILE = "compile"
 
     @staticmethod
-    def from_string(command_string: str):
+    def from_string(command_string: str) -> MlFmuCommand | None:
         matches = [command for command in MlFmuCommand if command.value == command_string]
-        if len(matches) == 0:
-            return None
-        return matches[0]
+        return matches[0] if matches else None
 
 
 # run for mlfmu
 def run(
     command: MlFmuCommand,
-    interface_file: Optional[str],
-    model_file: Optional[str],
-    fmu_path: Optional[str],
-    source_folder: Optional[str],
-):
+    interface_file: str | None,
+    model_file: str | None,
+    fmu_path: str | None,
+    source_folder: str | None,
+) -> None:
     """Run the mlfmu process.
 
     Run the mlfmu process with the given command and optional parameters.
@@ -74,20 +73,20 @@ class MlFmuBuilder:
     ----------
     fmu_name : Optional[str]
         The name of the FMU.
-    build_folder : Optional[Path]
-        The folder where the FMU will be built.
-    source_folder : Optional[Path]
-        The folder containing the source code for the FMU.
-    ml_model_file : Optional[Path]
-        The path to the machine learning model file.
     interface_file : Optional[Path]
         The path to the interface JSON file.
+    ml_model_file : Optional[Path]
+        The path to the machine learning model file.
+    source_folder : Optional[Path]
+        The folder containing the source code for the FMU.
     fmu_output_folder : Optional[Path]
         The folder where the built FMU will be saved.
-    temp_folder : Optional[tempfile.TemporaryDirectory[str]]
-        The temporary folder used for building the FMU.
+    build_folder : Optional[Path]
+        The folder where the FMU will be built.
     root_directory : Path
         The root directory for the builder.
+    temp_folder : Optional[tempfile.TemporaryDirectory[str]]
+        The temporary folder used for building the FMU.
 
     Methods
     -------
@@ -104,38 +103,35 @@ class MlFmuBuilder:
         Compiles the FMU from the FMU C++ source code and model description.
     """
 
-    fmu_name: Optional[str] = None
-    build_folder: Optional[Path] = None
-    source_folder: Optional[Path] = None
-    ml_model_file: Optional[Path] = None
-    interface_file: Optional[Path] = None
-    fmu_output_folder: Optional[Path] = None
-    temp_folder: tempfile.TemporaryDirectory[str]
-    temp_folder_path: Path
-    root_directory: Path
-
     def __init__(
         self,
-        fmu_name: Optional[str] = None,
-        interface_file: Optional[Path] = None,
-        ml_model_file: Optional[Path] = None,
-        source_folder: Optional[Path] = None,
-        fmu_output_folder: Optional[Path] = None,
-        build_folder: Optional[Path] = None,
-        root_directory: Optional[Path] = None,
-    ):
-        self.fmu_name = fmu_name
-        self.interface_file = interface_file
-        self.ml_model_file = ml_model_file
-        self.source_folder = source_folder
-        self.fmu_output_folder = fmu_output_folder
-        self.build_folder = build_folder
-        self.root_directory = root_directory or Path(os.getcwd())
-        self.temp_folder = tempfile.TemporaryDirectory(prefix="mlfmu_")
-        self.temp_folder_path = Path(self.temp_folder.name)
+        fmu_name: str | None = None,
+        interface_file: Path | None = None,
+        ml_model_file: Path | None = None,
+        source_folder: Path | None = None,
+        fmu_output_folder: Path | None = None,
+        build_folder: Path | None = None,
+        root_directory: Path | None = None,
+    ) -> None:
+        self.fmu_name: str | None = fmu_name
+        self.interface_file: Path | None = interface_file
+        self.ml_model_file: Path | None = ml_model_file
+        self.source_folder: Path | None = source_folder
+        self.fmu_output_folder: Path | None = fmu_output_folder
+        self.build_folder: Path | None = build_folder
+        self.root_directory: Path = root_directory or Path.cwd()
+        self.temp_folder: tempfile.TemporaryDirectory[str] = tempfile.TemporaryDirectory(prefix="mlfmu_")
+        self.temp_folder_path: Path = Path(self.temp_folder.name)
         logger.debug(f"Created temp folder: {self.temp_folder_path}")
 
-    def __del__(self):
+    # TODO: @KristofferSkare @StephanieKemna Check whether the explicit destructor code is still needed.
+    #       I have changed all attributes from class- to instance attributes.
+    #       With that, no strong reference should be kept to `temp_folder`
+    #       after an instance of MlFmuBuilder runs out of scope
+    #       and becomes a candidate for garbage collection. This _should_ do the job.
+    #       But I remember you had some discussion and investigation around this..  so maybe I am wrong :-)
+    #       CLAROS, 2024-10-15
+    def __del__(self) -> None:
         """
         Destructor for the MlFmuBuilder class.
 
@@ -144,7 +140,7 @@ class MlFmuBuilder:
         """
         logger.debug("MlFmuBuilder: destructor called, removing temporary build directory.")
 
-    def build(self):
+    def build(self) -> None:
         """
         Build an FMU from ml_model_file and interface_file and saves it to fmu_output_folder.
 
@@ -156,6 +152,7 @@ class MlFmuBuilder:
             if ml_model_file or interface_file do not exists or is not set and cannot be easily inferred.
         ---
         """
+        # sourcery skip: class-extract-method
         logger.debug("MLFmuBuilder: Start build")
         # specify folders and filenames for building
         self.source_folder = self.source_folder or self.default_build_source_folder()
@@ -182,9 +179,8 @@ class MlFmuBuilder:
         # create fmu files
         try:
             fmi_model = builder.generate_fmu_files(self.source_folder, self.ml_model_file, self.interface_file)
-        except Exception as ex:
-            logger.error("Exception when running generate_fmu_files: %s", ex)
-            print(ex)
+        except Exception:
+            logger.exception("Exception when running generate_fmu_files: %s")
 
         self.fmu_name = fmi_model.name
         builder.build_fmu(
@@ -194,7 +190,7 @@ class MlFmuBuilder:
         )
         logger.debug("MLFmuBuilder: Done with build")
 
-    def generate(self):
+    def generate(self) -> None:
         """
         Generate FMU C++ source code and model description from ml_model_file and interface_file and saves it to source_folder.
 
@@ -229,13 +225,12 @@ class MlFmuBuilder:
         try:
             fmi_model = builder.generate_fmu_files(self.source_folder, self.ml_model_file, self.interface_file)
             self.fmu_name = fmi_model.name
-        except Exception as ex:
-            logger.error("Exception when running generate_fmu_files: %s", ex)
-            print(ex)
+        except Exception:
+            logger.exception("Exception when running generate_fmu_files: %s")
 
         logger.debug("MLFmuBuilder: Done with generate")
 
-    def compile(self):
+    def compile(self) -> None:
         """
         Compile FMU from FMU C++ source code and model description contained in source_folder and saves it to fmu_output_folder.
 
@@ -267,48 +262,47 @@ class MlFmuBuilder:
                 fmu_save_path=self.fmu_output_folder,
             )
             logger.debug("MLFmuBuilder: Done with build (via compile)")
-        except Exception as ex:
-            logger.error("Error while running build_fmu: %s", ex)
-            print(ex)
+        except Exception:
+            logger.exception("Error while running build_fmu: %s")
         logger.debug("MLFmuBuilder: Done with compile")
 
-    def default_interface_file(self):
+    def default_interface_file(self) -> Path | None:
         """Return the path to a interface json file inside self.root_directory if it can be inferred."""
         return MlFmuBuilder._find_default_file(self.root_directory, "json", "interface")
 
-    def default_model_file(self):
+    def default_model_file(self) -> Path | None:
         """Return the path to a ml model file inside self.root_directory if it can be inferred."""
         return MlFmuBuilder._find_default_file(self.root_directory, "onnx", "model")
 
-    def default_build_folder(self):
+    def default_build_folder(self) -> Path:
         """Return the path to a build folder inside the temp_folder. Creates the temp_folder if it is not set."""
         return self.temp_folder_path / "build"
 
-    def default_build_source_folder(self):
+    def default_build_source_folder(self) -> Path:
         """Return the path to a src folder inside the temp_folder. Creates the temp_folder if it is not set."""
         return self.temp_folder_path / "src"
 
-    def default_generate_source_folder(self):
+    def default_generate_source_folder(self) -> Path:
         """Return the path to the default source folder for the generate process."""
         return self.root_directory
 
-    def default_compile_source_folder(self):
+    def default_compile_source_folder(self) -> Path | None:
         """Return the path to the default source folder for the compile process.
 
         Searches inside self.source_folder and self.root_directory for a folder that contains a folder structure
         and files that is required to be valid ml fmu source code.
         """
-        search_folders: List[Path] = []
+        search_folders: list[Path] = []
         if self.source_folder is not None:
             search_folders.append(self.source_folder)
         search_folders.append(self.root_directory)
-        source_folder: Optional[Path] = None
+        source_folder: Path | None = None
         # If source folder is not provided, try to find one in current folder that is compatible with the tool
         # I.e a folder that contains everything needed for compilation
         for current_folder in search_folders:
-            for dir, _, _ in os.walk(current_folder):
+            for sub_folder, _, _ in os.walk(current_folder):
                 try:
-                    possible_source_folder = Path(dir)
+                    possible_source_folder = Path(sub_folder)
                     # If a fmu name is given and the candidate folder name does not match. Skip it!
                     if self.fmu_name is not None and possible_source_folder.stem != self.fmu_name:
                         continue
@@ -316,9 +310,8 @@ class MlFmuBuilder:
                     source_folder = possible_source_folder
                     # If a match was found stop searching
                     break
-                except Exception as ex:
-                    logger.error("Exception when validating source folder: %s", ex)
-                    print(ex)
+                except Exception:
+                    logger.exception("Exception when validating source folder: %s")
                     # Any folder that does not contain the correct folder structure and files needed for compilation will raise and exception
                     continue
             # If a match was found stop searching
@@ -326,38 +319,61 @@ class MlFmuBuilder:
                 break
         return source_folder
 
-    def default_fmu_output_folder(self):
+    def default_fmu_output_folder(self) -> Path:
         """Return the path to the default fmu output folder."""
         return self.root_directory
 
+    # TODO @KristofferSkare: You could consider to move this method into a suitable module in utils,
+    #      and make it a public function therein. It could be useful for also other parts of the codebase.
+    #      CLAROS, 2024-10-15
     @staticmethod
-    def _find_default_file(dir: Path, file_extension: str, default_name: Optional[str] = None):
-        """
-        Return a file inside dir with the file extension that matches file_extension.
-        If there are multiple matches it uses the closest match to default_name if given. Return None if there is no clear match.
+    def _find_default_file(
+        folder: Path,
+        file_extension: str,
+        default_name: str | None = None,
+    ) -> Path | None:
+        """Return a file inside folder with the file extension that matches file_extension.
+
+        If there are multiple matches it uses the closest match to default_name if given.
+        Return None if there is no clear match.
+
+        Parameters
+        ----------
+        folder : Path
+            the folder to search in
+        file_extension : str
+            file extension to search for
+        default_name : str | None, optional
+            file name used to determine "closest match"
+            in case multiple files match file_extension, by default None
+
+        Returns
+        -------
+        Path | None
+            the path to the file if it is found, otherwise None
         """
         # Check if there is a file with correct file extension in current working directory. If it exists use it.
-        matching_files: List[Path] = []
+        matching_files: list[Path] = []
 
-        for file in os.listdir(dir):
-            file_path = dir / file
+        for file in os.listdir(folder):
+            file_path = folder / file
             if file_path.is_file() and file_path.suffix.lstrip(".") == file_extension:
                 matching_files.append(file_path)
 
-        if len(matching_files) == 0:
-            return
+        if not matching_files:
+            return None
 
         if len(matching_files) == 1:
             return matching_files[0]
 
         # If there are more matches on file extension. Use the one that matches the default name
         if default_name is None:
-            return
+            return None
 
         name_matches = [file for file in matching_files if default_name in file.stem]
 
-        if len(name_matches) == 0:
-            return
+        if not name_matches:
+            return None
 
         if len(name_matches) == 1:
             return name_matches[0]
@@ -365,9 +381,7 @@ class MlFmuBuilder:
         # If more multiple name matches use the exact match if it exists
         name_exact_matches = [file for file in matching_files if default_name == file.stem]
 
-        if len(name_exact_matches) == 1:
-            return name_matches[0]
-        return
+        return name_matches[0] if len(name_exact_matches) == 1 else None
 
 
 class MlFmuProcess:
@@ -397,19 +411,19 @@ class MlFmuProcess:
     def __init__(
         self,
         command: MlFmuCommand,
-        source_folder: Optional[Path] = None,
-        ml_model_file: Optional[Path] = None,
-        interface_file: Optional[Path] = None,
-        fmu_output_folder: Optional[Path] = None,
-    ):
+        source_folder: Path | None = None,
+        ml_model_file: Path | None = None,
+        interface_file: Path | None = None,
+        fmu_output_folder: Path | None = None,
+    ) -> None:
         self._run_number: int = 0
         self._max_number_of_runs: int = 1
         self.terminate: bool = False
 
         self.command = command
 
-        fmu_name: Optional[str] = None
-        build_folder: Optional[Path] = None
+        fmu_name: str | None = None
+        build_folder: Path | None = None
 
         self.builder = MlFmuBuilder(
             fmu_name=fmu_name,
@@ -420,7 +434,7 @@ class MlFmuProcess:
             build_folder=build_folder,
         )
 
-    def run(self):
+    def run(self) -> None:
         """
         Run the mlfmu process.
 
@@ -431,15 +445,14 @@ class MlFmuProcess:
         while not self.terminate:
             try:
                 self._run_process()
-            except Exception as ex:
-                logger.error("Exception in run_process for MlFmuProcess: %s", ex)
-                print(ex)
+            except Exception:
+                logger.exception("Exception in run_process for MlFmuProcess: %s")
                 self.terminate = True
             self.terminate = self._run_number >= self._max_number_of_runs
 
         return
 
-    def _run_process(self):
+    def _run_process(self) -> None:
         """Execute a single run of the mlfmu process."""
         self._run_number += 1
 

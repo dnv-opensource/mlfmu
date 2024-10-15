@@ -1,17 +1,20 @@
+from __future__ import annotations
+
 import warnings
 from dataclasses import dataclass
 from enum import Enum
 from functools import reduce
-from typing import List, Optional, Tuple, Union
-from uuid import UUID
+from typing import TYPE_CHECKING, Annotated, Any
 
 from pydantic import BaseModel, ConfigDict, StringConstraints, model_validator
 from pydantic.fields import Field
-from typing_extensions import Annotated
 
 from mlfmu.types.component_examples import create_fmu_signal_example
 from mlfmu.utils.signals import range_list_expanded
 from mlfmu.utils.strings import to_camel
+
+if TYPE_CHECKING:
+    from uuid import UUID
 
 
 class FmiVariableType(str, Enum):
@@ -44,7 +47,10 @@ class FmiVariability(str, Enum):
 class BaseModelConfig(BaseModel):
     """Enables the alias_generator for all cases."""
 
-    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+    )
 
 
 class Variable(BaseModelConfig):
@@ -62,28 +68,34 @@ class Variable(BaseModelConfig):
         length (Optional[int]): Defines the number of entries in the signal if the signal is array.
     """
 
-    name: str = Field(
-        None,
+    name: str | None = Field(
+        default=None,
         description="Unique name for the port.",
         examples=["windSpeed", "windDirection"],
     )
-    type: Optional[FmiVariableType] = Field(
-        FmiVariableType.REAL,
+    type: FmiVariableType | None = Field(
+        default=FmiVariableType.REAL,
         description="Data type as defined by FMI standard, defaults to Real.",
         examples=[FmiVariableType.REAL, FmiVariableType.INTEGER],
     )
-    description: Optional[str] = Field(None, description="Short FMU variable description.")
-    variability: Optional[FmiVariability] = Field(None, description="Signal variability as defined by FMI.")
-    start_value: Optional[Union[float, str, bool, int]] = Field(
-        0,
+    description: str | None = Field(
+        default=None,
+        description="Short FMU variable description.",
+    )
+    variability: FmiVariability | None = Field(
+        default=None,
+        description="Signal variability as defined by FMI.",
+    )
+    start_value: float | str | bool | int | None = Field(
+        default=0,
         description="Initial value of the signal at time step 1. Type should match the variable type.",
     )
-    is_array: Optional[bool] = Field(
-        False,
+    is_array: bool | None = Field(
+        default=False,
         description="When dealing with an array signal, it is essential to specify the LENGTH parameter. Arrays are indexed starting from 0, and FMU signals will be structured as SIGNAL_NAME[0], SIGNAL_NAME[1], and so forth. By default, this feature is set to False.",
     )
-    length: Optional[int] = Field(
-        None,
+    length: int | None = Field(
+        default=None,
         description="Defines the number of entries in the signal if the signal is array.",
         examples=[3, 5],
     )
@@ -107,33 +119,40 @@ class InternalState(BaseModelConfig):
             ONNX (agent) outputs need to have the same length.
     """
 
-    name: Optional[str] = Field(
-        None,
+    name: str | None = Field(
+        default=None,
         description="Unique name for state. Only needed if start_value is set (!= None). Initialization FMU parameters will be generated using this name",
         examples=["initialWindSpeed", "initialWindDirection"],
     )
-    description: Optional[str] = Field(None, description="Short FMU variable description.")
-    start_value: Optional[float] = Field(
-        None,
+    description: str | None = Field(
+        default=None,
+        description="Short FMU variable description.",
+    )
+    start_value: float | None = Field(
+        default=None,
         description="The default value of the parameter used for initialization. If this field is set parameters for initialization will be automatically generated for these states.",
     )
-    initialization_variable: Optional[str] = Field(
-        None,
+    initialization_variable: str | None = Field(
+        default=None,
         description="The name of a an input or parameter in the same model interface that should be used to initialize this state.",
     )
-    agent_output_indexes: List[
+    agent_output_indexes: list[
         Annotated[
             str,
             StringConstraints(strip_whitespace=True, to_upper=True, pattern=r"^(\d+|\d+:\d+)$"),
         ]
     ] = Field(
-        [],
+        default=[],
         description="Index or range of indices of agent outputs that will be stored as internal states and will be fed as inputs in the next time step. Note: the FMU signal and the agent outputs need to have the same length.",
         examples=["10", "10:20", "30"],
     )
 
+    # TODO @KristofferSkare: Change return type to `Self` (from `typing`module)
+    #      once we drop support for Python 3.10
+    #      (see https://docs.python.org/3/library/typing.html#typing.Self)
+    #      CLAROS, 2024-10-15
     @model_validator(mode="after")
-    def check_only_one_initialization(self):
+    def check_only_one_initialization(self) -> InternalState:
         """
         Check if only one state initialization method is used at a time.
 
@@ -182,13 +201,17 @@ class InputVariable(Variable):
         An example of `agent_input_indexes` can be ["10", "10:20", "30"].
     """
 
-    agent_input_indexes: List[
+    agent_input_indexes: list[
         Annotated[
             str,
-            StringConstraints(strip_whitespace=True, to_upper=True, pattern=r"^(\d+|\d+:\d+)$"),
+            StringConstraints(
+                strip_whitespace=True,
+                to_upper=True,
+                pattern=r"^(\d+|\d+:\d+)$",
+            ),
         ]
     ] = Field(
-        [],
+        default=[],
         description="Index or range of indices of agent inputs to which this FMU signal shall be linked to. Note: the FMU signal and the agent inputs need to have the same length.",
         examples=["10", "10:20", "30"],
     )
@@ -208,13 +231,17 @@ class OutputVariable(Variable):
         An example of `agent_output_indexes` can be ["10", "10:20", "30"].
     """
 
-    agent_output_indexes: List[
+    agent_output_indexes: list[
         Annotated[
             str,
-            StringConstraints(strip_whitespace=True, to_upper=True, pattern=r"^(\d+|\d+:\d+)$"),
+            StringConstraints(
+                strip_whitespace=True,
+                to_upper=True,
+                pattern=r"^(\d+|\d+:\d+)$",
+            ),
         ]
     ] = Field(
-        [],
+        default=[],
         description="Index or range of indices of agent outputs that will be linked to this output signal. Note: The FMU signal and the agent outputs need to have the same length.",
         examples=["10", "10:20", "30"],
     )
@@ -239,13 +266,13 @@ class FmiInputVariable(InputVariable):
     """
 
     causality: FmiCausality
-    variable_references: List[int] = []
-    agent_state_init_indexes: List[List[int]] = []
+    variable_references: list[int]
+    agent_state_init_indexes: list[list[int]]
 
-    def __init__(self, **kwargs):  # type: ignore
+    def __init__(self, **kwargs: Any) -> None:  # noqa: ANN401
         super().__init__(**kwargs)
-        self.causality = kwargs.get("causality", FmiCausality.INPUT)  # type: ignore
-        self.variable_references = kwargs.get("variable_references", [])  # type: ignore
+        self.causality = kwargs.get("causality", FmiCausality.INPUT)
+        self.variable_references = kwargs.get("variable_references", [])
 
 
 @dataclass
@@ -266,12 +293,12 @@ class FmiOutputVariable(OutputVariable):
     """
 
     causality: FmiCausality
-    variable_references: List[int] = []
+    variable_references: list[int]
 
-    def __init__(self, **kwargs):  # type: ignore
+    def __init__(self, **kwargs: Any) -> None:  # noqa: ANN401
         super().__init__(**kwargs)
-        self.causality = kwargs.get("causality", FmiCausality.OUTPUT)  # type: ignore
-        self.variable_references = kwargs.get("variable_references", [])  # type: ignore
+        self.causality = kwargs.get("causality", FmiCausality.OUTPUT)
+        self.variable_references = kwargs.get("variable_references", [])
 
 
 @dataclass
@@ -293,7 +320,7 @@ class FmiVariable:
     name: str = ""
     variable_reference: int = 0
     type: FmiVariableType = FmiVariableType.REAL
-    start_value: Union[bool, str, int, float] = 0
+    start_value: bool | str | int | float = 0
     causality: FmiCausality = FmiCausality.INPUT
     description: str = ""
     variability: FmiVariability = FmiVariability.CONTINUOUS
@@ -320,37 +347,55 @@ class ModelComponent(BaseModelConfig):
         state_initialization_reuse (bool): Whether variables are allowed to be reused for state initialization when initialization_variable is used for state initialization. If set to true the variable referred to in initialization_variable will be repeated for the state initialization until the entire state is initialized.
     """
 
-    name: str = Field(None, description="The name of the simulation model.")
-    version: str = Field("0.0.1", description="The version number of the model.")
-    author: Optional[str] = Field(None, description="Name or email of the model's author.")
-    description: Optional[str] = Field("", description="Brief description of the model.")
-    copyright: Optional[str] = Field(None, description="Copyright line for use in full license text.")
-    license: Optional[str] = Field(None, description="License text or file name (relative to source files)")
-    inputs: List[InputVariable] = Field(
-        [],
+    name: str = Field(
+        default=None,
+        description="The name of the simulation model.",
+    )
+    version: str = Field(
+        default="0.0.1",
+        description="The version number of the model.",
+    )
+    author: str | None = Field(
+        default=None,
+        description="Name or email of the model's author.",
+    )
+    description: str | None = Field(
+        default="",
+        description="Brief description of the model.",
+    )
+    copyright: str | None = Field(
+        default=None,
+        description="Copyright line for use in full license text.",
+    )
+    license: str | None = Field(
+        default=None,
+        description="License text or file name (relative to source files)",
+    )
+    inputs: list[InputVariable] = Field(
+        default=[],
         description="List of input signals of the simulation model.",
         examples=[[create_fmu_signal_example()]],
     )
-    outputs: List[OutputVariable] = Field(
-        [],
+    outputs: list[OutputVariable] = Field(
+        default=[],
         description="List of output signals of the simulation model.",
         examples=[[create_fmu_signal_example()]],
     )
-    parameters: List[InputVariable] = Field(
-        [],
+    parameters: list[InputVariable] = Field(
+        default=[],
         description="List of parameter signals of the simulation model.",
         examples=[[create_fmu_signal_example()]],
     )
-    states: List[InternalState] = Field(
-        [],
+    states: list[InternalState] = Field(
+        default=[],
         description="Internal states that will be stored in the simulation model's memory, these will be passed as inputs to the agent in the next time step.",
     )
-    uses_time: Optional[bool] = Field(
-        False,
+    uses_time: bool | None = Field(
+        default=False,
         description="Whether the agent consumes time data from co-simulation algorithm.",
     )
     state_initialization_reuse: bool = Field(
-        False,
+        default=False,
         description="Whether variables are allowed to be reused for state initialization when initialization_variable is used for state initialization. If set to true the variable referred to in initialization_variable will be repeated for the state initialization until the entire state is initialized.",
     )
 
@@ -385,37 +430,33 @@ class FmiModel:
 
     """
 
-    name: str = ""
-    guid: Optional[UUID] = None
-    inputs: List[FmiInputVariable] = []
-    outputs: List[FmiOutputVariable] = []
-    parameters: List[FmiInputVariable] = []
-    author: Optional[str] = None
-    version: str = "0.0.1"
-    description: Optional[str] = None
-    copyright: Optional[str] = None
-    license: Optional[str] = None
-    state_initialization_reuse: bool = False
-
-    def __init__(self, model: ModelComponent):
+    def __init__(self, model: ModelComponent) -> None:
         # Assign model specification to a valid FMU component complaint with FMISlave
-        self.name = model.name
-        self.author = model.author
-        self.version = model.version
-        self.description = model.description
-        self.copyright = model.copyright
-        self.license = model.license
-        self.state_initialization_reuse = model.state_initialization_reuse
+        self.name: str = model.name
+        self.guid: UUID | None = None
+        self.inputs: list[FmiInputVariable] = []
+        self.outputs: list[FmiOutputVariable] = []
+        self.parameters: list[FmiInputVariable] = []
+        self.author: str | None = model.author
+        self.version: str = model.version or "0.0.1"
+        self.description: str | None = model.description
+        self.copyright: str | None = model.copyright
+        self.license: str | None = model.license
+        self.state_initialization_reuse: bool = model.state_initialization_reuse
 
         self.add_variable_references(model.inputs, model.parameters, model.outputs)
         self.add_state_initialization_parameters(model.states)
 
     def add_variable_references(
         self,
-        inputs: List[InputVariable],
-        parameters: List[InputVariable],
-        outputs: List[OutputVariable],
-    ):
+        inputs: list[InputVariable],
+        parameters: list[InputVariable],
+        outputs: list[OutputVariable],
+    ) -> None:
+        # TODO @KristofferSkare: Docstring is not correct. It documents a return value,
+        #      but the method does not return anything. I suspect this might be a left-over after
+        #      refactoring from a function to an instance method?
+        #      CLAROS, 2024-10-15
         """
         Assign variable references to inputs, parameters and outputs from user interface to FMU model class.
 
@@ -430,9 +471,10 @@ class FmiModel:
             A dictionary that maps variable references to FmiVariables (same as Variable but contains causality)
         """
         current_var_ref = 0
-        fmu_inputs: List[FmiInputVariable] = []
-        fmu_parameters: List[FmiInputVariable] = []
-        fmu_outputs: List[FmiOutputVariable] = []
+        fmu_inputs: list[FmiInputVariable] = []
+        fmu_parameters: list[FmiInputVariable] = []
+        fmu_outputs: list[FmiOutputVariable] = []
+        fmi_variable: FmiInputVariable | FmiOutputVariable
 
         for var in inputs:
             var_port_refs = []
@@ -495,7 +537,10 @@ class FmiModel:
         self.outputs = fmu_outputs
         self.parameters = fmu_parameters
 
-    def add_state_initialization_parameters(self, states: List[InternalState]):
+    def add_state_initialization_parameters(
+        self,
+        states: list[InternalState],
+    ) -> None:
         """
         Generate or modifies FmuInputVariables for initialization of states for the InternalState objects
         that have set start_value and name or have set initialization_variable.
@@ -506,7 +551,7 @@ class FmiModel:
             states (List[InternalState]): List of states from JSON interface
         """
 
-        init_parameters: List[FmiInputVariable] = []
+        init_parameters: list[FmiInputVariable] = []
 
         value_reference_start = (
             self.get_total_variable_number()
@@ -565,7 +610,7 @@ class FmiModel:
             current_state_index_state += length
         self.parameters = [*self.parameters, *init_parameters]
 
-    def format_fmi_variable(self, var: Union[FmiInputVariable, FmiOutputVariable]) -> List[FmiVariable]:
+    def format_fmi_variable(self, var: FmiInputVariable | FmiOutputVariable) -> list[FmiVariable]:
         """
         Get an inclusive list of variables from an interface variable definition.
            Vectors are separated as N number of signals, being N the size of the array.
@@ -578,7 +623,7 @@ class FmiModel:
         -------
             A list of FMI formatted variables.
         """
-        variables: List[FmiVariable] = []
+        variables: list[FmiVariable] = []
 
         if var.is_array:
             for idx, var_ref in enumerate(var.variable_references):
@@ -611,17 +656,17 @@ class FmiModel:
 
         return variables
 
-    def get_fmi_model_variables(self) -> List[FmiVariable]:
+    def get_fmi_model_variables(self) -> list[FmiVariable]:
         """Get a full list of all variables in ths FMU, including each index of vector ports."""
         variables = [*self.inputs, *self.parameters, *self.outputs]
-        fmi_variables = list(map(lambda var: self.format_fmi_variable(var), variables))
+        fmi_variables = [self.format_fmi_variable(var) for var in variables]
 
         flat_vars = [var_j for var_i in fmi_variables for var_j in var_i]
         return flat_vars
 
     def get_template_mapping(
         self,
-    ) -> Tuple[List[Tuple[int, int]], List[Tuple[int, int]], List[Tuple[int, int]]]:
+    ) -> tuple[list[tuple[int, int]], list[tuple[int, int]], list[tuple[int, int]]]:
         """
         Calculate the index to value reference mapping between onnx inputs/outputs/state to fmu variables.
 
@@ -630,15 +675,16 @@ class FmiModel:
             Tuple of lists of mappings between onnx indexes to fmu variables. (input_mapping, output_mapping, state_init_mapping)
         """
         # Input and output mapping in the form of agent index and fmu variable reference pairs
-        input_mapping: List[Tuple[int, int]] = []
-        output_mapping: List[Tuple[int, int]] = []
-        state_init_mapping: List[Tuple[int, int]] = []
+        input_mapping: list[tuple[int, int]] = []
+        output_mapping: list[tuple[int, int]] = []
+        state_init_mapping: list[tuple[int, int]] = []
 
         for inp in self.inputs + self.parameters:
             input_indexes = range_list_expanded(inp.agent_input_indexes)
-            for variable_index, input_index in enumerate(input_indexes):
-                input_mapping.append((input_index, inp.variable_references[variable_index]))
-
+            input_mapping.extend(
+                (input_index, inp.variable_references[variable_index])
+                for variable_index, input_index in enumerate(input_indexes)
+            )
             num_variable_references = len(inp.variable_references)
             for state_init_indexes in inp.agent_state_init_indexes:
                 num_state_init_indexes = len(state_init_indexes)
@@ -650,21 +696,22 @@ class FmiModel:
                                 stacklevel=1,
                             )
                             break
-                        variable_index = variable_index % num_variable_references
-                    state_init_mapping.append((state_init_index, inp.variable_references[variable_index]))
+                        _variable_index = variable_index % num_variable_references
+                    state_init_mapping.append((state_init_index, inp.variable_references[_variable_index]))
 
         for out in self.outputs:
             output_indexes = range_list_expanded(out.agent_output_indexes)
-            for variable_index, output_index in enumerate(output_indexes):
-                output_mapping.append((output_index, out.variable_references[variable_index]))
-
+            output_mapping.extend(
+                (output_index, out.variable_references[variable_index])
+                for variable_index, output_index in enumerate(output_indexes)
+            )
         input_mapping = sorted(input_mapping, key=lambda inp: inp[0])
         output_mapping = sorted(output_mapping, key=lambda out: out[0])
         return input_mapping, output_mapping, state_init_mapping
 
     def get_total_variable_number(self) -> int:
         """Calculate the total amount of variables including every index of vector ports."""
-        all_fmi_variables: List[Union[FmiInputVariable, FmiOutputVariable]] = [
+        all_fmi_variables: list[FmiInputVariable | FmiOutputVariable] = [
             *self.inputs,
             *self.parameters,
             *self.outputs,

@@ -101,7 +101,7 @@ files = [
     "examples",
 ]
 exclude = [
-    "^src/folder_to_be_excluded/",
+    "^src/mlfmu/fmu_build/cppfmu/",
 ]
 check_untyped_defs = true
 disable_error_code = [
@@ -118,7 +118,7 @@ include = [
     "examples",
 ]
 exclude = [
-    "src/folder_to_be_excluded",
+    "src/mlfmu/fmu_build/cppfmu",
 ]
 
 typeCheckingMode = "basic"

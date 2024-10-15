@@ -1,4 +1,7 @@
-def create_fmu_signal_example():
+from mlfmu.types.fmu_component import FmiVariableType, Variable
+
+
+def create_fmu_signal_example() -> Variable:
     """
     Create an example FMU signal variable.
 
@@ -6,7 +9,6 @@ def create_fmu_signal_example():
     -------
         Variable: An instance of the Variable class representing the FMU signal variable.
     """
-    from mlfmu.types.fmu_component import FmiVariableType, Variable
 
     return Variable(
         name="dis_yx",

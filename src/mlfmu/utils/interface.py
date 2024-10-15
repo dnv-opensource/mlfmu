@@ -1,8 +1,6 @@
 import json
 import os
-from glob import glob
 from pathlib import Path
-from typing import List, Union
 
 from dictIO.utils.path import relative_path
 from json_schema_for_humans.generate import (
@@ -20,9 +18,9 @@ __ALL__ = ["publish_interface_schema"]
 
 
 def generate_interface_schema(
-    model: Union[BaseModel, ModelMetaclass],
-    schema_dir: Union[str, os.PathLike[str], None] = None,
-):
+    model: BaseModel | ModelMetaclass,
+    schema_dir: str | os.PathLike[str] | None = None,
+) -> None:
     """
     Generate a JSON interface schema file for the given model.
 
@@ -46,18 +44,18 @@ def generate_interface_schema(
     schema_dir.mkdir(parents=True, exist_ok=True)
 
     json_file: Path = schema_dir / "schema.json"
-    schema = json.dumps(model.model_json_schema(by_alias=True), indent=4)  # type: ignore
+    schema = json.dumps(model.model_json_schema(by_alias=True), indent=4)
 
-    with open(json_file, "w", encoding="utf-8") as f:
+    with Path.open(json_file, "w", encoding="utf-8") as f:
         _ = f.write(schema)
 
     return
 
 
 def generate_interface_docs(
-    schema_dir: Union[str, os.PathLike[str], None] = None,
-    docs_dir: Union[str, os.PathLike[str], None] = None,
-):
+    schema_dir: str | os.PathLike[str] | None = None,
+    docs_dir: str | os.PathLike[str] | None = None,
+) -> None:
     """
     Generate HTML documentation for the JSON interface schema files in the schema directory.
 
@@ -82,8 +80,8 @@ def generate_interface_docs(
     docs_dir.mkdir(parents=True, exist_ok=True)
 
     # Collect all schemata in schema dir
-    pattern: str = f"{str(schema_dir.absolute())}/**.json"
-    schemata: List[Path] = [Path(file) for file in glob(pattern)]
+    pattern: str = "**.json"
+    schemata: list[Path] = list(schema_dir.glob(pattern))
 
     # Generate html documentation for schemata
     config: GenerationConfiguration = GenerationConfiguration(
@@ -93,7 +91,7 @@ def generate_interface_docs(
         show_breadcrumbs=False,
     )
 
-    schemas_to_render: List[SchemaToRender] = []
+    schemas_to_render: list[SchemaToRender] = []
 
     for schema in schemata:
         rel_path: Path = relative_path(from_path=schema_dir, to_path=schema.parent)
@@ -113,9 +111,9 @@ def generate_interface_docs(
 
 
 def publish_interface_schema(
-    schema_dir: Union[str, os.PathLike[str], None] = None,
-    docs_dir: Union[str, os.PathLike[str], None] = None,
-):
+    schema_dir: str | os.PathLike[str] | None = None,
+    docs_dir: str | os.PathLike[str] | None = None,
+) -> None:
     """
     Publish the JSON schema and HTML documentation for the interface.
 

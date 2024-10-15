@@ -1,7 +1,4 @@
-from typing import List
-
-
-def range_list_expanded(list_of_ranges: List[str]) -> List[int]:
+def range_list_expanded(list_of_ranges: list[str]) -> list[int]:
     """
     Expand ranges specified in interface. They should be formatted as [starts_index:end_index].
 
@@ -14,7 +11,7 @@ def range_list_expanded(list_of_ranges: List[str]) -> List[int]:
         A list of all indexes covered in ranges or individual indexes
     """
 
-    indexes: List[int] = []
+    indexes: list[int] = []
 
     for val in list_of_ranges:
         if ":" in val:

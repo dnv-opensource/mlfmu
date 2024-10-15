@@ -3,7 +3,6 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
-from typing import List, Optional
 
 from pydantic import ValidationError
 
@@ -13,7 +12,7 @@ from mlfmu.utils.fmi_builder import generate_model_description
 from mlfmu.utils.signals import range_list_expanded
 
 # Paths to files needed for build
-path_to_this_file = Path(os.path.abspath(__file__))
+path_to_this_file = Path(__file__).resolve()
 absolute_path = path_to_this_file.parent.parent
 fmu_build_folder = absolute_path / "fmu_build"
 template_parent_path = fmu_build_folder / "templates" / "fmu"
@@ -21,7 +20,11 @@ template_parent_path = fmu_build_folder / "templates" / "fmu"
 logger = logging.getLogger(__name__)
 
 
-def format_template_file(template_path: Path, save_path: Path, data: dict[str, str]):
+def format_template_file(
+    template_path: Path,
+    save_path: Path,
+    data: dict[str, str],
+) -> None:
     """
     Replace all the template strings with their corresponding values and save to a new file.
 
@@ -33,15 +36,18 @@ def format_template_file(template_path: Path, save_path: Path, data: dict[str, s
     """
 
     # TODO: Need to check that these calls are safe from a cybersecurity point of view
-    with open(template_path, "r", encoding="utf-8") as template_file:
+    with Path.open(template_path, encoding="utf-8") as template_file:
         template_string = template_file.read()
 
     formatted_string = template_string.format(**data)
-    with open(save_path, "w", encoding="utf-8") as save_file:
+    with Path.open(save_path, "w", encoding="utf-8") as save_file:
         _ = save_file.write(formatted_string)
 
 
-def create_model_description(fmu: FmiModel, src_path: Path):
+def create_model_description(
+    fmu: FmiModel,
+    src_path: Path,
+) -> None:
     """
     Generate modelDescription.xml structure for FMU, and save it in a file.
 
@@ -57,7 +63,7 @@ def create_model_description(fmu: FmiModel, src_path: Path):
     xml_structure.write(src_path / "modelDescription.xml", encoding="utf-8")
 
 
-def make_fmu_dirs(src_path: Path):
+def make_fmu_dirs(src_path: Path) -> None:
     """
     Create all the directories needed to put all the FMU files in.
 
@@ -72,7 +78,10 @@ def make_fmu_dirs(src_path: Path):
     resources_path.mkdir(parents=True, exist_ok=True)
 
 
-def create_files_from_templates(data: dict[str, str], fmu_src: Path):
+def create_files_from_templates(
+    data: dict[str, str],
+    fmu_src: Path,
+) -> None:
     """
     Create and format all needed C++ files for FMU generation.
 
@@ -155,34 +164,34 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
         [str(index) for indexValueReferencePair in state_init for index in indexValueReferencePair]
     )
 
-    template_data: dict[str, str] = dict(
-        numFmuVariables=str(num_fmu_variables),
-        FmuName=fmi_model.name,
-        numOnnxInputs=str(onnx.input_size),
-        numOnnxOutputs=str(onnx.output_size),
-        numOnnxStates=str(onnx.state_size),
-        numOnnxStateInit=str(num_onnx_state_init),
-        onnxUsesTime="true" if onnx.time_input else "false",
-        onnxInputName=onnx.input_name,
-        onnxStatesName=onnx.states_name,
-        onnxTimeInputName=onnx.time_input_name,
-        onnxOutputName=onnx.output_name,
-        onnxFileName=onnx.filename,
-        numOnnxFmuInputs=str(num_fmu_inputs),
-        numOnnxFmuOutputs=str(num_fmu_outputs),
-        numOnnxStatesOutputs=str(num_onnx_states),
-        onnxInputValueReferences=flattened_input_string,
-        onnxOutputValueReferences=flattened_output_string,
-        onnxStateOutputIndexes=flattened_state_string,
-        onnxStateInitValueReferences=flattened_state_init_string,
-    )
+    template_data: dict[str, str] = {
+        "numFmuVariables": str(num_fmu_variables),
+        "FmuName": fmi_model.name,
+        "numOnnxInputs": str(onnx.input_size),
+        "numOnnxOutputs": str(onnx.output_size),
+        "numOnnxStates": str(onnx.state_size),
+        "numOnnxStateInit": str(num_onnx_state_init),
+        "onnxUsesTime": "true" if onnx.time_input else "false",
+        "onnxInputName": onnx.input_name,
+        "onnxStatesName": onnx.states_name,
+        "onnxTimeInputName": onnx.time_input_name,
+        "onnxOutputName": onnx.output_name,
+        "onnxFileName": onnx.filename,
+        "numOnnxFmuInputs": str(num_fmu_inputs),
+        "numOnnxFmuOutputs": str(num_fmu_outputs),
+        "numOnnxStatesOutputs": str(num_onnx_states),
+        "onnxInputValueReferences": flattened_input_string,
+        "onnxOutputValueReferences": flattened_output_string,
+        "onnxStateOutputIndexes": flattened_state_string,
+        "onnxStateInitValueReferences": flattened_state_init_string,
+    }
 
     return template_data
 
 
 def validate_interface_spec(
     spec: str,
-) -> tuple[Optional[ValidationError], ModelComponent]:
+) -> tuple[ValidationError | None, ModelComponent]:
     """
     Parse and validate JSON data from the interface file.
 
@@ -206,8 +215,10 @@ def validate_interface_spec(
 
 
 def generate_fmu_files(
-    fmu_src_path: os.PathLike[str], onnx_path: os.PathLike[str], interface_spec_path: os.PathLike[str]
-):
+    fmu_src_path: os.PathLike[str],
+    onnx_path: os.PathLike[str],
+    interface_spec_path: os.PathLike[str],
+) -> FmiModel:
     """
     Generate FMU files based on the FMU source, ONNX model, and interface specification.
 
@@ -227,7 +238,7 @@ def generate_fmu_files(
     interface_spec_path = Path(interface_spec_path)
 
     # Load JSON interface contents
-    with open(interface_spec_path, "r", encoding="utf-8") as template_file:
+    with Path.open(interface_spec_path, encoding="utf-8") as template_file:
         interface_contents = template_file.read()
 
     # Validate the FMU interface spec against expected Schema
@@ -255,7 +266,7 @@ def generate_fmu_files(
     return fmi_model
 
 
-def validate_fmu_source_files(fmu_path: os.PathLike[str]):
+def validate_fmu_source_files(fmu_path: os.PathLike[str]) -> None:
     """
     Validate the FMU source files.
 
@@ -269,15 +280,13 @@ def validate_fmu_source_files(fmu_path: os.PathLike[str]):
     """
     fmu_path = Path(fmu_path)
 
-    files_should_exist: List[str] = [
+    files_should_exist: list[str] = [
         "modelDescription.xml",
         "sources/fmu.cpp",
         "sources/model_definitions.h",
     ]
 
-    files_not_exists = [file for file in files_should_exist if not (fmu_path / file).is_file()]
-
-    if len(files_not_exists) > 0:
+    if files_not_exists := [file for file in files_should_exist if not (fmu_path / file).is_file()]:
         raise FileNotFoundError(
             f"The files {files_not_exists} are not contained in the provided FMU source path ({fmu_path})"
         )
@@ -296,7 +305,7 @@ def build_fmu(
     fmu_src_path: os.PathLike[str],
     fmu_build_path: os.PathLike[str],
     fmu_save_path: os.PathLike[str],
-):
+) -> None:
     """
     Build the FMU.
 
@@ -327,10 +336,10 @@ def build_fmu(
         "shared=True",
     ]
     cmake_set_folders = [
-        f"-DCMAKE_BINARY_DIR={str(fmu_build_path)}",
-        f"-DFMU_OUTPUT_DIR={str(fmu_save_path)}",
+        f"-DCMAKE_BINARY_DIR={fmu_build_path!s}",
+        f"-DFMU_OUTPUT_DIR={fmu_save_path!s}",
         f"-DFMU_NAMES={fmu_name}",
-        f"-DFMU_SOURCE_PATH={str(fmu_src_path.parent)}",
+        f"-DFMU_SOURCE_PATH={fmu_src_path.parent!s}",
     ]
     cmake_command = ["cmake", *cmake_set_folders, "--preset", "conan-default"]
     cmake_build_command = ["cmake", "--build", ".", "-j", "14", "--config", "Release"]
@@ -341,25 +350,22 @@ def build_fmu(
     # Run conan install, cmake, cmake build
     logger.debug("Builder: Run conan install")
     try:
-        _ = subprocess.run(conan_install_command, check=True)
-    except subprocess.CalledProcessError as ex:
-        logger.error("Exception in conan install %s", ex)
-        print(ex)
+        _ = subprocess.run(conan_install_command, check=True)  # noqa: S603
+    except subprocess.CalledProcessError:
+        logger.exception("Exception in conan install: %s")
 
     logger.debug("Builder: Run cmake")
     try:
-        _ = subprocess.run(cmake_command, check=True)
-    except subprocess.CalledProcessError as ex:
-        logger.error("Exception in cmake %s", ex)
-        print(ex)
+        _ = subprocess.run(cmake_command, check=True)  # noqa: S603
+    except subprocess.CalledProcessError:
+        logger.exception("Exception in cmake: %s")
 
     os.chdir(fmu_build_path)
     logger.debug("Builder: Run cmake build")
     try:
-        _ = subprocess.run(cmake_build_command, check=True)
-    except subprocess.CalledProcessError as ex:
-        logger.error("Exception in cmake build: %s", ex)
-        print(ex)
+        _ = subprocess.run(cmake_build_command, check=True)  # noqa: S603
+    except subprocess.CalledProcessError:
+        logger.exception("Exception in cmake build: %s")
 
     logger.debug("Builder: Done with build_fmu")
 

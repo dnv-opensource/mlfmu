@@ -1,6 +1,6 @@
 import datetime
-import importlib.metadata as metadata
 import logging
+from importlib import metadata
 from xml.etree.ElementTree import Element, ElementTree, SubElement, indent
 
 from mlfmu.types.fmu_component import (
@@ -21,11 +21,7 @@ def requires_start(var: FmiVariable) -> bool:
     -------
         True if successful, False otherwise
     """
-    return (
-        var.causality == FmiCausality.INPUT
-        or var.causality == FmiCausality.PARAMETER
-        or var.variability == FmiVariability.CONSTANT
-    )
+    return var.causality in (FmiCausality.INPUT, FmiCausality.PARAMETER) or var.variability == FmiVariability.CONSTANT
 
 
 def generate_model_description(fmu_model: FmiModel) -> ElementTree:
@@ -46,15 +42,15 @@ def generate_model_description(fmu_model: FmiModel) -> ElementTree:
     TOOL_VERSION = metadata.version("mlfmu")
 
     # Root <fmiModelDescription> tag
-    model_description = dict(
-        fmiVersion="2.0",
-        modelName=fmu_model.name,
-        guid=f"{fmu_model.guid!s}" if fmu_model.guid is not None else "@FMU_UUID@",
-        version=fmu_model.version,
-        generationDateAndTime=date_str,
-        variableNamingConvention="structured",
-        generationTool=f"MLFMU {TOOL_VERSION}",
-    )
+    model_description = {
+        "fmiVersion": "2.0",
+        "modelName": fmu_model.name,
+        "guid": f"{fmu_model.guid!s}" if fmu_model.guid is not None else "@FMU_UUID@",
+        "version": fmu_model.version,
+        "generationDateAndTime": date_str,
+        "variableNamingConvention": "structured",
+        "generationTool": f"MLFMU {TOOL_VERSION}",
+    }
 
     # Optional props
     if fmu_model.copyright is not None:
@@ -69,10 +65,10 @@ def generate_model_description(fmu_model: FmiModel) -> ElementTree:
     root = Element("fmiModelDescription", model_description)
 
     # <CoSimulation> tag options
-    cosim_options = dict(
-        modelIdentifier=fmu_model.name,
-        canHandleVariableCommunicationStepSize="true",
-    )
+    cosim_options = {
+        "modelIdentifier": fmu_model.name,
+        "canHandleVariableCommunicationStepSize": "true",
+    }
     _ = SubElement(root, "CoSimulation", attrib=cosim_options)
 
     # <ModelVariables> tag -> Append inputs/parameters/outputs
@@ -84,16 +80,16 @@ def generate_model_description(fmu_model: FmiModel) -> ElementTree:
 
     for var in fmu_model.get_fmi_model_variables():
         # XML variable attributes
-        var_attrs = dict(
-            name=var.name,
-            valueReference=str(var.variable_reference),
-            causality=var.causality.value,
-            description=var.description if var.description else "",
-            variability=var.variability.value if var.variability else FmiVariability.CONTINUOUS.value,
-        )
+        var_attrs = {
+            "name": var.name,
+            "valueReference": str(var.variable_reference),
+            "causality": var.causality.value,
+            "description": var.description if var.description else "",
+            "variability": var.variability.value if var.variability else FmiVariability.CONTINUOUS.value,
+        }
         var_elem = SubElement(variables, "ScalarVariable", var_attrs)
 
-        var_type_attrs = dict()
+        var_type_attrs = {}
         if requires_start(var):
             var_type_attrs["start"] = str(var.start_value)
 
