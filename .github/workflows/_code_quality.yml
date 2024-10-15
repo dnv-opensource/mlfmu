@@ -16,10 +16,10 @@ jobs:
           python -m pip install uv
       - name: Install dependencies
         run: |
-          uv pip install --system -r requirements.txt
+          uv uv pip install --system --system -r requirements.txt
       - name: Install ruff
         run: |
-          uv pip install --system ruff>=0.6.3
+          uv uv pip install --system --system ruff>=0.6.3
       - name: Run ruff format
         run: ruff format --diff .
 
@@ -36,10 +36,10 @@ jobs:
           python -m pip install uv
       - name: Install dependencies
         run: |
-          uv pip install --system -r requirements.txt
+          uv uv pip install --system --system -r requirements.txt
       - name: Install ruff
         run: |
-          uv pip install --system ruff>=0.6.3
+          uv uv pip install --system --system ruff>=0.6.3
       - name: Run ruff check
         run: ruff check --diff .
 
@@ -56,10 +56,10 @@ jobs:
           python -m pip install uv
       - name: Install dependencies
         run: |
-          uv pip install --system -r requirements.txt
-          uv pip install --system pytest
+          uv uv pip install --system --system -r requirements.txt
+          uv uv pip install --system --system pytest
       - name: Install pyright
         run: |
-          uv pip install --system pyright>=1.1.378
+          uv uv pip install --system --system pyright>=1.1.378
       - name: Run pyright
         run: pyright .
