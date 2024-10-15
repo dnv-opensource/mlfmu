@@ -1,7 +1,6 @@
 import logging
 import sys
 from pathlib import Path
-from typing import Union
 
 __all__ = ["configure_logging"]
 
@@ -10,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 def configure_logging(
     log_level_console: str = "WARNING",
-    log_file: Union[Path, None] = None,
+    log_file: Path | None = None,
     log_level_file: str = "WARNING",
 ):  # sourcery skip: extract-duplicate-method, extract-method
     """
@@ -48,7 +47,7 @@ def configure_logging(
         if not log_file.parent.exists():
             log_file.parent.mkdir(parents=True, exist_ok=True)
         file_handler = logging.FileHandler(str(log_file.absolute()), "a")
-        print(f"Logging to: {log_file.absolute()}")
+        print(f"Logging to: {log_file.absolute()}")  # noqa: T201
         file_handler.setLevel(log_level_file_numeric)
         file_formatter = logging.Formatter("%(asctime)s %(levelname)-8s %(message)s", "%Y-%m-%d %H:%M:%S")
         file_handler.setFormatter(file_formatter)
