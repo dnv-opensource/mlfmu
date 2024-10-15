@@ -1,11 +1,11 @@
-pytest>=8.2
+pytest>=8.3
 pytest-cov>=5.0
-ruff==0.5.1
-pyright==1.1.371
-Sphinx>=7.3
-sphinx-argparse-cli>=1.16
-myst-parser>=3.0
-furo>=2024.5
-sourcery==1.21
+ruff>=0.6.3
+pyright>=1.1.378
+Sphinx>=8.0
+sphinx-argparse-cli>=1.17
+myst-parser>=4.0
+furo>=2024.8
+sourcery>=1.22
 
 -r requirements.txt
