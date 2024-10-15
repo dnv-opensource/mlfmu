@@ -1,6 +1,7 @@
 import json
 import os
 from pathlib import Path
+from typing import cast
 
 from dictIO.utils.path import relative_path
 from json_schema_for_humans.generate import (
@@ -39,7 +40,9 @@ def generate_interface_schema(
     # Background: ModelMetaClass is added just to please static type checking,
     #             which would otherwise complain.
     #             Behind the scenes in pdyantic, models always inherit the attributes of BaseModel.
-    assert hasattr(model, "model_json_schema")
+    if not hasattr(model, "model_json_schema"):
+        raise ValueError("model argument must be a pydantic BaseModel")
+    model = cast(BaseModel, model)
 
     # Create schema_dir if it does not exist
     schema_dir.mkdir(parents=True, exist_ok=True)
