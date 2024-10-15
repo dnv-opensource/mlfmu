@@ -93,7 +93,8 @@ class ONNXModel:
             num_states = input_shapes[1][1]
             if not self.time_input:
                 raise ValueError(
-                    "The ml model has 3 inputs, but the usesTime flag is set to false in the json interface. A model can only have 3 inputs if it uses time input."
+                    "The ml model has 3 inputs, but the `usesTime` flag is set to `false` in the json interface. "
+                    "A model can only have 3 inputs if it uses time input."
                 )
         elif len(input_names) == 2:  # noqa: PLR2004
             if self.time_input:

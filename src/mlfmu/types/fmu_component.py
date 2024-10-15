@@ -63,8 +63,12 @@ class Variable(BaseModelConfig):
         type (Optional[FmiVariableType]): Data type as defined by FMI standard, defaults to Real.
         description (Optional[str]): Short FMU variable description.
         variability (Optional[FmiVariability]): Signal variability as defined by FMI.
-        start_value (Optional[Union[float, str, bool, int]]): Initial value of the signal at time step 1. Type should match the variable type.
-        is_array (Optional[bool]): When dealing with an array signal, it is essential to specify the LENGTH parameter. Arrays are indexed starting from 0, and FMU signals will be structured as SIGNAL_NAME[0], SIGNAL_NAME[1], and so forth. By default, this feature is set to False.
+        start_value (Optional[Union[float, str, bool, int]]): Initial value of the signal at time step 1.
+            Type should match the variable type.
+        is_array (Optional[bool]): When dealing with an array signal, it is essential to
+            specify the LENGTH parameter. Arrays are indexed starting from 0, and FMU signals
+            will be structured as SIGNAL_NAME[0], SIGNAL_NAME[1], and so forth.
+            By default, this feature is set to False.
         length (Optional[int]): Defines the number of entries in the signal if the signal is array.
     """
 
@@ -92,7 +96,12 @@ class Variable(BaseModelConfig):
     )
     is_array: bool | None = Field(
         default=False,
-        description="When dealing with an array signal, it is essential to specify the LENGTH parameter. Arrays are indexed starting from 0, and FMU signals will be structured as SIGNAL_NAME[0], SIGNAL_NAME[1], and so forth. By default, this feature is set to False.",
+        description=(
+            "When dealing with an array signal, it is essential to specify the LENGTH parameter. "
+            "Arrays are indexed starting from 0, and FMU signals will be structured as "
+            "SIGNAL_NAME[0], SIGNAL_NAME[1], and so forth. "
+            "By default, this feature is set to False."
+        ),
     )
     length: int | None = Field(
         default=None,
@@ -111,7 +120,8 @@ class InternalState(BaseModelConfig):
             Initialization FMU parameters will be generated using this name.
         description (Optional[str]): Short description of the FMU variable.
         start_value (Optional[float]): The default value of the parameter used for initialization.
-            If this field is set, parameters for initialization will be automatically generated for these states.
+            If this field is set, parameters for initialization will be automatically
+            generated for these states.
         initialization_variable (Optional[str]): The name of an input or parameter in the same model interface
             that should be used to initialize this state.
         agent_output_indexes (List[str]): Index or range of indices of agent (ONNX model) outputs that will be stored as
@@ -121,7 +131,10 @@ class InternalState(BaseModelConfig):
 
     name: str | None = Field(
         default=None,
-        description="Unique name for state. Only needed if start_value is set (!= None). Initialization FMU parameters will be generated using this name",
+        description=(
+            "Unique name for state. Only needed if start_value is set (!= None). "
+            "Initialization FMU parameters will be generated using this name"
+        ),
         examples=["initialWindSpeed", "initialWindDirection"],
     )
     description: str | None = Field(
@@ -130,11 +143,18 @@ class InternalState(BaseModelConfig):
     )
     start_value: float | None = Field(
         default=None,
-        description="The default value of the parameter used for initialization. If this field is set parameters for initialization will be automatically generated for these states.",
+        description=(
+            "The default value of the parameter used for initialization. "
+            "If this field is set parameters for initialization will be automatically "
+            "generated for these states."
+        ),
     )
     initialization_variable: str | None = Field(
         default=None,
-        description="The name of a an input or parameter in the same model interface that should be used to initialize this state.",
+        description=(
+            "The name of a an input or parameter in the same model interface "
+            "that should be used to initialize this state."
+        ),
     )
     agent_output_indexes: list[
         Annotated[
@@ -143,7 +163,11 @@ class InternalState(BaseModelConfig):
         ]
     ] = Field(
         default=[],
-        description="Index or range of indices of agent outputs that will be stored as internal states and will be fed as inputs in the next time step. Note: the FMU signal and the agent outputs need to have the same length.",
+        description=(
+            "Index or range of indices of agent outputs that will be stored as internal states "
+            "and will be fed as inputs in the next time step. "
+            "Note: the FMU signal and the agent outputs need to have the same length."
+        ),
         examples=["10", "10:20", "30"],
     )
 
@@ -174,15 +198,18 @@ class InternalState(BaseModelConfig):
 
         if init_var and (start_value or name):
             raise ValueError(
-                "Only one state initialization method is allowed to be used at a time: initialization_variable cannot be set if either start_value or name is set."
+                "Only one state initialization method is allowed to be used at a time: "
+                "initialization_variable cannot be set if either start_value or name is set."
             )
         if (not start_value) and name:
             raise ValueError(
-                "name is set without start_value being set. Both fields needs to be set for the state initialization to be valid"
+                "name is set without start_value being set. "
+                "Both fields needs to be set for the state initialization to be valid."
             )
         if start_value and (not name):
             raise ValueError(
-                "start_value is set without name being set. Both fields needs to be set for the state initialization to be valid"
+                "start_value is set without name being set. "
+                "Both fields needs to be set for the state initialization to be valid."
             )
         return self
 
@@ -193,7 +220,8 @@ class InputVariable(Variable):
 
     Attributes
     ----------
-        agent_input_indexes (List[str]): Index or range of indices of ONNX (agent) inputs to which this FMU signal shall be linked.
+        agent_input_indexes (List[str]): Index or range of indices of ONNX (agent) inputs to which
+            this FMU signal shall be linked.
             Note: The FMU signal and the ONNX (agent) inputs need to have the same length.
 
     Examples
@@ -212,7 +240,10 @@ class InputVariable(Variable):
         ]
     ] = Field(
         default=[],
-        description="Index or range of indices of agent inputs to which this FMU signal shall be linked to. Note: the FMU signal and the agent inputs need to have the same length.",
+        description=(
+            "Index or range of indices of agent inputs to which this FMU signal shall be linked to. "
+            "Note: the FMU signal and the agent inputs need to have the same length."
+        ),
         examples=["10", "10:20", "30"],
     )
 
@@ -223,7 +254,8 @@ class OutputVariable(Variable):
 
     Attributes
     ----------
-        agent_output_indexes (List[str]): Index or range of indices of agent outputs that will be linked to this output signal.
+        agent_output_indexes (List[str]): Index or range of indices of agent outputs
+            that will be linked to this output signal.
             Note: The FMU signal and the agent outputs need to have the same length.
 
     Examples
@@ -242,7 +274,10 @@ class OutputVariable(Variable):
         ]
     ] = Field(
         default=[],
-        description="Index or range of indices of agent outputs that will be linked to this output signal. Note: The FMU signal and the agent outputs need to have the same length.",
+        description=(
+            "Index or range of indices of agent outputs that will be linked to this output signal. "
+            "Note: The FMU signal and the agent outputs need to have the same length."
+        ),
         examples=["10", "10:20", "30"],
     )
 
@@ -256,7 +291,8 @@ class FmiInputVariable(InputVariable):
     ----------
         causality (FmiCausality): The causality of the input variable.
         variable_references (List[int]): List of variable references.
-        agent_state_init_indexes (List[List[int]]): List of state initialization indexes for ONNX model - concerns mapping of FMU input variables to ONNX states.
+        agent_state_init_indexes (List[List[int]]): List of state initialization indexes for ONNX model -
+            concerns mapping of FMU input variables to ONNX states.
 
     Args
     ----
@@ -329,7 +365,8 @@ class FmiVariable:
 class ModelComponent(BaseModelConfig):
     """
     Represents a simulation model component, used to generate the JSON schema for the model interface.
-    We define the structure of the FMU and how the inputs and outputs of the ONNX model correspond to the FMU variables.
+    We define the structure of the FMU and how the inputs and outputs of the ONNX model
+    correspond to the FMU variables.
 
     Attributes
     ----------
@@ -342,9 +379,13 @@ class ModelComponent(BaseModelConfig):
         inputs (List[InputVariable]): List of input signals of the simulation model.
         outputs (List[OutputVariable]): List of output signals of the simulation model.
         parameters (List[InputVariable]): List of parameter signals of the simulation model.
-        states (List[InternalState]): Internal states that will be stored in the simulation model's memory, these will be passed as inputs to the agent in the next time step.
+        states (List[InternalState]): Internal states that will be stored in the simulation model's memory,
+            these will be passed as inputs to the agent in the next time step.
         uses_time (Optional[bool]): Whether the agent consumes time data from co-simulation algorithm.
-        state_initialization_reuse (bool): Whether variables are allowed to be reused for state initialization when initialization_variable is used for state initialization. If set to true the variable referred to in initialization_variable will be repeated for the state initialization until the entire state is initialized.
+        state_initialization_reuse (bool): Whether variables are allowed to be reused for
+            state initialization when initialization_variable is used for state initialization.
+            If set to true the variable referred to in initialization_variable will be repeated
+            for the state initialization until the entire state is initialized.
     """
 
     name: str = Field(
@@ -388,7 +429,10 @@ class ModelComponent(BaseModelConfig):
     )
     states: list[InternalState] = Field(
         default=[],
-        description="Internal states that will be stored in the simulation model's memory, these will be passed as inputs to the agent in the next time step.",
+        description=(
+            "Internal states that will be stored in the simulation model's memory, "
+            "these will be passed as inputs to the agent in the next time step."
+        ),
     )
     uses_time: bool | None = Field(
         default=False,
@@ -396,7 +440,12 @@ class ModelComponent(BaseModelConfig):
     )
     state_initialization_reuse: bool = Field(
         default=False,
-        description="Whether variables are allowed to be reused for state initialization when initialization_variable is used for state initialization. If set to true the variable referred to in initialization_variable will be repeated for the state initialization until the entire state is initialized.",
+        description=(
+            "Whether variables are allowed to be reused for state initialization "
+            "when initialization_variable is used for state initialization. "
+            "If set to true the variable referred to in initialization_variable will be repeated "
+            "for the state initialization until the entire state is initialized."
+        ),
     )
 
 
@@ -422,13 +471,14 @@ class FmiModel:
     -------
         __init__(self, model: ModelComponent): Initializes the FmiModel object with a ModelComponent object.
         add_variable_references(self, inputs: List[InputVariable], parameters: List[InputVariable], outputs: List[OutputVariable]):
-            Assigns variable references to inputs, parameters, and outputs from the user interface to the FMU model class.
+            Assigns variable references to inputs, parameters, and outputs
+            from the user interface to the FMU model class.
         add_state_initialization_parameters(self, states: List[InternalState]):
             Generates or modifies FmuInputVariables for initialization of states for the InternalState objects.
         format_fmi_variable(self, var: Union[FmiInputVariable, FmiOutputVariable]) -> List[FmiVariable]:
             Gets an inclusive list of variables from an interface variable definition.
 
-    """
+    """  # noqa: E501
 
     def __init__(self, model: ModelComponent) -> None:
         # Assign model specification to a valid FMU component complaint with FMISlave
@@ -553,9 +603,8 @@ class FmiModel:
 
         init_parameters: list[FmiInputVariable] = []
 
-        value_reference_start = (
-            self.get_total_variable_number()
-        )  # TODO: Biggest used value reference + 1, will this always be correct?
+        # TODO @KristofferSkare: Biggest used value reference + 1, will this always be correct?
+        value_reference_start = self.get_total_variable_number()
         current_state_index_state = 0
         for i, state in enumerate(states):
             length = len(range_list_expanded(state.agent_output_indexes))
@@ -567,12 +616,15 @@ class FmiModel:
                 ]
                 if len(variable_name_input_index) + len(variable_name_parameter_index) > 1:
                     raise ValueError(
-                        f"Found {len(variable_name_input_index) + len(variable_name_parameter_index)} FMU inputs or parameters with same name (={variable_name}) when trying to use for state initialization. Variables must have a unique name."
+                        f"Found {len(variable_name_input_index) + len(variable_name_parameter_index)} "
+                        f"FMU inputs or parameters with same name (={variable_name}) "
+                        "when trying to use for state initialization. Variables must have a unique name."
                     )
 
                 if len(variable_name_input_index) + len(variable_name_parameter_index) == 0:
                     raise ValueError(
-                        f"Did not find any FMU variables for use for initialization with name={variable_name} for state with agent_output_indexes={state.agent_output_indexes}."
+                        "Did not find any FMU variables for use for initialization "
+                        f"with name={variable_name} for state with agent_output_indexes={state.agent_output_indexes}."
                     )
                 agent_state_init_indexes = list(range(current_state_index_state, current_state_index_state + length))
 
@@ -586,7 +638,8 @@ class FmiModel:
             elif state.start_value is not None:
                 if state.name is None:
                     raise ValueError(
-                        f"State with index {i} has state_value (!= None) without having a name. Either give it a name or set start_value = None"
+                        f"State with index {i} has state_value (!= None) without having a name. "
+                        "Either give it a name or set start_value = None"
                     )
                 value_references = list(range(value_reference_start, value_reference_start + length))
                 is_array = length > 1
@@ -672,7 +725,8 @@ class FmiModel:
 
         Returns
         -------
-            Tuple of lists of mappings between onnx indexes to fmu variables. (input_mapping, output_mapping, state_init_mapping)
+            Tuple of lists of mappings between onnx indexes to fmu variables.
+            (input_mapping, output_mapping, state_init_mapping)
         """
         # Input and output mapping in the form of agent index and fmu variable reference pairs
         input_mapping: list[tuple[int, int]] = []
@@ -692,7 +746,10 @@ class FmiModel:
                     if variable_index >= num_variable_references:
                         if not self.state_initialization_reuse:
                             warnings.warn(
-                                f"Too few variables in {inp.name} (={num_variable_references}) to initialize all states (={num_state_init_indexes}). To initialize all states set state_initialization_reuse=true in interface json or provide a variable with length >={num_state_init_indexes}",
+                                f"Too few variables in {inp.name} (={num_variable_references}) "
+                                f"to initialize all states (={num_state_init_indexes}). "
+                                "To initialize all states set `state_initialization_reuse=true` in interface json "
+                                f"or provide a variable with length >={num_state_init_indexes}",
                                 stacklevel=1,
                             )
                             break

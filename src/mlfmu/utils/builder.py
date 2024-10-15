@@ -35,7 +35,7 @@ def format_template_file(
         data (dict[str, str]): The data containing the values to replace in the template.
     """
 
-    # TODO: Need to check that these calls are safe from a cybersecurity point of view
+    # TODO: Need to check that these calls are safe from a cybersecurity point of view  # noqa: TD002
     with Path.open(template_path, encoding="utf-8") as template_file:
         template_string = template_file.read()
 
@@ -137,22 +137,27 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
     # Checking compatibility between ModelComponent and ONNXModel
     if num_fmu_inputs > onnx.input_size:
         raise ValueError(
-            f"The number of total input indexes for all inputs and parameter in the interface file(={num_fmu_inputs}) cannot exceed the input size of the ml model (={onnx.input_size})"
+            "The number of total input indexes for all inputs and parameter in the interface file "
+            f"(={num_fmu_inputs}) cannot exceed the input size of the ml model (={onnx.input_size})"
         )
     if num_fmu_outputs > onnx.output_size:
         raise ValueError(
-            f"The number of total output indexes for all outputs in the interface file(={num_fmu_outputs}) cannot exceed the output size of the ml model (={onnx.output_size})"
+            "The number of total output indexes for all outputs in the interface file "
+            f"(={num_fmu_outputs}) cannot exceed the output size of the ml model (={onnx.output_size})"
         )
     if num_onnx_states > onnx.state_size:
         raise ValueError(
-            f"The number of total output indexes for all states in the interface file(={num_onnx_states}) cannot exceed either the state input size (={onnx.state_size})"
+            "The number of total output indexes for all states in the interface file "
+            f"(={num_onnx_states}) cannot exceed either the state input size (={onnx.state_size})"
         )
     if num_onnx_state_init > onnx.state_size:
         raise ValueError(
-            f"The number of state that are initialized in the interface file(={num_onnx_state_init}) cannot exceed either the state input size (={onnx.state_size})"
+            "The number of states that are initialized in the interface file "
+            f"(={num_onnx_state_init}) cannot exceed either the state input size (={onnx.state_size})"
         )
 
-    # Flatten vectors to comply with template requirements -> onnx-index, variable-reference, onnx-index, variable-reference ...
+    # Flatten vectors to comply with template requirements
+    # -> onnx-index, variable-reference, onnx-index, variable-reference ...
     flattened_input_string = ", ".join(
         [str(index) for indexValueReferencePair in inputs for index in indexValueReferencePair]
     )
@@ -201,7 +206,9 @@ def validate_interface_spec(
 
     Returns
     -------
-        tuple[Optional[ValidationError], ModelComponent]: The validation error (if any) and the validated model component. The pydantic model instance that contains all the interface information.
+        tuple[Optional[ValidationError], ModelComponent]:
+            The validation error (if any) and the validated model component.
+            The pydantic model instance that contains all the interface information.
     """
 
     parsed_spec = ModelComponent.model_validate_json(json_data=spec, strict=True)

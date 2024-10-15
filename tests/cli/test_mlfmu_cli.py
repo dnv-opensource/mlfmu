@@ -51,12 +51,14 @@ def test_cli(
     Args
     ----
         inputs (List[str]): A list of input arguments to be passed to the CLI.
-        expected (Union[CliArgs, type]): The expected output of the CLI. It can be either an instance of the `CliArgs` class or a subclass of `Exception`.
+        expected (Union[CliArgs, type]): The expected output of the CLI.
+            It can be either an instance of the `CliArgs` class or a subclass of `Exception`.
         monkeypatch (pytest.MonkeyPatch): A pytest fixture that allows patching of objects at runtime.
 
     Raises
     ------
-        AssertionError: If the `expected` argument is neither an instance of `CliArgs` nor a subclass of `Exception`.
+        AssertionError: If the `expected` argument is neither an instance of `CliArgs`
+            nor a subclass of `Exception`.
     """
 
     # sourcery skip: no-conditionals-in-tests
@@ -134,12 +136,14 @@ def test_logging_configuration(
     Args
     ----
         inputs (List[str]): The list of input arguments to be passed to the `main` function.
-        expected (Union[ConfigureLoggingArgs, type]): The expected output of the `main` function. It can be an instance of `ConfigureLoggingArgs` or a subclass of `Exception`.
+        expected (Union[ConfigureLoggingArgs, type]): The expected output of the `main` function.
+        It can be an instance of `ConfigureLoggingArgs` or a subclass of `Exception`.
         monkeypatch (pytest.MonkeyPatch): The monkeypatch fixture provided by pytest.
 
     Raises
     ----
-        AssertionError: If the `expected` argument is neither an instance of `ConfigureLoggingArgs` nor a subclass of `Exception`.
+        AssertionError: If the `expected` argument is neither an instance of `ConfigureLoggingArgs`
+        nor a subclass of `Exception`.
     """
 
     # sourcery skip: no-conditionals-in-tests

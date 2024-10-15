@@ -124,13 +124,13 @@ class MlFmuBuilder:
         self.temp_folder_path: Path = Path(self.temp_folder.name)
         logger.debug(f"Created temp folder: {self.temp_folder_path}")
 
-    # TODO: @KristofferSkare @StephanieKemna Check whether the explicit destructor code is still needed.
-    #       I have changed all attributes from class- to instance attributes.
-    #       With that, no strong reference should be kept to `temp_folder`
-    #       after an instance of MlFmuBuilder runs out of scope
-    #       and becomes a candidate for garbage collection. This _should_ do the job.
-    #       But I remember you had some discussion and investigation around this..  so maybe I am wrong :-)
-    #       CLAROS, 2024-10-15
+    # TODO @KristofferSkare: @StephanieKemna Check whether the explicit destructor code is still needed.
+    #      I have changed all attributes from class- to instance attributes.
+    #      With that, no strong reference should be kept to `temp_folder`
+    #      after an instance of MlFmuBuilder runs out of scope
+    #      and becomes a candidate for garbage collection. This _should_ do the job.
+    #      But I remember you had some discussion and investigation around this..  so maybe I am wrong :-)
+    #      CLAROS, 2024-10-15
     def __del__(self) -> None:
         """
         Destructor for the MlFmuBuilder class.
@@ -144,7 +144,8 @@ class MlFmuBuilder:
         """
         Build an FMU from ml_model_file and interface_file and saves it to fmu_output_folder.
 
-        If the paths to the necessary files and directories are not given the function will try to find files and directories that match the ones needed.
+        If the paths to the necessary files and directories are not given the function
+        will try to find files and directories that match the ones needed.
 
         Raises
         ------
@@ -168,7 +169,7 @@ class MlFmuBuilder:
         self.interface_file = self.interface_file or self.default_interface_file()
         if self.interface_file is None:
             raise FileNotFoundError(
-                "No interface json file was provided and no obvious interface file found in current working directory (os.getcwd())"
+                "No interface json file was provided and no obvious interface file found in current working directory."
             )
         if not self.interface_file.exists():
             raise FileNotFoundError(f"The given interface json file (={self.interface_file}) does not exist.")
@@ -192,9 +193,11 @@ class MlFmuBuilder:
 
     def generate(self) -> None:
         """
-        Generate FMU C++ source code and model description from ml_model_file and interface_file and saves it to source_folder.
+        Generate FMU C++ source code and model description from ml_model_file and interface_file
+        and saves it to source_folder.
 
-        If the paths to the necessary files and directories are not given the function will try to find files and directories that match the ones needed.
+        If the paths to the necessary files and directories are not given the function
+        will try to find files and directories that match the ones needed.
 
         Raises
         ------
@@ -216,7 +219,7 @@ class MlFmuBuilder:
         self.interface_file = self.interface_file or self.default_interface_file()
         if self.interface_file is None:
             raise FileNotFoundError(
-                "No interface json file was provided and no obvious interface file found in current working directory (os.getcwd())"
+                "No interface json file was provided and no obvious interface file found in current working directory."
             )
         if not self.interface_file.exists():
             raise FileNotFoundError(f"The given interface json file (={self.interface_file}) does not exist.")
@@ -232,9 +235,11 @@ class MlFmuBuilder:
 
     def compile(self) -> None:
         """
-        Compile FMU from FMU C++ source code and model description contained in source_folder and saves it to fmu_output_folder.
+        Compile FMU from FMU C++ source code and model description contained in source_folder
+        and saves it to fmu_output_folder.
 
-        If the paths to the necessary files and directories are not given the function will try to find files and directories that match the ones needed.
+        If the paths to the necessary files and directories are not given the function
+        will try to find files and directories that match the ones needed.
 
         Raises
         ------
@@ -250,7 +255,8 @@ class MlFmuBuilder:
             source_child_folder = self.default_compile_source_folder()
             if source_child_folder is None:
                 raise FileNotFoundError(
-                    f"No valid FMU source directory found anywhere inside the current working directory or any given source path (={self.source_folder})."
+                    "No valid FMU source directory found anywhere inside the current working directory "
+                    f"or any given source path (={self.source_folder})."
                 )
             self.fmu_name = source_child_folder.stem
             self.source_folder = source_child_folder.parent
@@ -312,7 +318,8 @@ class MlFmuBuilder:
                     break
                 except Exception:
                     logger.exception("Exception when validating source folder: %s")
-                    # Any folder that does not contain the correct folder structure and files needed for compilation will raise and exception
+                    # Any folder that does not contain the correct folder structure and files
+                    # needed for compilation will raise an exception
                     continue
             # If a match was found stop searching
             if source_folder is not None:

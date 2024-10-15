@@ -26,8 +26,9 @@ def generate_interface_schema(
 
     Args
     ----
-        model (Union[BaseModel, ModelMetaclass]): The pydantic model for which to generate the schema.
-        schema_dir (Union[str, os.PathLike[str], None], optional): The directory where the schema file will be saved. Defaults to None.
+        model (BaseModel | ModelMetaclass): The pydantic model for which to generate the schema.
+        schema_dir (str | os.PathLike[str], optional):
+            The directory where the schema file will be saved. Defaults to None.
     """
     schema_dir_default = Path.cwd() / "docs/schema"
     schema_dir = schema_dir or schema_dir_default
@@ -61,8 +62,10 @@ def generate_interface_docs(
 
     Args
     ----
-        schema_dir (Union[str, os.PathLike[str], None], optional): The directory where the schema files are located. Defaults to None.
-        docs_dir (Union[str, os.PathLike[str], None], optional): The directory where the documentation files will be saved. Defaults to None.
+        schema_dir (str | os.PathLike[str], optional):
+            The directory where the schema files are located. Defaults to None.
+        docs_dir (str | os.PathLike[str], optional):
+            The directory where the documentation files will be saved. Defaults to None.
     """
 
     schema_dir_default = Path.cwd() / "docs/schema"
@@ -119,8 +122,10 @@ def publish_interface_schema(
 
     Args
     ----
-        schema_dir (Union[str, os.PathLike[str], None], optional): The directory where the schema file will be saved. Defaults to None.
-        docs_dir (Union[str, os.PathLike[str], None], optional): The directory where the documentation files will be saved. Defaults to None.
+        schema_dir (str | os.PathLike[str], optional):
+            The directory where the schema file will be saved. Defaults to None.
+        docs_dir (str | os.PathLike[str], optional):
+            The directory where the documentation files will be saved. Defaults to None.
     """
 
     # Generate JSON schema

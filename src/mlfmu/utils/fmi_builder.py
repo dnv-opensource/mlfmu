@@ -39,7 +39,7 @@ def generate_model_description(fmu_model: FmiModel) -> ElementTree:
 
     t = datetime.datetime.now(datetime.timezone.utc)
     date_str = t.isoformat(timespec="seconds")
-    TOOL_VERSION = metadata.version("mlfmu")
+    TOOL_VERSION = metadata.version("mlfmu")  # noqa: N806
 
     # Root <fmiModelDescription> tag
     model_description = {
