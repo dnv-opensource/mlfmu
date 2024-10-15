@@ -18,7 +18,6 @@ def _argparser() -> argparse.ArgumentParser:
     -------
         argparse.ArgumentParser: The ArgumentParser object.
     """
-
     parser = argparse.ArgumentParser(
         prog="mlfmu",
         epilog="_________________mlfmu___________________",
@@ -167,7 +166,6 @@ def main() -> None:
 
     Runs the command line interface and parses arguments and options entered on the console.
     """
-
     parser = _argparser()
     args = parser.parse_args()
 

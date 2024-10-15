@@ -34,7 +34,6 @@ def format_template_file(
         save_path (Path): The path to save the formatted file.
         data (dict[str, str]): The data containing the values to replace in the template.
     """
-
     # TODO: Need to check that these calls are safe from a cybersecurity point of view  # noqa: TD002
     with Path.open(template_path, encoding="utf-8") as template_file:
         template_string = template_file.read()
@@ -56,7 +55,6 @@ def create_model_description(
         fmu (FmiModel): The FMI model.
         src_path (Path): The path to save the model description file.
     """
-
     xml_structure = generate_model_description(fmu_model=fmu)
 
     # Save in file
@@ -71,7 +69,6 @@ def make_fmu_dirs(src_path: Path) -> None:
     ----
         src_path (Path): The path to the FMU source directory.
     """
-
     sources_path = src_path / "sources"
     resources_path = src_path / "resources"
     sources_path.mkdir(parents=True, exist_ok=True)
@@ -90,7 +87,6 @@ def create_files_from_templates(
         data (dict[str, str]): The data containing the values to format the template files.
         fmu_src (Path): The path to the FMU source directory.
     """
-
     sources_path = fmu_src / "sources"
     file_names = ["fmu.cpp", "model_definitions.h"]
 
@@ -120,7 +116,6 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
     -------
         dict[str, str]: The formatted template data.
     """
-
     # Work out template mapping between ONNX and FMU ports
     inputs, outputs, state_init = fmi_model.get_template_mapping()
     state_output_indexes = [
@@ -210,7 +205,6 @@ def validate_interface_spec(
             The validation error (if any) and the validated model component.
             The pydantic model instance that contains all the interface information.
     """
-
     parsed_spec = ModelComponent.model_validate_json(json_data=spec, strict=True)
 
     try:
@@ -239,7 +233,6 @@ def generate_fmu_files(
     -------
         FmiModel: The FMI model.
     """
-
     # Create Path instances for the path to the spec and ONNX file.
     onnx_path = Path(onnx_path)
     interface_spec_path = Path(interface_spec_path)
@@ -326,7 +319,6 @@ def build_fmu(
     ------
         FileNotFoundError: If required files are missing in the FMU source directory.
     """
-
     fmu_src_path = Path(fmu_src_path)
     validate_fmu_source_files(fmu_src_path)
     fmu_name = fmu_src_path.stem

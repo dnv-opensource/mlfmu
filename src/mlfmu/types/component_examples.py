@@ -9,7 +9,6 @@ def create_fmu_signal_example() -> Variable:
     -------
         Variable: An instance of the Variable class representing the FMU signal variable.
     """
-
     return Variable(
         name="dis_yx",
         type=FmiVariableType.REAL,

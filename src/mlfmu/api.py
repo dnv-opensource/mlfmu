@@ -51,7 +51,6 @@ def run(
     source_folder: Optional[str]
         the path to where the FMU source code is located. Will be inferred if not provided.
     """
-
     process = MlFmuProcess(
         command=command,
         source_folder=Path(source_folder) if source_folder is not None else None,
@@ -65,9 +64,9 @@ def run(
 
 
 class MlFmuBuilder:
-    """
-    A class that represents a builder for creating FMUs (Functional Mock-up Units) from machine learning models.
-    This class is for executing the different commands in the mlfmu process.
+    """Builder for creating FMUs (Functional Mock-up Units) from machine learning models.
+
+    This class is core to executing the different commands in the mlfmu process.
 
     Attributes
     ----------
@@ -192,8 +191,9 @@ class MlFmuBuilder:
         logger.debug("MLFmuBuilder: Done with build")
 
     def generate(self) -> None:
-        """
-        Generate FMU C++ source code and model description from ml_model_file and interface_file
+        """Generate C++ source code and model description.
+
+        Generates FMU C++ source code and model description from ml_model_file and interface_file
         and saves it to source_folder.
 
         If the paths to the necessary files and directories are not given the function
@@ -234,8 +234,9 @@ class MlFmuBuilder:
         logger.debug("MLFmuBuilder: Done with generate")
 
     def compile(self) -> None:
-        """
-        Compile FMU from FMU C++ source code and model description contained in source_folder
+        """Compile FMU from C++ source code and model description.
+
+        Compiles FMU from FMU C++ source code and model description contained in source_folder
         and saves it to fmu_output_folder.
 
         If the paths to the necessary files and directories are not given the function
@@ -447,7 +448,6 @@ class MlFmuProcess:
 
         Runs the mlfmu process in a self-terminated loop.
         """
-
         # Run mlfmu process until termination is flagged
         while not self.terminate:
             try:

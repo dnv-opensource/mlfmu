@@ -8,7 +8,8 @@ from onnxruntime import InferenceSession
 
 class ONNXModel:
     """
-    ONNX Metadata class
+    ONNX Metadata class.
+
     Represents an ONNX model and provides methods to load inputs and outputs.
     Allows to import the ONNX file and figure out the input/output sizes.
 
@@ -61,7 +62,6 @@ class ONNXModel:
             onnx_path (Union[str, os.PathLike[str]]): The path to the ONNX file.
             time_input (bool, optional): Flag indicating whether the model uses time input. Defaults to False.
         """
-
         # Load ONNX file into memory
         self.__onnx_path = onnx_path if isinstance(onnx_path, Path) else Path(onnx_path)
         self.__onnx_session = onnxruntime.InferenceSession(onnx_path)
@@ -75,7 +75,6 @@ class ONNXModel:
 
     def load_inputs(self) -> None:
         """Load the inputs from the ONNX file and assign the input name and size."""
-
         # Get inputs from ONNX file
         inputs: list[Any] = self.__onnx_session.get_inputs()
         input_names = [inp.name for inp in inputs]  # No typing support provided by ONNX library

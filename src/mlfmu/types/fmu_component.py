@@ -365,6 +365,7 @@ class FmiVariable:
 class ModelComponent(BaseModelConfig):
     """
     Represents a simulation model component, used to generate the JSON schema for the model interface.
+
     We define the structure of the FMU and how the inputs and outputs of the ONNX model
     correspond to the FMU variables.
 
@@ -591,8 +592,9 @@ class FmiModel:
         self,
         states: list[InternalState],
     ) -> None:
-        """
-        Generate or modifies FmuInputVariables for initialization of states for the InternalState objects
+        """Generate or modify FmuInputVariables for initialization of states.
+
+        Generates or modifies FmuInputVariables for initialization of states for the InternalState objects
         that have set start_value and name or have set initialization_variable.
         Any generated parameters are appended to self.parameters.
 
@@ -600,7 +602,6 @@ class FmiModel:
         ----
             states (List[InternalState]): List of states from JSON interface
         """
-
         init_parameters: list[FmiInputVariable] = []
 
         # TODO @KristofferSkare: Biggest used value reference + 1, will this always be correct?
@@ -666,7 +667,8 @@ class FmiModel:
     def format_fmi_variable(self, var: FmiInputVariable | FmiOutputVariable) -> list[FmiVariable]:
         """
         Get an inclusive list of variables from an interface variable definition.
-           Vectors are separated as N number of signals, being N the size of the array.
+
+        Vectors are separated as N number of signals, being N the size of the array.
 
         Args
         ----

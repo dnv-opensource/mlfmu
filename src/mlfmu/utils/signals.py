@@ -10,7 +10,6 @@ def range_list_expanded(list_of_ranges: list[str]) -> list[int]:
     -------
         A list of all indexes covered in ranges or individual indexes
     """
-
     indexes: list[int] = []
 
     for val in list_of_ranges:

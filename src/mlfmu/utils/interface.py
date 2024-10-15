@@ -67,7 +67,6 @@ def generate_interface_docs(
         docs_dir (str | os.PathLike[str], optional):
             The directory where the documentation files will be saved. Defaults to None.
     """
-
     schema_dir_default = Path.cwd() / "docs/schema"
     schema_dir = schema_dir or schema_dir_default
 
@@ -127,7 +126,6 @@ def publish_interface_schema(
         docs_dir (str | os.PathLike[str], optional):
             The directory where the documentation files will be saved. Defaults to None.
     """
-
     # Generate JSON schema
     generate_interface_schema(model=ModelComponent, schema_dir=schema_dir)
 
