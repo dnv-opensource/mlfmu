@@ -80,7 +80,7 @@ class Variable(BaseModelConfig):
         description="Unique name for the port.",
         examples=["windSpeed", "windDirection"],
     )
-    type: FmiVariableType | None = Field(
+    type: FmiVariableType = Field(
         default=FmiVariableType.REAL,
         description="Data type as defined by FMI standard, defaults to Real.",
         examples=[FmiVariableType.REAL, FmiVariableType.INTEGER],
