@@ -93,7 +93,7 @@ class Variable(BaseModelConfig):
         default=0,
         description="Initial value of the signal at time step 1. Type should match the variable type.",
     )
-    is_array: bool | None = Field(
+    is_array: bool = Field(
         default=False,
         description=(
             "When dealing with an array signal, it is essential to specify the LENGTH parameter. "
