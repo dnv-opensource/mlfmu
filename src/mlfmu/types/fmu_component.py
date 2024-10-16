@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Annotated, Any
 from pydantic import BaseModel, ConfigDict, StringConstraints, model_validator
 from pydantic.fields import Field
 
-from mlfmu.types.component_examples import create_fmu_signal_example
+# from mlfmu.types.component_examples import _create_fmu_signal_example
 from mlfmu.utils.signals import range_list_expanded
 from mlfmu.utils.strings import to_camel
 
@@ -370,6 +370,25 @@ class FmiVariable:
     variability: FmiVariability = FmiVariability.CONTINUOUS
 
 
+def _create_fmu_signal_example() -> Variable:
+    """
+    Create an example FMU signal variable.
+
+    Returns
+    -------
+        Variable: An instance of the Variable class representing the FMU signal variable.
+    """
+    return Variable(
+        name="dis_yx",
+        type=FmiVariableType.REAL,
+        description=None,
+        start_value=None,
+        is_array=None,
+        length=None,
+        variability=None,
+    )
+
+
 class ModelComponent(BaseModelConfig):
     """
     Represents a simulation model component, used to generate the JSON schema for the model interface.
@@ -424,17 +443,17 @@ class ModelComponent(BaseModelConfig):
     inputs: list[InputVariable] = Field(
         default=[],
         description="List of input signals of the simulation model.",
-        examples=[[create_fmu_signal_example()]],
+        examples=[[_create_fmu_signal_example()]],
     )
     outputs: list[OutputVariable] = Field(
         default=[],
         description="List of output signals of the simulation model.",
-        examples=[[create_fmu_signal_example()]],
+        examples=[[_create_fmu_signal_example()]],
     )
     parameters: list[InputVariable] = Field(
         default=[],
         description="List of parameter signals of the simulation model.",
-        examples=[[create_fmu_signal_example()]],
+        examples=[[_create_fmu_signal_example()]],
     )
     states: list[InternalState] = Field(
         default=[],
