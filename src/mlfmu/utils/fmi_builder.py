@@ -83,7 +83,7 @@ def generate_model_description(fmu_model: FmiModel) -> ElementTree:
             "name": var.name,
             "valueReference": str(var.variable_reference),
             "causality": var.causality.value,
-            "description": var.description if var.description else "",
+            "description": var.description or "",
             "variability": var.variability.value if var.variability else FmiVariability.CONTINUOUS.value,
         }
         var_elem = SubElement(variables, "ScalarVariable", var_attrs)
