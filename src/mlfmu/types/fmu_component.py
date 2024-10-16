@@ -72,11 +72,7 @@ class Variable(BaseModelConfig):
         length (Optional[int]): Defines the number of entries in the signal if the signal is array.
     """
 
-    # TODO @KristofferSkare: The `name` field should not be optional, as it is required for the FMU component.
-    #      I think you should change its type from `str | None` to `str` and set `default` to `""`.
-    #      CLAROS, 2024-10-15
-    name: str | None = Field(
-        default=None,
+    name: str = Field(
         description="Unique name for the port.",
         examples=["windSpeed", "windDirection"],
     )
