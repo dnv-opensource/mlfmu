@@ -378,7 +378,6 @@ def _create_fmu_signal_example() -> Variable:
         type=FmiVariableType.REAL,
         description=None,
         start_value=None,
-        is_array=None,
         length=None,
         variability=None,
     )
