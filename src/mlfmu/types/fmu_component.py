@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING, Annotated, Any
 from pydantic import BaseModel, ConfigDict, StringConstraints, model_validator
 from pydantic.fields import Field
 
-# from mlfmu.types.component_examples import _create_fmu_signal_example
 from mlfmu.utils.signals import range_list_expanded
 from mlfmu.utils.strings import to_camel
 
