@@ -92,8 +92,6 @@ class MlFmuBuilder:
     __init__(self, fmu_name=None, interface_file=None, ml_model_file=None, source_folder=None,
              fmu_output_folder=None, build_folder=None, root_directory=None)
         Initializes a new instance of the MlFmuBuilder class.
-    __del__(self)
-        Destructor for the MlFmuBuilder class.
     build(self)
         Builds an FMU from the machine learning model file and interface file.
     generate(self)
@@ -122,22 +120,6 @@ class MlFmuBuilder:
         self.temp_folder: tempfile.TemporaryDirectory[str] = tempfile.TemporaryDirectory(prefix="mlfmu_")
         self.temp_folder_path: Path = Path(self.temp_folder.name)
         logger.debug(f"Created temp folder: {self.temp_folder_path}")
-
-    # TODO @KristofferSkare: @StephanieKemna Check whether the explicit destructor code is still needed.
-    #      I have changed all attributes from class- to instance attributes.
-    #      With that, no strong reference should be kept to `temp_folder`
-    #      after an instance of MlFmuBuilder runs out of scope
-    #      and becomes a candidate for garbage collection. This _should_ do the job.
-    #      But I remember you had some discussion and investigation around this..  so maybe I am wrong :-)
-    #      CLAROS, 2024-10-15
-    def __del__(self) -> None:
-        """
-        Destructor for the MlFmuBuilder class.
-
-        This method is automatically called when the object is about to be destroyed.
-        The destructor should automatically delete the temporary directory (goes out of scope).
-        """
-        logger.debug("MlFmuBuilder: destructor called, removing temporary build directory.")
 
     def build(self) -> None:
         """
