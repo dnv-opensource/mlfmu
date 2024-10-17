@@ -172,7 +172,7 @@ git clone https://github.com/dnv-innersource/mlfmu path/to/your/dev/mlfmu
 git submodule update --init --recursive
 ```
 
-### 4. Install Conan
+### 4. Install Visual Studio Build Tools
 
 We use conan for building the FMU. For the conan building to work later on, you will need the Visual Studio Build tools 2022 to be installed. It is best to do this **before** installing conan (which gets installed as part of the package dependencies, see step 5). You can download and install the Build Tools for VS 2022 (for free) from <https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022>.
 
