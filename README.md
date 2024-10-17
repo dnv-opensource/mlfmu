@@ -115,7 +115,7 @@ Given that you have an ML model, you now need to:
 2. Compile the FMU:
 
 ```sh
-mlfmu build --interface-file Interface.json --model-file model.onnx
+mlfmu build --interface-file interface.json --model-file model.onnx
 ```
 
 or if the files are in your current working directory:

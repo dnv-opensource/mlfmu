@@ -1,5 +1,5 @@
 [requires]
-onnxruntime/1.18.1@stc/dev
+onnxruntime/1.18.1
 
 [options]
 *:shared=False
