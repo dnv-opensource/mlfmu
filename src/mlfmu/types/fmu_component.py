@@ -583,7 +583,7 @@ class FmiModel:
         if var.is_array:
             for idx, var_ref in enumerate(var.variable_references):
                 # Create port names that contain the index starting from 1. E.i signal[1], signal[2] ...
-                name = f"{var.name}[{idx+1}]"
+                name = f"{var.name}[{idx}]"
                 fmi_var = FmiVariable(
                     name=name,
                     variable_reference=var_ref,
@@ -604,7 +604,7 @@ class FmiModel:
                 description=var.description or "",
                 variability=var.variability
                 or (FmiVariability.CONTINUOUS if var.causality != FmiCausality.PARAMETER else FmiVariability.TUNABLE),
-                start_value=var.start_value or 0,
+                start_value=var.start_value if var.start_value is not None else 0,
                 type=var.type or FmiVariableType.REAL,
             )
             variables.append(fmi_var)
