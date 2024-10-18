@@ -159,11 +159,11 @@ class InternalState(BaseModelConfig):
             )
         if (not start_value) and name:
             raise ValueError(
-                "name is set without start_value being set. Both fields needs to be set for the state initialization to be valid"
+                "name is set without start_value being set. Both fields need to be set for the state initialization to be valid"
             )
         if start_value and (not name):
             raise ValueError(
-                "start_value is set without name being set. Both fields needs to be set for the state initialization to be valid"
+                "start_value is set without name being set. Both fields need to be set for the state initialization to be valid"
             )
         return self
 
@@ -320,7 +320,7 @@ class ModelComponent(BaseModelConfig):
         state_initialization_reuse (bool): Whether variables are allowed to be reused for state initialization when initialization_variable is used for state initialization. If set to true the variable referred to in initialization_variable will be repeated for the state initialization until the entire state is initialized.
     """
 
-    name: str = Field(None, description="The name of the simulation model.")
+    name: str = Field(description="The name of the simulation model.")
     version: str = Field("0.0.1", description="The version number of the model.")
     author: Optional[str] = Field(None, description="Name or email of the model's author.")
     description: Optional[str] = Field("", description="Brief description of the model.")
