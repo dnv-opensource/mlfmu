@@ -1,15 +1,16 @@
-from pathlib import Path
-from mlfmu.types.fmu_component import FmiModel
-from mlfmu.utils.fmi_builder import generate_model_description
-from mlfmu.utils.builder import validate_interface_spec
 import json
+
+from mlfmu.types.fmu_component import FmiModel
+from mlfmu.utils.builder import validate_interface_spec
+from mlfmu.utils.fmi_builder import generate_model_description
+
 
 def test_generate_simple_model_description():
     valid_spec = {
         "name": "example",
         "version": "1.0",
         "inputs": [{"name": "input1", "description": "My input1", "agentInputIndexes": ["0"], "type": "integer"}],
-        "outputs": [{"name": "output1", "description": "My output1", "agentInputIndexes": ["0"]}]
+        "outputs": [{"name": "output1", "description": "My output1", "agentInputIndexes": ["0"]}],
     }
     _, model = validate_interface_spec(json.dumps(valid_spec))
     assert model is not None
@@ -31,18 +32,21 @@ def test_generate_simple_model_description():
     assert variables[1].attrib["description"] == "My output1"
     assert variables[1][0].tag == "Real"
 
+
 def test_generate_model_description_with_internal_state_params():
     valid_spec = {
         "name": "example",
         "version": "1.0",
-        "states": [{
-            "name": "state1",
-            "description": "My state1",
-            "startValue": 0.0,
-            "type": "real",
-            "agentOutputIndexes": ["0"]
-        }],
-        "outputs": [{"name": "output1", "description": "My output1", "agentInputIndexes": ["0"]}]
+        "states": [
+            {
+                "name": "state1",
+                "description": "My state1",
+                "startValue": 0.0,
+                "type": "real",
+                "agentOutputIndexes": ["0"],
+            }
+        ],
+        "outputs": [{"name": "output1", "description": "My output1", "agentInputIndexes": ["0"]}],
     }
     _, model = validate_interface_spec(json.dumps(valid_spec))
     assert model is not None
@@ -60,12 +64,30 @@ def test_generate_model_description_with_internal_state_params():
     assert variables[1].attrib["name"] == "output1"
     assert variables[1].attrib["causality"] == "output"
 
+
 def test_generate_vector_ports():
     valid_spec = {
         "name": "example",
         "version": "1.0",
-        "inputs": [{ "name": "inputVector", "description": "My input1", "agentInputIndexes": ["0:5"], "type": "real", "isArray": True, "length": 5}],
-        "outputs": [{"name": "outputVector", "description": "My output1", "agentInputIndexes": ["0:5"], "isArray": True, "length": 5}]
+        "inputs": [
+            {
+                "name": "inputVector",
+                "description": "My input1",
+                "agentInputIndexes": ["0:5"],
+                "type": "real",
+                "isArray": True,
+                "length": 5,
+            }
+        ],
+        "outputs": [
+            {
+                "name": "outputVector",
+                "description": "My output1",
+                "agentInputIndexes": ["0:5"],
+                "isArray": True,
+                "length": 5,
+            }
+        ],
     }
     _, model = validate_interface_spec(json.dumps(valid_spec))
     assert model is not None
@@ -87,14 +109,29 @@ def test_generate_vector_ports():
     assert variables[8].attrib["name"] == "outputVector[3]"
     assert variables[9].attrib["name"] == "outputVector[4]"
 
+
 def test_generate_model_description_with_start_value():
     valid_spec = {
         "name": "example",
         "version": "1.0",
         "usesTime": True,
-        "inputs": [{"name": "input1", "description": "My input1", "agentInputIndexes": ["0"], "type": "integer", "startValue": 10},
-                   {"name": "input2", "description": "My input2", "agentOutputIndexes": ["0"], "type": "boolean", "startValue": True},
-                   {"name": "input3", "description": "My input3", "agentOutputIndexes": ["0"], "startValue": 10.0}],
+        "inputs": [
+            {
+                "name": "input1",
+                "description": "My input1",
+                "agentInputIndexes": ["0"],
+                "type": "integer",
+                "startValue": 10,
+            },
+            {
+                "name": "input2",
+                "description": "My input2",
+                "agentOutputIndexes": ["0"],
+                "type": "boolean",
+                "startValue": True,
+            },
+            {"name": "input3", "description": "My input3", "agentOutputIndexes": ["0"], "startValue": 10.0},
+        ],
     }
     _, model = validate_interface_spec(json.dumps(valid_spec))
     assert model is not None
@@ -119,16 +156,33 @@ def test_generate_model_description_with_start_value():
     assert variables[2][0].tag == "Real"
     assert variables[2][0].attrib["start"] == "10.0"
 
+
 def test_generate_model_description_output():
     valid_spec = {
         "name": "example",
         "version": "1.0",
         "usesTime": True,
-        "inputs": [{"name": "input1", "description": "My input1", "agentInputIndexes": ["0"], "type": "integer", "startValue": 10},
-                   {"name": "input2", "description": "My input2", "agentOutputIndexes": ["0"], "type": "boolean", "startValue": True},
-                   {"name": "input3", "description": "My input3", "agentOutputIndexes": ["0"], "startValue": 10.0}],
-        "outputs": [{"name": "output1", "description": "My output1", "agentInputIndexes": ["0"], "type": "real"},
-                    {"name": "output1", "description": "My output1", "agentInputIndexes": ["0"], "type": "real"}]
+        "inputs": [
+            {
+                "name": "input1",
+                "description": "My input1",
+                "agentInputIndexes": ["0"],
+                "type": "integer",
+                "startValue": 10,
+            },
+            {
+                "name": "input2",
+                "description": "My input2",
+                "agentOutputIndexes": ["0"],
+                "type": "boolean",
+                "startValue": True,
+            },
+            {"name": "input3", "description": "My input3", "agentOutputIndexes": ["0"], "startValue": 10.0},
+        ],
+        "outputs": [
+            {"name": "output1", "description": "My output1", "agentInputIndexes": ["0"], "type": "real"},
+            {"name": "output1", "description": "My output1", "agentInputIndexes": ["0"], "type": "real"},
+        ],
     }
     _, model = validate_interface_spec(json.dumps(valid_spec))
     assert model is not None
