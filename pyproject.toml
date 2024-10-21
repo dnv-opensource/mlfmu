@@ -81,6 +81,7 @@ dev-dependencies = [
     "sphinx-autodoc-typehints>=2.2",
     "myst-parser>=4.0",
     "furo>=2024.8",
+    "matplotlib>=3.9",
 ]
 native-tls = true
 
