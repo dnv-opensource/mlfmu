@@ -1,7 +1,7 @@
 
 # Style Guide
 
-All code shall be [black](https://pypi.org/project/black/) formatted.
+All code shall be [Ruff](https://docs.astral.sh/ruff) formatted.
 
 References, details as well as examples of bad/good styles and their respective reasoning can be found below.
 
@@ -13,13 +13,12 @@ References, details as well as examples of bad/good styles and their respective 
 * [Documenting Python Code: A Complete Guide](https://realpython.com/documenting-python-code)
 * [Jupyter](https://jupyter.readthedocs.io/en/latest/contributing/ipython-dev-guide/coding_style.html) style guide
 * Python style guide on [learnpython.com](https://learnpython.com/blog/python-coding-best-practices-and-style-guidelines/)
-* [flake8](https://flake8.pycqa.org/en/latest/)
-* [black](https://pypi.org/project/black/)
+* [Ruff](https://docs.astral.sh/ruff)
 
 ## Code Layout
 
 * Use 4 spaces instead of tabs
-* Maximum line length is 88 characters (not 79 as proposed in [PEP-8](https://www.python.org/dev/peps/pep-0008/))
+* Maximum line length is 120 characters (not 79 as proposed in [PEP-8](https://www.python.org/dev/peps/pep-0008/))
 * 2 blank lines between classes and functions
 * 1 blank line within class, between class methods
 * Use blank lines for logic separation of functionality within functions/methods wherever it is justified

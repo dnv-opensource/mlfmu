@@ -1,0 +1,13 @@
+[paths]
+source =
+    src/mlfmu
+    */site-packages/mlfmu
+
+[run]
+source = mlfmu
+branch = True
+
+[report]
+fail_under = 10.0
+show_missing = True
+skip_covered = True

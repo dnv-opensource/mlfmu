@@ -50,6 +50,7 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+cover/
 
 # Translations
 *.mo
@@ -70,8 +71,10 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+_autosummary
 
 # PyBuilder
+.pybuilder/
 target/
 
 # Jupyter Notebook
@@ -84,14 +87,14 @@ ipython_config.py
 # pyenv
 .python-version
 
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+# uv
+#   It is generally recommended to include `uv.lock` in version control.
 #   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
+#   having no cross-platform support, `uv` might install dependencies in one environment that don't work in another.
+#   In such case, `uv.lock` should be added to `.gitignore`
+# uv.lock
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
 __pypackages__/
 
 # Celery stuff
@@ -128,16 +131,30 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# Ruff
+.ruff_cache
+
 # PyCharm
 .idea
 
-# VS Code Settings
+# VS Code
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
+
+# Inside /examples folder: ignore temporary logs, db's and local data files
+examples/**/*.log
+examples/**/*.db
+examples/**/*.nc
 
 # Cmake generated files
 CMakeUserPresets.json

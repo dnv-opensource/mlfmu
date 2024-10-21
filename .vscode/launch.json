@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Python: Debug Tests",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "purpose": [
@@ -19,37 +19,35 @@
             "autoReload": {
                 "enable": true
             },
-            "justMyCode": false,
+            "justMyCode": true,
         },
         {
-            "name": "Python: Current File, cwd = file dir, envFile",
-            "type": "python",
+            "name": "Python: Current File, cwd = file dir",
+            "type": "debugpy",
             "request": "launch",
             "cwd": "${fileDirname}", // working dir = dir where current file is
             "program": "${file}",
             "console": "integratedTerminal",
-            "justMyCode": false,
+            "justMyCode": true,
             "autoReload": {
                 "enable": true
             },
-            "envFile": "${workspaceFolder}/.env" // specify where mvx is
         },
         {
-            "name": "Python: Current File, cwd = workspace root folder, envFile",
-            "type": "python",
+            "name": "Python: Current File, cwd = workspace root folder",
+            "type": "debugpy",
             "request": "launch",
-            "cwd": "${workspaceFolder}", // working dir = workspace (mvx) dir
+            "cwd": "${workspaceFolder}", // working dir = workspace root folder
             "program": "${file}",
             "console": "integratedTerminal",
             "autoReload": {
                 "enable": true
             },
-            "justMyCode": false,
-            "envFile": "${workspaceFolder}/.env" // specify where mvx is
+            "justMyCode": true,
         },
         {
             "name": "mlfmu test_cli",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "cwd": "${workspaceFolder}\\tests",
             "program": "${workspaceFolder}\\src\\mlfmu\\cli\\mlfmu.py",
@@ -62,7 +60,7 @@
             "autoReload": {
                 "enable": true
             },
-            "justMyCode": false,
+            "justMyCode": true,
         },
     ]
 }
