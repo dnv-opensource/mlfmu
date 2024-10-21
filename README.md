@@ -151,19 +151,12 @@ Once installed, you can update `uv` to its latest version, anytime, by running:
 uv self update
 ```
 
-### 2. Install Python
-This project requires Python 3.10 or later. <br>
-If you don't already have a compatible version installed on your machine, the probably most comfortable way to install Python is through `uv`:
-```sh
-uv python install
-```
-This will install the latest stable version of Python into the uv Python directory, i.e. as a uv-managed version of Python.
+### 2. Install Visual Studio Build Tools
 
-Alternatively, and if you want a standalone version of Python on your machine, you can install Python either via `winget`:
-```sh
-winget install --id Python.Python
-```
-or you can download and install Python from the [python.org](https://www.python.org/downloads/) website.
+We use conan for building the FMU. For the conan building to work later on, you will need the Visual Studio Build tools 2022 to be installed. It is best to do this **before** installing conan (which gets installed as part of the package dependencies, see step 5). You can download and install the Build Tools for VS 2022 (for free) from <https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022>.
+
+> Note: After you installed conan, you want to make sure it has the correct build profile. You can auto-detect and create the profile by running `conan profile detect`. After this, you can check the profile in `C:\Users\<USRNAM>\.conan2\profiles\.default` (replace `<USRNAM>` with your username). You want to `compiler=msvc`, `compiler.cppstd=17`, `compiler.version=193` (for Windows).
+
 
 ### 3. Clone the repository
 Clone the mlfmu repository into your local development directory:
@@ -172,20 +165,26 @@ git clone https://github.com/dnv-innersource/mlfmu path/to/your/dev/mlfmu
 git submodule update --init --recursive
 ```
 
-### 4. Install Visual Studio Build Tools
-
-We use conan for building the FMU. For the conan building to work later on, you will need the Visual Studio Build tools 2022 to be installed. It is best to do this **before** installing conan (which gets installed as part of the package dependencies, see step 5). You can download and install the Build Tools for VS 2022 (for free) from <https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022>.
-
-> Note: After you installed conan, you want to make sure it has the correct build profile. You can auto-detect and create the profile by running `conan profile detect`. After this, you can check the profile in `C:\Users\<USRNAM>\.conan2\profiles\.default` (replace `<USRNAM>` with your username). You want to `compiler=msvc`, `compiler.cppstd=17`, `compiler.version=193` (for Windows).
-
-
-### 5. Install dependencies
+### 4. Install dependencies
 Run `uv sync` to create a virtual environment and install all project dependencies into it:
 ```sh
 uv sync
 ```
+Use the command line option `-p` to specifiy the Python version to resolve the dependencies against.
+For instance, use `-p 3.12` to specify Python 3.12 .
+```sh
+uv sync -p 3.12
+```
+> Note: In case the specified Python version is not found on your machine, `uv sync` will automatically download and install it.
 
-### 6. (Optional) Activate the virtual environment
+Optionally, use `-U` in addition to allow package upgrades. Especially in cases when you change to a newer Python version, adding `-U` can be useful. <br>
+It allows the dependency resolver to upgrade dependencies to newer versions, which might be necessary to support the (newer) Python version you specified.
+```sh
+uv sync -p 3.12 -U
+```
+
+
+### 5. (Optional) Activate the virtual environment
 When using `uv`, there is in almost all cases no longer a need to manually activate the virtual environment. <br>
 `uv` will find the `.venv` virtual environment in the working directory or any parent directory, and activate it on the fly whenever you run a command via `uv` inside your project folder structure:
 ```sh
@@ -204,7 +203,7 @@ To manually activate the virtual environment, run one of the "known" legacy comm
 source .venv/bin/activate
 ```
 
-### 7. Install pre-commit hooks
+### 6. Install pre-commit hooks
 The `.pre-commit-config.yaml` file in the project root directory contains a configuration for pre-commit hooks.
 To install the pre-commit hooks defined therein in your local git repository, run:
 ```sh
@@ -214,14 +213,13 @@ uv run pre-commit install
 All pre-commit hooks configured in `.pre-commit-config.yaml` will now run each time you commit changes.
 
 
-### 8. Test that the installation works
+### 7. Test that the installation works
 To test that the installation works, run pytest in the project root folder:
 ```sh
 uv run pytest
 ```
 
-
-### 9. Run an example
+### 8. Run an example
 
 ```sh
 cd .\examples\wind_generator\config\
