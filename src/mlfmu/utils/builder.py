@@ -140,7 +140,7 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
         )
     if num_onnx_state_init > onnx.state_size:
         raise ValueError(
-            f"The number of state that are initialized in the interface file(={num_onnx_state_init}) cannot exceed either the state input size (={onnx.state_size})"
+            f"The number of states that are initialized in the interface file(={num_onnx_state_init}) cannot exceed the state input size (={onnx.state_size})"
         )
 
     # Flatten vectors to comply with template requirements -> onnx-index, variable-reference, onnx-index, variable-reference ...
