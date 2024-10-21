@@ -5,6 +5,12 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### Changed
+
+* Added missing unit tests for the template data generated when building the FMU.
+* Unit tests for the modelDescription.xml generation.
+* Unit tests for the Interface JSON validation.
+
 ### Dependencies
 * Updated to download-artifact@v4  (from download-artifact@v3)
 
