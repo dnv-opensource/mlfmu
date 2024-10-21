@@ -185,15 +185,15 @@ uv sync -p 3.12 -U
 
 
 ### 5. (Optional) Activate the virtual environment
-When using `uv`, there is in almost all cases no longer a need to manually activate the virtual environment. <br>
-`uv` will find the `.venv` virtual environment in the working directory or any parent directory, and activate it on the fly whenever you run a command via `uv` inside your project folder structure:
+When using `uv`, most of the time there will be no longer a need to manually activate the virtual environment. <br>
+Whenever you run a command via `uv run` inside your project folder structure, `uv` will find the `.venv` virtual environment in the working directory or any parent directory, and activate it on the fly:
 ```sh
 uv run <command>
 ```
 
 However, you still _can_ manually activate the virtual environment if needed.
-When developing in an IDE, for instance, this can in some cases be necessary depending on your IDE settings.
-To manually activate the virtual environment, run one of the "known" legacy commands: <br>
+While we did not face any issues using VS Code as IDE, you might e.g. use an IDE which needs the .venv manually activated in order to properly work. <br>
+If this is the case, you can anytime activate the virtual environment using one of the "known" legacy commands: <br>
 ..on Windows:
 ```sh
 .venv\Scripts\activate.bat
