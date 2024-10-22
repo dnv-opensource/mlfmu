@@ -1,5 +1,6 @@
 import json
 
+import pytest
 from pydantic import ValidationError
 
 from mlfmu.types.fmu_component import ModelComponent
@@ -33,13 +34,13 @@ def test_validate_interface_spec_wrong_types():
         "inputs": [{"name": "input1", "type": "enum"}],  # Missing enum type
         "outputs": [{"name": "output1", "type": "int"}],  # Should be integer
     }
-    error, model = validate_interface_spec(json.dumps(invalid_spec))
-    assert error
-    assert model is None
-    assert isinstance(error, ValidationError)
+
+    with pytest.raises(ValidationError) as exc_info:
+        _, _ = validate_interface_spec(json.dumps(invalid_spec))
+
     # Model type error as it's missing the agentInputIndexes
-    assert error.errors()[0]["msg"] == "Input should be 'real', 'integer', 'string' or 'boolean'"
-    assert error.errors()[1]["msg"] == "Input should be 'real', 'integer', 'string' or 'boolean'"
+    assert exc_info.match("Input should be 'real', 'integer', 'string' or 'boolean'")
+    assert exc_info.match("Input should be 'real', 'integer', 'string' or 'boolean'")
 
 
 def test_validate_unnamed_spec():
@@ -48,11 +49,11 @@ def test_validate_unnamed_spec():
         "inputs": [{"name": "input1", "description": "My input1", "agentInputIndexes": ["0"], "type": "integer"}],
         "outputs": [{"name": "output1", "description": "My output1", "agentInputIndexes": ["0"]}],
     }
-    error, model = validate_interface_spec(json.dumps(invalid_spec))
-    assert error
-    assert model is None
-    assert isinstance(error, ValidationError)
-    assert error.errors()[0]["msg"] == "Field required"
+
+    with pytest.raises(ValidationError) as exc_info:
+        _, _ = validate_interface_spec(json.dumps(invalid_spec))
+
+    assert exc_info.match("Field required")
 
 
 def test_validate_invalid_agent_indices():
@@ -66,15 +67,13 @@ def test_validate_invalid_agent_indices():
             {"name": "output1", "description": "My output1", "agentOutputIndexes": ["0:a"]}
         ],  # Should not have letters
     }
-    error, model = validate_interface_spec(json.dumps(invalid_spec))
-    assert error
-    assert model is None
-    assert isinstance(error, ValidationError)
-    assert len(error.errors()) == 4
-    assert error.errors()[0]["msg"] == "Input should be a valid string"
-    assert error.errors()[1]["msg"] == "String should match pattern '^(\\d+|\\d+:\\d+)$'"
-    assert error.errors()[1]["msg"] == "String should match pattern '^(\\d+|\\d+:\\d+)$'"
-    assert error.errors()[2]["msg"] == "String should match pattern '^(\\d+|\\d+:\\d+)$'"
+
+    with pytest.raises(ValidationError) as exc_info:
+        _, _ = validate_interface_spec(json.dumps(invalid_spec))
+
+    assert exc_info.match("Input should be a valid string")
+    assert exc_info.match("String should match pattern")
+    assert exc_info.match("4 validation errors for ModelComponent")
 
 
 def test_validate_default_parameters():
@@ -121,23 +120,18 @@ def test_validate_internal_states():
             {"description": "My state4", "startValue": 10},
         ],
     }
-    error, model = validate_interface_spec(json.dumps(invalid_spec))
-    assert error is not None
-    assert model is None
-    assert isinstance(error, ValidationError)
-    assert (
-        error.errors()[0]["msg"]
-        == "Value error, Only one state initialization method is allowed to be used at a time: initialization_variable cannot be set if either start_value or name is set."
+    with pytest.raises(ValidationError) as exc_info:
+        _, _ = validate_interface_spec(json.dumps(invalid_spec))
+
+    assert exc_info.match(
+        "Value error, Only one state initialization method is allowed to be used at a time: initialization_variable cannot be set if either start_value or name is set."
     )
-    assert (
-        error.errors()[1]["msg"]
-        == "Value error, name is set without start_value being set. Both fields need to be set for the state initialization to be valid"
+    assert exc_info.match(
+        "Value error, name is set without start_value being set. Both fields need to be set for the state initialization to be valid"
     )
-    assert (
-        error.errors()[2]["msg"]
-        == "Value error, Only one state initialization method is allowed to be used at a time: initialization_variable cannot be set if either start_value or name is set."
+    assert exc_info.match(
+        "Value error, Only one state initialization method is allowed to be used at a time: initialization_variable cannot be set if either start_value or name is set."
     )
-    assert (
-        error.errors()[3]["msg"]
-        == "Value error, start_value is set without name being set. Both fields need to be set for the state initialization to be valid"
+    assert exc_info.match(
+        "Value error, start_value is set without name being set. Both fields need to be set for the state initialization to be valid"
     )

@@ -3,7 +3,7 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import List
 
 from pydantic import ValidationError
 
@@ -182,7 +182,7 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
 
 def validate_interface_spec(
     spec: str,
-) -> tuple[ValidationError | ValueError| None, ModelComponent | None]:
+) -> tuple[ValidationError | None, ModelComponent]:
     """
     Parse and validate JSON data from the interface file.
 
@@ -194,14 +194,11 @@ def validate_interface_spec(
     -------
         tuple[Optional[ValidationError], ModelComponent]: The validation error (if any) and the validated model component. The pydantic model instance that contains all the interface information.
     """
-
+    parsed_spec = ModelComponent.model_validate_json(json_data=spec, strict=True)
     try:
-        parsed_spec = ModelComponent.model_validate_json(json_data=spec, strict=True)
         validated_model = ModelComponent.model_validate(parsed_spec)
     except ValidationError as e:
-        return e, None
-    except ValueError as e:
-        return e, None
+        return e, parsed_spec
 
     return None, validated_model
 
