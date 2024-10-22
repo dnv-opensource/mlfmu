@@ -3,7 +3,7 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from pydantic import ValidationError
 
@@ -182,7 +182,7 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
 
 def validate_interface_spec(
     spec: str,
-) -> tuple[ValidationError | None, ModelComponent]:
+) -> tuple[Optional[ValidationError], ModelComponent]:
     """
     Parse and validate JSON data from the interface file.
 
