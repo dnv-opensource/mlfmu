@@ -182,7 +182,7 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
 
 def validate_interface_spec(
     spec: str,
-) -> tuple[Union[ValidationError, ValueError, None], Optional[ModelComponent]]:
+) -> tuple[ValidationError | ValueError| None, ModelComponent | None]:
     """
     Parse and validate JSON data from the interface file.
 
