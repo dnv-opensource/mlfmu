@@ -235,7 +235,6 @@ def generate_fmu_files(
         # Display error and finish workflow
         raise error
 
-    assert component_model
     # Create ONNXModel and FmiModel instances -> load some metadata
     onnx_model = ONNXModel(onnx_path=onnx_path, time_input=bool(component_model.uses_time))
     fmi_model = FmiModel(model=component_model)
