@@ -707,7 +707,7 @@ class FmiModel:
 
         if var.is_array:
             for idx, var_ref in enumerate(var.variable_references):
-                # Create port names that contain the index starting from 1. E.i signal[1], signal[2] ...
+                # Create port names that contain the index starting from 1. E.i signal[0], signal[1] ...
                 name = f"{var.name}[{idx}]"
                 fmi_var = FmiVariable(
                     name=name,
