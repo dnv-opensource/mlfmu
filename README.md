@@ -273,7 +273,7 @@ Stephanie Kemna - [@LinkedIn](https://www.linkedin.com/in/stephaniekemna/) - <st
 
 ## Contributing
 
-1. Fork it (<https://github.com/dnv-innersource/mlfmu/fork>) (Note: this is currently disabled for this repo. For DNV internal development, continue with the next step.)
+1. Fork it (<https://github.com/dnv-innersource/mlfmu/fork>) (Note: this is currently disabled for this repo. For development, continue with the next step.)
 2. Create an issue in your GitHub repo
 3. Create your branch based on the issue number and type (`git checkout -b issue-name`)
 4. Evaluate and stage the changes you want to commit (`git add -i`)
