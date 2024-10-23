@@ -124,14 +124,18 @@ def test_validate_internal_states():
         _, _ = validate_interface_spec(json.dumps(invalid_spec))
 
     assert exc_info.match(
-        "Value error, Only one state initialization method is allowed to be used at a time: initialization_variable cannot be set if either start_value or name is set."
+        "Value error, Only one state initialization method is allowed to be used at a time: \
+initialization_variable cannot be set if either start_value or name is set."
     )
     assert exc_info.match(
-        "Value error, name is set without start_value being set. Both fields need to be set for the state initialization to be valid"
+        "Value error, name is set without start_value being set. \
+Both fields need to be set for the state initialization to be valid"
     )
     assert exc_info.match(
-        "Value error, Only one state initialization method is allowed to be used at a time: initialization_variable cannot be set if either start_value or name is set."
+        "Value error, Only one state initialization method is allowed to be used at a time: \
+initialization_variable cannot be set if either start_value or name is set."
     )
     assert exc_info.match(
-        "Value error, start_value is set without name being set. Both fields need to be set for the state initialization to be valid"
+        "Value error, start_value is set without name being set. \
+Both fields need to be set for the state initialization to be valid"
     )

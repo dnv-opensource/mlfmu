@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -78,13 +79,16 @@ def test_template_data_invalid_input_size(wind_generator_onnx: ONNXModel):
     assert model is not None
 
     fmi_model = FmiModel(model=model)
-    try:
+
+    with pytest.raises(ValueError) as exc_info:
         _ = format_template_data(onnx=wind_generator_onnx, fmi_model=fmi_model, model_component=model)
-    except ValueError as err:
-        assert (
-            str(err)
-            == "The number of total input indexes for all inputs and parameter in the interface file(=12) cannot exceed the input size of the ml model (=2)"
+
+    assert exc_info.match(
+        re.escape(
+            "The number of total input indexes for all inputs and parameter in the interface file (=12) \
+cannot exceed the input size of the ml model (=2)"
         )
+    )
 
 
 def test_template_data_invalid_output_size(wind_generator_onnx: ONNXModel):
@@ -98,16 +102,16 @@ def test_template_data_invalid_output_size(wind_generator_onnx: ONNXModel):
             {
                 "name": "outputs",
                 "description": "My outputs",
-                "agentInputIndexes": ["0:2"],
+                "agentOutputIndexes": ["0:2"],
                 "isArray": True,
                 "length": 2,
             },
             {
                 "name": "outputs2",
                 "description": "My outputs 2",
-                "agentInputIndexes": ["0:10"],
+                "agentOutputIndexes": ["0:200"],
                 "isArray": True,
-                "length": 10,
+                "length": 200,
             },
         ],
         "states": [
@@ -118,16 +122,17 @@ def test_template_data_invalid_output_size(wind_generator_onnx: ONNXModel):
     }
 
     _, model = validate_interface_spec(json.dumps(valid_spec))
-    assert model is not None
-
     fmi_model = FmiModel(model=model)
-    try:
+
+    with pytest.raises(ValueError) as exc_info:
         _ = format_template_data(onnx=wind_generator_onnx, fmi_model=fmi_model, model_component=model)
-    except ValueError as err:
-        assert (
-            str(err)
-            == "The number of total output indexes for all outputs in the interface file(=12) cannot exceed the output size of the ml model (=2)"
+
+    assert exc_info.match(
+        re.escape(
+            "The number of total output indexes for all outputs in the interface file (=202) \
+cannot exceed the output size of the ml model (=130)"
         )
+    )
 
 
 def test_template_data_invalid_state_size(wind_generator_onnx: ONNXModel):
@@ -149,10 +154,13 @@ def test_template_data_invalid_state_size(wind_generator_onnx: ONNXModel):
     assert model is not None
 
     fmi_model = FmiModel(model=model)
-    try:
+
+    with pytest.raises(ValueError) as exc_info:
         _ = format_template_data(onnx=wind_generator_onnx, fmi_model=fmi_model, model_component=model)
-    except ValueError as err:
-        assert (
-            str(err)
-            == "The number of total output indexes for all states in the interface file(=198) cannot exceed either the state input size (=130)"
+
+    assert exc_info.match(
+        re.escape(
+            "The number of total output indexes for all states in the interface file (=198) \
+cannot exceed either the state input size (=130)"
         )
+    )

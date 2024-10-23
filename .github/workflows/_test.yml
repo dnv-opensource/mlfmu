@@ -4,31 +4,34 @@ on: workflow_call
 
 jobs:
   test:
-    name: Test on ${{matrix.python.toxenv}}-${{matrix.platform.toxenv}}
+    name: Test on ${{matrix.python.version}}-${{matrix.platform.runner}}
     runs-on: ${{ matrix.platform.runner }}
     strategy:
       matrix:
         platform:
           - runner: ubuntu-latest
-            toxenv: linux
           - runner: windows-latest
-            toxenv: windows
+          # - runner: macos-latest
         python:
-          - version: '3.9'
-            toxenv: 'py39'
           - version: '3.10'
-            toxenv: 'py310'
           - version: '3.11'
-            toxenv: 'py311'
           - version: '3.12'
-            toxenv: 'py312'
     steps:
       - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
       - name: Install Python ${{ matrix.python.version }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python.version }}
-      - name: Install tox
-        run: python -m pip install tox-uv
+      - name: Install the project
+        run: uv sync --upgrade -p ${{ matrix.python.version }} --no-dev
+      - name: Install pytest
+        run: |
+          uv pip install pytest
+          uv pip install pytest-cov
       - name: Run pytest
-        run: tox -e ${{matrix.python.toxenv}}-${{matrix.platform.toxenv}}
+        run: uv run pytest --cov

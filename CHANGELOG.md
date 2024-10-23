@@ -15,7 +15,8 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 * Updated to download-artifact@v4  (from download-artifact@v3)
 
 ### Changed
-
+* Changed from `pip`/`tox` to `uv` as package manager
+* README.md : Completely rewrote section "Development Setup", introducing `uv` as package manager.
 * Added missing docstrings for py/cpp/h files with help of Github Copilot
 * Moved CMake + conan + c++ package files and folders with cpp code inside src folder to be included in package
 * Replace pkg_resources with importlib.metadata for getting packages version to work in python 3.12
@@ -54,7 +55,8 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 * VS Code settings: Turned off automatic venv activation
 
 ### Added
-
+* Added BSD 3-Clause License
+* Added `mypy` as static type checker (in addition to `pyright`)
 * Add .gitattributes to handle line endings, removed eol from .editorconfig
 * Add .github/pull_request_template.md for enabling PR templates on Github
 * Add conan dependency to pyproject.toml
@@ -73,45 +75,31 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
   * Interface json file containing information needed not contained in onnx file
 * The generated fmu files resulting from running running builder on the new wind_to_power example
 * CMakeLists.txt and conanfile.txt from old repo to configure compiling/building FMU from generated files
-* README.md : Under `Development Setup`, added a step to install current package in "editable" mode, using the pip install -e option.
-This removes the need to manually add /src to the PythonPath environment variable in order for debugging and tests to work.
+
+### Removed
+* VS Code settings: Removed the setting which added the /src folder to PythonPath. This is no longer necessary. `uv` installs the project itself as a package in "editable" mode, which removes the need to manually add /src to the PythonPath environment variable.
+
+### GitHub workflows
+* (all workflows): Adapted to use `uv` as package manager
+* _test_future.yml : updated Python version to 3.13.0-alpha - 3.13.0
+* _test_future.yml : updated name of test job to 'test313'
 
 ### Dependencies
-
-* Updated to ruff==0.5.1  (from ruff==0.4.2)
-* Updated to pyright==1.1.371  (from pyright==1.1.360)
-* Updated to sourcery==1.21  (from sourcery==1.16)
-* Updated to dictIO>=0.3.4  (from dictIO>=0.3.4)
-* Updated to sphinx-argparse-cli>=1.16  (from sphinx-argparse-cli>=1.15)
-* Updated to furo>=2024.5  (from furo>=2024.4)
+* Updated to ruff>=0.6.3  (from ruff==0.2.1)
+* Updated to pyright>=1.1.378  (from pyright==1.1.350)
+* Updated to sourcery>=1.22  (from sourcery==1.15)
+* Updated to pytest>=8.3  (from pytest>=7.4)
+* updated to pytest-cov>=5.0  (from pytest-cov>=4.1)
+* Updated to Sphinx>=8.0  (from Sphinx>=7.2)
+* Updated to sphinx-argparse-cli>=1.17  (from sphinx-argparse-cli>=1.11)
+* Updated to myst-parser>=4.0  (from myst-parser>=2.0)
+* Updated to furo>=2024.8  (from furo>=2023.9.10)
 * Updated to setup-python@v5  (from setup-python@v4)
 * Updated to actions-gh-pages@v4  (from actions-gh-pages@v3)
 * Updated to upload-artifact@v4  (from upload-artifact@v3)
-* GitHub workflows: Replaced pip install tox with pip install tox-uv
-* GitHub workflows: Removed cache: 'pip' for tox-uv compatibility
-* GitHub workflows: Install dependencies: change singleline run statements to multiline run statements
-* GitHub workflows: Add step to install 'uv' package
-* GitHub workflows: Add step to install 'uv' package
-* GitHub workflows: Install dependencies: change from 'pip install' to 'uv pip install'
-* GitHub workflow _test_future.yml : updated Python version to 3.13.0-alpha - 3.13.0
-* GitHub workflow _test_future.yml : updated name of test job to 'test313'
-* updated to ruff==0.4.2  (from ruff==0.3.0)
-* updated to pyright==1.1.360  (from pyright==1.1.352)
-* updated to sourcery==1.16  (from sourcery==1.15)
-* updated to pytest>=8.2  (from pytest>=7.4)
-* updated to pytest-cov>=5.0  (from pytest-cov>=4.1)
-* updated to Sphinx>=7.3  (from Sphinx>=7.2)
-* updated to sphinx-argparse-cli>=1.15  (from sphinx-argparse-cli>=1.11)
-* updated to myst-parser>=3.0  (from myst-parser>=2.0)
-* updated to furo>=2024.4  (from furo>=2023.9.10)
-* updated to ruff==0.3.0  (from ruff==0.2.1)
-* updated to pyright==1.1.352  (from pyright==1.1.350)
-* removed black
-* updated to dictIO>=0.3.3  (from dictIO>=0.3.1)
+* Updated to download-artifact@v4  (from download-artifact@v3)
+* Updated to dictIO>=0.3.4  (from dictIO>=0.3.1)
 
-### Removed
-
-* VS Code settings: Removed the setting which added the /src folder to PythonPath. This is no longer necessary. Installing the project itself as a package in "editable" mode, using the pip install -e option, solves the issue and removes the need to manually add /src to the PythonPath environment variable.
 
 ## [0.1.6] - 2024-02-20
 

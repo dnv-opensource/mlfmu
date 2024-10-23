@@ -3,14 +3,14 @@
     "editor.formatOnSave": true,
     "notebook.formatOnSave.enabled": true,
     "notebook.codeActionsOnSave": {
-        "notebook.source.fixAll": true,
-        "notebook.source.organizeImports": true,
+        "notebook.source.fixAll": "explicit",
+        "notebook.source.organizeImports": "explicit",
     },
     "[python]": {
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
             "source.fixAll": "always",
-            "source.organizeImports": "always",
+            "source.organizeImports": "explicit",
         },
         "editor.defaultFormatter": "charliermarsh.ruff",
     },
@@ -20,7 +20,6 @@
     "python.analysis.logLevel": "Warning",
     "python.analysis.completeFunctionParens": false,
     "python.analysis.diagnosticMode": "workspace",
-    "python.analysis.diagnosticSeverityOverrides": {},
     "python.analysis.indexing": true,
     "python.analysis.autoImportCompletions": true,
     "python.analysis.inlayHints.variableTypes": false,
@@ -46,4 +45,8 @@
             "includeAllSymbols": true,
         },
     ],
+    "mypy-type-checker.importStrategy": "fromEnvironment",
+    "mypy-type-checker.reportingScope": "workspace",
+    "mypy-type-checker.preferDaemon": false,
+    "ruff.configurationPreference": "filesystemFirst",
 }
