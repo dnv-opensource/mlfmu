@@ -255,9 +255,13 @@ _Note_: wherever you run the build command from, is where the FMU file will be c
 
 For more options, see `uv run mlfmu --help` or `uv run mlfmu build --help`.
 
+### 9. Use your new ML FMU
+
+The created FMU can be used for running (co-)simulations. We have tested the FMUs that we have created in the [Simulation Trust Center], which uses the [Open Simulation Platform] software.
+
 ## Meta
 
-All code in mlfmu is DNV intellectual property and for DNV internal use only.
+All code in mlfmu is DNV intellectual property.
 
 Copyright (c) 2024 [DNV](https://www.dnv.com) AS. All rights reserved.
 
@@ -266,10 +270,6 @@ Kristoffer Skare - [@LinkedIn](https://www.linkedin.com/in/kristoffer-skare-1960
 Jorge Luis Mendez - [@LinkedIn](https://www.linkedin.com/in/jorgelmh/) - <jorge.luis.mendez@dnv.com>
 
 Stephanie Kemna - [@LinkedIn](https://www.linkedin.com/in/stephaniekemna/) - <stephanie.kemna@dnv.com>
-
-Distributed under the BSD 3-Clause license. See [LICENSE](LICENSE.md) for more information.
-
-[https://github.com/dnv-innersource/mlfmu](https://github.com/dnv-innersource/mlfmu)
 
 ## Contributing
 
@@ -289,10 +289,12 @@ For your contribution, please make sure you follow the [STYLEGUIDE](STYLEGUIDE.m
 
 ## License & dependencies
 
-This code is distributed under the BSD 3-Clause license (see LICENSE).
+This code is distributed under the BSD 3-Clause license. See [LICENSE](LICENSE.md) for more information.
 
 It makes use of [cpp-fmu], which is distributed under the MPL license at <https://github.com/viproma/cppfmu>.
 
 <!-- Markdown link & img dfn's -->
 [mlfmu_docs]: https://dnv-innersource.github.io/mlfmu/README.html
 [cpp-fmu]: https://github.com/viproma/cppfmu
+[Open Simulation Platform]: https://opensimulationplatform.com/
+[Simulation Trust Center]: https://store.veracity.com/simulation-trust-center
