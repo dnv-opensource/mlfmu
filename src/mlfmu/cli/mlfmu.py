@@ -3,6 +3,7 @@
 import argparse
 import logging
 from pathlib import Path
+import textwrap
 
 from mlfmu.api import MlFmuCommand, run
 from mlfmu.utils.logging import configure_logging
@@ -20,9 +21,17 @@ def _argparser() -> argparse.ArgumentParser:
     """
     parser = argparse.ArgumentParser(
         prog="mlfmu",
-        epilog="_________________mlfmu___________________",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=textwrap.dedent('''\
+                                    mlfmu is a command line tool to build FMUs from ONNX ML models.
+                                    Check the README and docs for more info.
+                                    You can also run `mlfmu <command> --help` for more info on a specific command.'''),
+        epilog=textwrap.dedent('''\
+                               This tool utilizes cppfmu, source code is available at: https://github.com/viproma/cppfmu
+                               _________________mlfmu___________________
+                               '''),
         prefix_chars="-",
-        add_help=True,
+        add_help=True
     )
 
     common_args_parser = argparse.ArgumentParser(add_help=False)

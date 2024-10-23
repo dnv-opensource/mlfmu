@@ -130,23 +130,28 @@ For more explanation on the ONNX file structure and inputs/outputs for your mode
 
 For advanced usage options, e.g. editing the generated FMU source code, or using the tool via a Python class, please refer to mlfmu's [ADVANCED.md](ADVANCED.md).
 
-
 ## Development Setup
 
 ### 1. Install uv
+
 This project uses `uv` as package manager.
 If you haven't already, install [uv](https://docs.astral.sh/uv), preferably using it's ["Standalone installer"](https://docs.astral.sh/uv/getting-started/installation/#__tabbed_1_2) method: <br>
 ..on Windows:
+
 ```sh
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
+
 ..on MacOS and Linux:
+
 ```sh
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+
 (see [docs.astral.sh/uv](https://docs.astral.sh/uv/getting-started/installation/) for all / alternative installation methods.)
 
 Once installed, you can update `uv` to its latest version, anytime, by running:
+
 ```sh
 uv self update
 ```
@@ -157,36 +162,44 @@ We use conan for building the FMU. For the conan building to work later on, you 
 
 > Note: After you installed conan, you want to make sure it has the correct build profile. You can auto-detect and create the profile by running `conan profile detect`. After this, you can check the profile in `C:\Users\<USRNAM>\.conan2\profiles\.default` (replace `<USRNAM>` with your username). You want to `compiler=msvc`, `compiler.cppstd=17`, `compiler.version=193` (for Windows).
 
-
 ### 3. Clone the repository
+
 Clone the mlfmu repository into your local development directory:
+
 ```sh
 git clone https://github.com/dnv-innersource/mlfmu path/to/your/dev/mlfmu
 git submodule update --init --recursive
 ```
 
 ### 4. Install dependencies
+
 Run `uv sync` to create a virtual environment and install all project dependencies into it:
+
 ```sh
 uv sync
 ```
+
 Use the command line option `-p` to specifiy the Python version to resolve the dependencies against.
 For instance, use `-p 3.12` to specify Python 3.12 .
+
 ```sh
 uv sync -p 3.12
 ```
+
 > Note: In case the specified Python version is not found on your machine, `uv sync` will automatically download and install it.
 
 Optionally, use `-U` in addition to allow package upgrades. Especially in cases when you change to a newer Python version, adding `-U` can be useful. <br>
 It allows the dependency resolver to upgrade dependencies to newer versions, which might be necessary to support the (newer) Python version you specified.
+
 ```sh
 uv sync -p 3.12 -U
 ```
 
-
 ### 5. (Optional) Activate the virtual environment
+
 When using `uv`, most of the time there will be no longer a need to manually activate the virtual environment. <br>
 Whenever you run a command via `uv run` inside your project folder structure, `uv` will find the `.venv` virtual environment in the working directory or any parent directory, and activate it on the fly:
+
 ```sh
 uv run <command>
 ```
@@ -195,26 +208,32 @@ However, you still _can_ manually activate the virtual environment if needed.
 While we did not face any issues using VS Code as IDE, you might e.g. use an IDE which needs the .venv manually activated in order to properly work. <br>
 If this is the case, you can anytime activate the virtual environment using one of the "known" legacy commands: <br>
 ..on Windows:
+
 ```sh
 .venv\Scripts\activate.bat
 ```
+
 ..on Linux:
+
 ```sh
 source .venv/bin/activate
 ```
 
 ### 6. Install pre-commit hooks
+
 The `.pre-commit-config.yaml` file in the project root directory contains a configuration for pre-commit hooks.
 To install the pre-commit hooks defined therein in your local git repository, run:
+
 ```sh
 uv run pre-commit install
 ```
 
 All pre-commit hooks configured in `.pre-commit-config.yaml` will now run each time you commit changes.
 
-
 ### 7. Test that the installation works
+
 To test that the installation works, run pytest in the project root folder:
+
 ```sh
 uv run pytest
 ```
@@ -235,7 +254,6 @@ uv run mlfmu build --interface-file .\examples\wind_generator\config\interface.j
 _Note_: wherever you run the build command from, is where the FMU file will be created, unless you specify otherwise with `--fmu-path`.
 
 For more options, see `uv run mlfmu --help` or `uv run mlfmu build --help`.
-
 
 ## Meta
 
@@ -269,5 +287,12 @@ For your contribution, please make sure you follow the [STYLEGUIDE](STYLEGUIDE.m
 
 - If you get an error similar to `..\fmu.cpp(4,10): error C1083: Cannot open include file: 'cppfmu_cs.hpp': No such file or directory`, you are missing cppfmu. This is a submodule to this repository. Make sure that you do a `git submodule update --init --recursive` in the top level folder.
 
+## License & dependencies
+
+This code is distributed under the BSD 3-Clause license (see LICENSE).
+
+It makes use of [cpp-fmu], which is distributed under the MPL license at <https://github.com/viproma/cppfmu>.
+
 <!-- Markdown link & img dfn's -->
 [mlfmu_docs]: https://dnv-innersource.github.io/mlfmu/README.html
+[cpp-fmu]: https://github.com/viproma/cppfmu
