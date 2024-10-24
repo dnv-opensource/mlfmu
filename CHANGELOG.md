@@ -6,6 +6,8 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ## [Unreleased]
 
 ### Changed
+* Wind turbine power prediction model example is included in the mlfmu\examples\wind_to_power_pyspark directory.
+* README.md : Interface.json is updated to show how to define vectors as inputs.
 * Changed from `pip`/`tox` to `uv` as package manager
 * README.md : Completely rewrote section "Development Setup", introducing `uv` as package manager.
 * Added missing docstrings for py/cpp/h files with help of Github Copilot
