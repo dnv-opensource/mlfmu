@@ -44,6 +44,7 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 * Changed publishing workflow to use OpenID Connect (Trusted Publisher Management) when publishing to PyPI
 * Updated copyright statement
 * VS Code settings: Turned off automatic venv activation
+* Edited descriptions in the examples/wind_to_power/config/interface.json
 
 ### Added
 * Added BSD 3-Clause License
