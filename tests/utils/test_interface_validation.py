@@ -41,6 +41,7 @@ def test_validate_interface_spec_wrong_types():
     # Model type error as it's missing the agentInputIndexes
     assert exc_info.match("Input should be 'real', 'integer', 'string' or 'boolean'")
 
+
 def test_validate_unnamed_spec():
     invalid_spec = {
         "version": "1.0",
