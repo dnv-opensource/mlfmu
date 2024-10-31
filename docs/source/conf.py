@@ -39,6 +39,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.autosummary",
     "sphinx.ext.todo",
+    "sphinxcontrib.mermaid",
 ]
 
 # The file extensions of source files.
@@ -71,3 +72,6 @@ autodoc_default_options = {
 autodoc_preserve_defaults = True
 
 myst_heading_anchors = 3
+
+# add markdown mermaid support
+myst_fence_as_directive = ["mermaid"]

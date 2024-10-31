@@ -79,6 +79,7 @@ dev-dependencies = [
     "Sphinx>=8.0",
     "sphinx-argparse-cli>=1.17",
     "sphinx-autodoc-typehints>=2.2",
+    "sphinxcontrib-mermaid>=1.0.0",
     "myst-parser>=4.0",
     "furo>=2024.8",
 ]
