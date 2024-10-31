@@ -1,7 +1,7 @@
 mlfmu.utils package
 =======================
 
-.. automodule:: mlfmu.utils
+.. autoclass:: mlfmu.utils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -10,6 +10,6 @@ Submodules
 ----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
    mlfmu.utils.logging

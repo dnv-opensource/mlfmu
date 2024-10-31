@@ -1,7 +1,7 @@
 mlfmu.utils.logging module
 ==============================
 
-.. automodule:: mlfmu.utils.logging
+.. autoclass:: mlfmu.utils.logging
    :members:
    :undoc-members:
    :show-inheritance:
