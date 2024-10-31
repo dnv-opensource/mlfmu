@@ -6,6 +6,8 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ## [Unreleased]
 
 ### Changed
+
+* Add where the source code for cppfmu can be found, add third party license.
 * Added missing unit tests for the template data generated when building the FMU.
 * Unit tests for the modelDescription.xml generation.
 * Unit tests for the Interface JSON validation.
@@ -49,6 +51,7 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 * VS Code settings: Turned off automatic venv activation
 
 ### Added
+
 * Added BSD 3-Clause License
 * Added `mypy` as static type checker (in addition to `pyright`)
 * Add .gitattributes to handle line endings, removed eol from .editorconfig
@@ -71,14 +74,17 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 * CMakeLists.txt and conanfile.txt from old repo to configure compiling/building FMU from generated files
 
 ### Removed
+
 * VS Code settings: Removed the setting which added the /src folder to PythonPath. This is no longer necessary. `uv` installs the project itself as a package in "editable" mode, which removes the need to manually add /src to the PythonPath environment variable.
 
 ### GitHub workflows
+
 * (all workflows): Adapted to use `uv` as package manager
 * _test_future.yml : updated Python version to 3.13.0-alpha - 3.13.0
 * _test_future.yml : updated name of test job to 'test313'
 
 ### Dependencies
+
 * Updated to ruff>=0.6.3  (from ruff==0.2.1)
 * Updated to pyright>=1.1.378  (from pyright==1.1.350)
 * Updated to sourcery>=1.22  (from sourcery==1.15)
@@ -93,7 +99,6 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 * Updated to upload-artifact@v4  (from upload-artifact@v3)
 * Updated to download-artifact@v4  (from download-artifact@v3)
 * Updated to dictIO>=0.3.4  (from dictIO>=0.3.1)
-
 
 ## [0.1.6] - 2024-02-20
 
