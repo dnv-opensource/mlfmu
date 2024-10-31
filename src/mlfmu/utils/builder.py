@@ -135,6 +135,7 @@ def format_template_data(onnx: ONNXModel, fmi_model: FmiModel, model_component: 
             "The number of total input indexes for all inputs and parameter in the interface file "
             f"(={num_fmu_inputs}) cannot exceed the input size of the ml model (={onnx.input_size})"
         )
+
     if num_fmu_outputs > onnx.output_size:
         raise ValueError(
             "The number of total output indexes for all outputs in the interface file "
@@ -206,7 +207,6 @@ def validate_interface_spec(
             The pydantic model instance that contains all the interface information.
     """
     parsed_spec = ModelComponent.model_validate_json(json_data=spec, strict=True)
-
     try:
         validated_model = ModelComponent.model_validate(parsed_spec)
     except ValidationError as e:

@@ -8,6 +8,9 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ### Changed
 
 * Add where the source code for cppfmu can be found, add third party license.
+* Added missing unit tests for the template data generated when building the FMU.
+* Unit tests for the modelDescription.xml generation.
+* Unit tests for the Interface JSON validation.
 * Changed from `pip`/`tox` to `uv` as package manager
 * README.md : Completely rewrote section "Development Setup", introducing `uv` as package manager.
 * Added missing docstrings for py/cpp/h files with help of Github Copilot
