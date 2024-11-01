@@ -289,7 +289,7 @@ For your contribution, please make sure you follow the [STYLEGUIDE](STYLEGUIDE.m
 
 ## License & dependencies
 
-This code is distributed under the BSD 3-Clause license. See [LICENSE](LICENSE.md) for more information.
+This code is distributed under the BSD 3-Clause license. See [LICENSE](LICENSE) for more information.
 
 It makes use of [cpp-fmu], which is distributed under the MPL license at <https://github.com/viproma/cppfmu>.
 
