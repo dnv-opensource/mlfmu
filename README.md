@@ -124,7 +124,7 @@ or if the files are in your current working directory:
 mlfmu build
 ```
 
-# Extended documentation
+## Extended documentation
 
 For more explanation on the ONNX file structure and inputs/outputs for your model, please refer to mlfmu's [MLMODEL.md](MLMODEL.md).
 

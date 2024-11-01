@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path("../../src").absolute()))
 
 project = "mlfmu"
 copyright = "2024, DNV AS. All rights reserved."
-author = "Author One, Author Two, Author Three"
+author = "Kristoffer Skare, Jorge Luis Mendez, Stephanie Kemna, Melih Akdag"
 
 # The full version, including alpha/beta/rc tags
 release = "0.1.6"
