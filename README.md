@@ -93,6 +93,14 @@ Given that you have an ML model, you now need to:
             "name": "input_1",
             "description": "My input signal to the model at position 0",
             "agentInputIndexes": ["0"]
+        },
+        {
+            "name": "input_2",
+            "description": "My input signal as a vector with four elements at position 1 to 5",
+            "agentInputIndexes": ["1:5"],
+            "type": "real",
+            "isArray": true,
+            "length": 4
         }
     ],
     "parameters": [
@@ -111,6 +119,8 @@ Given that you have an ML model, you now need to:
     ]
 }
 ```
+
+More information about the interface.json schema can be found in the mlfmu\docs\interface\schema.html
 
 2. Compile the FMU:
 
