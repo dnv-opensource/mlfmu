@@ -65,7 +65,7 @@ html_theme = "furo"
 html_static_path = ["_static"]
 # html_logo = "_static/mlfmu.svg"
 autodoc_default_options = {
-    "member-order": "bysource",
+    "member-order": "groupwise",
     "undoc-members": True,
     "exclude-members": "__weakref__",
 }
