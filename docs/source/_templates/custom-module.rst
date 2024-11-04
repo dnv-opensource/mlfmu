@@ -1,13 +1,13 @@
 {{ fullname | escape | underline}}
 
 .. automodule:: {{ fullname }}
+   :members:
 
    {% block attributes %}
    {%- if attributes %}
    .. rubric:: {{ _('Module Attributes') }}
 
    .. autosummary::
-      :toctree:
    {% for item in attributes %}
       {{ item }}
    {%- endfor %}
@@ -19,7 +19,6 @@
    .. rubric:: {{ _('Functions') }}
 
    .. autosummary::
-      :toctree:
    {% for item in functions %}
       {{ item }}
    {%- endfor %}
@@ -44,7 +43,6 @@
    .. rubric:: {{ _('Exceptions') }}
 
    .. autosummary::
-      :toctree:
    {% for item in exceptions %}
       {{ item }}
    {%- endfor %}
