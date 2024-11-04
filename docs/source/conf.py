@@ -37,9 +37,9 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx_argparse_cli",
     "sphinx.ext.mathjax",
-    "matplotlib.sphinxext.plot_directive",
     "sphinx.ext.autosummary",
     "sphinx.ext.todo",
+    "sphinxcontrib.mermaid",
 ]
 
 # The file extensions of source files.
@@ -63,7 +63,7 @@ exclude_patterns = []
 html_title = f"mlfmu {release}"
 html_theme = "furo"
 html_static_path = ["_static"]
-html_logo = "_static/mlfmu.svg"
+# html_logo = "_static/mlfmu.svg"
 autodoc_default_options = {
     "member-order": "bysource",
     "undoc-members": True,
@@ -72,3 +72,6 @@ autodoc_default_options = {
 autodoc_preserve_defaults = True
 
 myst_heading_anchors = 3
+
+# add markdown mermaid support
+myst_fence_as_directive = ["mermaid"]

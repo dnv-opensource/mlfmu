@@ -1,7 +1,7 @@
 mlfmu.api module
 ================
 
-.. automodule:: mlfmu.api
+.. autoclass:: mlfmu.api
    :members:
    :undoc-members:
    :show-inheritance:

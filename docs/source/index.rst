@@ -7,15 +7,19 @@ mlfmu: Example Python Package
 =========================================
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
    :caption: Contents:
 
    README
+   MLMODEL
+   ADVANCED
    CHANGELOG
+   STYLEGUIDE
    LICENSE
+   LICENSE_THIRD_PARTY
    api
    cli
-
+   mlfmu
 
 Indices and tables
 ==================

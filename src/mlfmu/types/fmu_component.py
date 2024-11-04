@@ -202,12 +202,12 @@ class InternalState(BaseModelConfig):
         if (not start_value) and name:
             raise ValueError(
                 "name is set without start_value being set. "
-                "Both fields needs to be set for the state initialization to be valid."
+                "Both fields need to be set for the state initialization to be valid."
             )
         if start_value and (not name):
             raise ValueError(
                 "start_value is set without name being set. "
-                "Both fields needs to be set for the state initialization to be valid."
+                "Both fields need to be set for the state initialization to be valid."
             )
         return self
 
@@ -306,7 +306,7 @@ class FmiInputVariable(InputVariable):
 
     causality: FmiCausality
     variable_references: list[int]
-    agent_state_init_indexes: list[list[int]]
+    agent_state_init_indexes: list[list[int]] = []  # noqa: RUF008
 
     def __init__(self, **kwargs: Any) -> None:  # noqa: ANN401
         super().__init__(**kwargs)
@@ -411,7 +411,6 @@ class ModelComponent(BaseModelConfig):
     """
 
     name: str = Field(
-        default=None,
         description="The name of the simulation model.",
     )
     version: str = Field(
@@ -708,8 +707,8 @@ class FmiModel:
 
         if var.is_array:
             for idx, var_ref in enumerate(var.variable_references):
-                # Create port names that contain the index starting from 1. E.i signal[1], signal[2] ...
-                name = f"{var.name}[{idx+1}]"
+                # Create port names that contain the index starting from 1. E.i signal[0], signal[1] ...
+                name = f"{var.name}[{idx}]"
                 fmi_var = FmiVariable(
                     name=name,
                     variable_reference=var_ref,
@@ -730,7 +729,7 @@ class FmiModel:
                 description=var.description or "",
                 variability=var.variability
                 or (FmiVariability.CONTINUOUS if var.causality != FmiCausality.PARAMETER else FmiVariability.TUNABLE),
-                start_value=var.start_value or 0,
+                start_value=var.start_value if var.start_value is not None else 0,
                 type=var.type or FmiVariableType.REAL,
             )
             variables.append(fmi_var)
@@ -772,7 +771,8 @@ class FmiModel:
             for state_init_indexes in inp.agent_state_init_indexes:
                 num_state_init_indexes = len(state_init_indexes)
                 for variable_index, state_init_index in enumerate(state_init_indexes):
-                    if variable_index >= num_variable_references:
+                    _variable_index = variable_index
+                    if _variable_index >= num_variable_references:
                         if not self.state_initialization_reuse:
                             warnings.warn(
                                 f"Too few variables in {inp.name} (={num_variable_references}) "
@@ -782,7 +782,7 @@ class FmiModel:
                                 stacklevel=1,
                             )
                             break
-                        _variable_index = variable_index % num_variable_references
+                        _variable_index = _variable_index % num_variable_references
                     state_init_mapping.append((state_init_index, inp.variable_references[_variable_index]))
 
         for out in self.outputs:

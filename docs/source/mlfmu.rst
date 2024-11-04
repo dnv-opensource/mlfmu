@@ -10,15 +10,13 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
-
-   mlfmu.subpackage1
-   mlfmu.subpackage2
+   :maxdepth: 2
 
 Submodules
 ----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
    mlfmu.api
+   mlfmu.utils
