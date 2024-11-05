@@ -286,9 +286,15 @@ All code in mlfmu is DNV intellectual property.
 
 Copyright (c) 2024 [DNV](https://www.dnv.com) AS. All rights reserved.
 
+Primary contributors:
+
 Kristoffer Skare - [@LinkedIn](https://www.linkedin.com/in/kristoffer-skare-19606a1a1/) - <kristoffer.skare@dnv.com>
 
 Jorge Luis Mendez - [@LinkedIn](https://www.linkedin.com/in/jorgelmh/) - <jorge.luis.mendez@dnv.com>
+
+Additional contributors (testing, docs, examples, etc.):
+
+Melih Akdag - [@LinkedIn](https://www.linkedin.com/in/melih-akdag/) - <melih.akdag@dnv.com>
 
 Stephanie Kemna - [@LinkedIn](https://www.linkedin.com/in/stephaniekemna/)
 
