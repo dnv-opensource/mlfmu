@@ -53,7 +53,7 @@ class BaseModelConfig(BaseModel):
 
 
 class Variable(BaseModelConfig):
-    """Pydantic model respresenting a variable in an FMU component."""
+    """Pydantic model representing a variable in an FMU component."""
 
     #: Unique name for the port.
     name: str = Field(
@@ -109,7 +109,7 @@ class Variable(BaseModelConfig):
 
 
 class InternalState(BaseModelConfig):
-    """Pydantic model respresenting an internal state of an FMU component."""
+    """Pydantic model representing an internal state of an FMU component."""
 
     #: Unique name for the state. Only needed if start_value is set (!= None).
     #: Initialization FMU parameters will be generated using this name.
@@ -356,7 +356,7 @@ def _create_fmu_signal_example() -> Variable:
 
 
 class ModelComponent(BaseModelConfig):
-    """Pydantic model respresenting a simulation model component.
+    """Pydantic model representing a simulation model component.
 
     Used to generate the JSON schema for the model interface.
     Defines the structure of the FMU and how the inputs and outputs of the ONNX model
