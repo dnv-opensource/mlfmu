@@ -7,6 +7,7 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 
 ### Changed
 
+* Update generated docs; cleaning, fix for warnings, add missing pages and info, update authors and maintainers.
 * Add where the source code for cppfmu can be found, add third party license.
 * Added missing unit tests for the template data generated when building the FMU.
 * Unit tests for the modelDescription.xml generation.
@@ -124,7 +125,7 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 
 ### Changed
 
-* incorporated latest updates introduced in mvx
+* incorporated latest updates introduced in other repo
 
 ## [0.1.4] - 2023-09-25
 
