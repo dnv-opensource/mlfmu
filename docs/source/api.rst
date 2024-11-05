@@ -6,4 +6,6 @@ API Reference
    :template: custom-module.rst
    :recursive:
 
-   mlfmu
+   mlfmu.api
+   mlfmu.types
+   mlfmu.utils

@@ -68,37 +68,6 @@ class MlFmuBuilder:
     """Builder for creating FMUs (Functional Mock-up Units) from machine learning models.
 
     This class is core to executing the different commands in the mlfmu process.
-
-    Attributes
-    ----------
-    fmu_name : Optional[str]
-        The name of the FMU.
-    interface_file : Optional[Path]
-        The path to the interface JSON file.
-    ml_model_file : Optional[Path]
-        The path to the machine learning model file.
-    source_folder : Optional[Path]
-        The folder containing the source code for the FMU.
-    fmu_output_folder : Optional[Path]
-        The folder where the built FMU will be saved.
-    build_folder : Optional[Path]
-        The folder where the FMU will be built.
-    root_directory : Path
-        The root directory for the builder.
-    temp_folder : Optional[tempfile.TemporaryDirectory[str]]
-        The temporary folder used for building the FMU.
-
-    Methods
-    -------
-    __init__(self, fmu_name=None, interface_file=None, ml_model_file=None, source_folder=None,
-             fmu_output_folder=None, build_folder=None, root_directory=None)
-        Initializes a new instance of the MlFmuBuilder class.
-    build(self)
-        Builds an FMU from the machine learning model file and interface file.
-    generate(self)
-        Generates FMU C++ source code and model description from the machine learning model file and interface file.
-    compile(self)
-        Compiles the FMU from the FMU C++ source code and model description.
     """
 
     def __init__(
@@ -111,6 +80,25 @@ class MlFmuBuilder:
         build_folder: Path | None = None,
         root_directory: Path | None = None,
     ) -> None:
+        """Initialize a new instance of the MlFmuBuilder class.
+
+        Parameters
+        ----------
+        fmu_name : str | None, optional
+            The name of the FMU., by default None
+        interface_file : Path | None, optional
+            The path to the interface JSON file., by default None
+        ml_model_file : Path | None, optional
+            The path to the machine learning model file., by default None
+        source_folder : Path | None, optional
+            The folder containing the source code for the FMU., by default None
+        fmu_output_folder : Path | None, optional
+            The folder where the built FMU will be saved., by default None
+        build_folder : Path | None, optional
+            The folder where the FMU will be built., by default None
+        root_directory : Path | None, optional
+            The root directory for the builder., by default None
+        """
         self.fmu_name: str | None = fmu_name
         self.interface_file: Path | None = interface_file
         self.ml_model_file: Path | None = ml_model_file
@@ -118,14 +106,15 @@ class MlFmuBuilder:
         self.fmu_output_folder: Path | None = fmu_output_folder
         self.build_folder: Path | None = build_folder
         self.root_directory: Path = root_directory or Path.cwd()
+        #: The temporary folder used for building the FMU.
         self.temp_folder: tempfile.TemporaryDirectory[str] = tempfile.TemporaryDirectory(prefix="mlfmu_")
         self.temp_folder_path: Path = Path(self.temp_folder.name)
         logger.debug(f"Created temp folder: {self.temp_folder_path}")
 
     def build(self) -> None:
-        """
-        Build an FMU from ml_model_file and interface_file and saves it to fmu_output_folder.
+        """Build an FMU from the machine learning model file and interface file.
 
+        Builds an FMU from ml_model_file and interface_file and saves it to fmu_output_folder.
         If the paths to the necessary files and directories are not given the function
         will try to find files and directories that match the ones needed.
 
@@ -174,7 +163,7 @@ class MlFmuBuilder:
         logger.debug("MLFmuBuilder: Done with build")
 
     def generate(self) -> None:
-        """Generate C++ source code and model description.
+        """Generate C++ source code and model description from the machine learning model file and interface file.
 
         Generates FMU C++ source code and model description from ml_model_file and interface_file
         and saves it to source_folder.
@@ -217,9 +206,9 @@ class MlFmuBuilder:
         logger.debug("MLFmuBuilder: Done with generate")
 
     def compile(self) -> None:
-        """Compile FMU from C++ source code and model description.
+        """Compile the FMU from the C++ source code and model description.
 
-        Compiles FMU from FMU C++ source code and model description contained in source_folder
+        Compiles the FMU from the FMU C++ source code and model description contained in source_folder
         and saves it to fmu_output_folder.
 
         If the paths to the necessary files and directories are not given the function
@@ -257,23 +246,53 @@ class MlFmuBuilder:
         logger.debug("MLFmuBuilder: Done with compile")
 
     def default_interface_file(self) -> Path | None:
-        """Return the path to a interface json file inside self.root_directory if it can be inferred."""
+        """Return the path to a interface json file inside self.root_directory if it can be inferred.
+
+        Returns
+        -------
+        Path | None
+            the path to the interface json file, or None.
+        """
         return find_default_file(self.root_directory, "json", "interface")
 
     def default_model_file(self) -> Path | None:
-        """Return the path to a ml model file inside self.root_directory if it can be inferred."""
+        """Return the path to a ml model file inside self.root_directory if it can be inferred.
+
+        Returns
+        -------
+        Path | None
+            the path to the ml model file, or None.
+        """
         return find_default_file(self.root_directory, "onnx", "model")
 
     def default_build_folder(self) -> Path:
-        """Return the path to a build folder inside the temp_folder. Creates the temp_folder if it is not set."""
+        """Return the path to a build folder inside the temp_folder. Creates the temp_folder if it is not set.
+
+        Returns
+        -------
+        Path
+            the path to the build folder.
+        """
         return self.temp_folder_path / "build"
 
     def default_build_source_folder(self) -> Path:
-        """Return the path to a src folder inside the temp_folder. Creates the temp_folder if it is not set."""
+        """Return the path to a src folder inside the temp_folder. Creates the temp_folder if it is not set.
+
+        Returns
+        -------
+        Path
+            the path to the src folder.
+        """
         return self.temp_folder_path / "src"
 
     def default_generate_source_folder(self) -> Path:
-        """Return the path to the default source folder for the generate process."""
+        """Return the path to the default source folder for the generate process.
+
+        Returns
+        -------
+        Path
+            the path to the default source folder for the generate process.
+        """
         return self.root_directory
 
     def default_compile_source_folder(self) -> Path | None:
@@ -281,6 +300,11 @@ class MlFmuBuilder:
 
         Searches inside self.source_folder and self.root_directory for a folder that contains a folder structure
         and files that is required to be valid ml fmu source code.
+
+        Returns
+        -------
+        Path
+            the path to the default source folder for the compile process.
         """
         search_folders: list[Path] = []
         if self.source_folder is not None:
@@ -311,7 +335,13 @@ class MlFmuBuilder:
         return source_folder
 
     def default_fmu_output_folder(self) -> Path:
-        """Return the path to the default fmu output folder."""
+        """Return the path to the default fmu output folder.
+
+        Returns
+        -------
+        Path
+            the path to the default fmu output folder.
+        """
         return self.root_directory
 
 
@@ -321,23 +351,10 @@ class MlFmuProcess:
 
     This class encapsulates the functionality to run the ML FMU process in a self-terminated loop.
     It provides methods to control the execution of the process and manage the number of runs.
-
-    Attributes
-    ----------
-        command (MlFmuCommand): The command to be executed by the process.
-        builder (MlFmuBuilder): The builder object responsible for building the FMU.
-
-    Args
-    ----
-        command (MlFmuCommand): The command to be executed by the process.
-        source_folder (Optional[Path]): The path to the source folder.
-        ml_model_file (Optional[Path]): The path to the ML model file.
-        interface_file (Optional[Path]): The path to the interface file.
-        fmu_output_folder (Optional[Path]): The path to the FMU output folder.
     """
 
-    command: MlFmuCommand
-    builder: MlFmuBuilder
+    command: MlFmuCommand  #: The command to be executed by the process.
+    builder: MlFmuBuilder  #: The builder object responsible for building the FMU.
 
     def __init__(
         self,
@@ -347,6 +364,21 @@ class MlFmuProcess:
         interface_file: Path | None = None,
         fmu_output_folder: Path | None = None,
     ) -> None:
+        """Instantiate the MlFmuProcess.
+
+        Parameters
+        ----------
+        command : MlFmuCommand
+            The command to be executed by the process.
+        source_folder : Path | None, optional
+            The path to the source folder., by default None
+        ml_model_file : Path | None, optional
+            The path to the ML model file., by default None
+        interface_file : Path | None, optional
+            The path to the interface file., by default None
+        fmu_output_folder : Path | None, optional
+            The path to the FMU output folder., by default None
+        """
         self._run_number: int = 0
         self._max_number_of_runs: int = 1
         self.terminate: bool = False

@@ -6,47 +6,32 @@ from onnxruntime import InferenceSession, NodeArg
 
 
 class ONNXModel:
-    """
-    ONNX Metadata class.
+    """ONNX Metadata class.
 
     Represents an ONNX model and provides methods to load inputs and outputs.
     Allows to import the ONNX file and figure out the input/output sizes.
 
-    Attributes
-    ----------
-        filename (str): The name of the ONNX file.
-        states_name (str): The name of the internal states input.
-        state_size (int): The size of the internal states input.
-        input_name (str): The name of the main input.
-        input_size (int): The size of the main input.
-        output_name (str): The name of the output.
-        output_size (int): The size of the output.
-        time_input_name (str): The name of the time input.
-        time_input (bool): Flag indicating whether the model uses time input.
-        __onnx_path (Path): The path to the ONNX file.
-        __onnx_session (InferenceSession): The ONNX runtime inference session.
-
-    Methods
-    -------
-        __init__(onnx_path: Union[str, os.PathLike[str]], time_input: bool = False):
-            Initializes the ONNXModel object by loading the ONNX file and assigning model parameters.
-        load_inputs():
-            Loads the inputs from the ONNX file and assigns the input name and size.
-        load_outputs():
-            Loads the outputs from the ONNX file and assigns the output name and size.
+    Raises
+    ------
+    ValueError
+        If the ml model has 3 inputs, but the `usesTime` flag is set to `false` in the json interface.
+    ValueError
+        If the number of inputs to the ml model is larger than 3.
+    ValueError
+        If the number of outputs from the ml model is not exactly 1.
     """
 
-    filename: str = ""
-    states_name: str = ""
-    state_size: int = 0
-    input_name: str = ""
-    input_size: int = 0
-    output_name: str = ""
-    output_size: int = 0
-    time_input_name: str = ""
-    time_input: bool = False
-    __onnx_path: Path
-    __onnx_session: InferenceSession
+    filename: str = ""  #: The name of the ONNX file.
+    states_name: str = ""  #: The name of the internal states input.
+    state_size: int = 0  #: The size of the internal states input.
+    input_name: str = ""  #: The name of the main input.
+    input_size: int = 0  #: The size of the main input.
+    output_name: str = ""  #: The name of the output.
+    output_size: int = 0  #: The size of the output.
+    time_input_name: str = ""  #: The name of the time input.
+    time_input: bool = False  #: Flag indicating whether the model uses time input.
+    __onnx_path: Path  #: The path to the ONNX file.
+    __onnx_session: InferenceSession  #: The ONNX runtime inference session.
 
     def __init__(
         self,
