@@ -22,16 +22,17 @@ packages = [
 
 [project]
 name = "mlfmu"
-version = "0.1.6"
+version = "1.0"
 description = "Export ML models represented as ONNX files to Functional-Mockup-Units (FMU)"
 readme = "README.md"
 requires-python = ">= 3.10"
 license = { file = "LICENSE" }
 authors = [
     { name = "Jorge Luis Mendez", email = "jorge.luis.mendez@dnv.com" },
-    { name = "Skare Kristoffer", email = "kristoffer.skare@dnv.com" },
+    { name = "Kristoffer Skare", email = "kristoffer.skare@dnv.com" },
 ]
 maintainers = [
+    { name = "Kristoffer Skare", email = "kristoffer.skare@dnv.com" },
     { name = "Claas Rostock", email = "claas.rostock@dnv.com" },
 ]
 keywords = [
