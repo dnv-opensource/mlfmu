@@ -158,3 +158,6 @@ examples/**/*.nc
 
 # Cmake generated files
 CMakeUserPresets.json
+
+# Generated FMUs
+*.fmu

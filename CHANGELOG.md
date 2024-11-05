@@ -11,6 +11,8 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 * Added missing unit tests for the template data generated when building the FMU.
 * Unit tests for the modelDescription.xml generation.
 * Unit tests for the Interface JSON validation.
+* Wind turbine power prediction model example is included in the mlfmu\examples\wind_to_power_pyspark directory.
+* README.md : Interface.json is updated to show how to define vectors as inputs.
 * Changed from `pip`/`tox` to `uv` as package manager
 * README.md : Completely rewrote section "Development Setup", introducing `uv` as package manager.
 * Added missing docstrings for py/cpp/h files with help of Github Copilot
