@@ -298,6 +298,8 @@ Melih Akdağ - [@LinkedIn](https://www.linkedin.com/in/melih-akdag/) - <melih.ak
 
 Stephanie Kemna - [@LinkedIn](https://www.linkedin.com/in/stephaniekemna/)
 
+Hee Jong Park - [@LinkedIn](https://www.linkedin.com/in/heejongpark/) - <hee.jong.park@dnv.com>
+
 ## Contributing
 
 1. Fork it (<https://github.com/dnv-innersource/mlfmu/fork>) (Note: this is currently disabled for this repo. For development, continue with the next step.)
