@@ -294,7 +294,7 @@ Jorge Luis Mendez - [@LinkedIn](https://www.linkedin.com/in/jorgelmh/) - <jorge.
 
 Additional contributors (testing, docs, examples, etc.):
 
-Melih Akdag - [@LinkedIn](https://www.linkedin.com/in/melih-akdag/) - <melih.akdag@dnv.com>
+Melih Akdağ - [@LinkedIn](https://www.linkedin.com/in/melih-akdag/) - <melih.akdag@dnv.com>
 
 Stephanie Kemna - [@LinkedIn](https://www.linkedin.com/in/stephaniekemna/)
 

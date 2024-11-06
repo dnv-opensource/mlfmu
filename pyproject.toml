@@ -33,6 +33,7 @@ authors = [
 ]
 maintainers = [
     { name = "Kristoffer Skare", email = "kristoffer.skare@dnv.com" },
+    { name = "Jorge Luis Mendez", email = "jorge.luis.mendez@dnv.com" },
     { name = "Claas Rostock", email = "claas.rostock@dnv.com" },
 ]
 keywords = [
