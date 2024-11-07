@@ -64,17 +64,9 @@ graph TD;
 
 ```
 
-## Tips and tricks
-
-```diff
-- TODO
-```
+[//]: # (## Tips and tricks - TODO)
 
 ## Examples
-
-```diff
-- TODO
-```
 
 ### Model that only uses "pure" inputs and outputs
 

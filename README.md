@@ -134,7 +134,7 @@ or if the files are in your current working directory:
 mlfmu build
 ```
 
-# Extended documentation
+## Extended documentation
 
 For more explanation on the ONNX file structure and inputs/outputs for your model, please refer to mlfmu's [MLMODEL.md](MLMODEL.md).
 
@@ -170,8 +170,6 @@ uv self update
 
 We use conan for building the FMU. For the conan building to work later on, you will need the Visual Studio Build tools 2022 to be installed. It is best to do this **before** installing conan (which gets installed as part of the package dependencies, see step 5). You can download and install the Build Tools for VS 2022 (for free) from <https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022>.
 
-> Note: After you installed conan, you want to make sure it has the correct build profile. You can auto-detect and create the profile by running `conan profile detect`. After this, you can check the profile in `C:\Users\<USRNAM>\.conan2\profiles\.default` (replace `<USRNAM>` with your username). You want to `compiler=msvc`, `compiler.cppstd=17`, `compiler.version=193` (for Windows).
-
 ### 3. Clone the repository
 
 Clone the mlfmu repository into your local development directory:
@@ -204,6 +202,8 @@ It allows the dependency resolver to upgrade dependencies to newer versions, whi
 ```sh
 uv sync -p 3.12 -U
 ```
+
+> Note: At this point, you should have conan installed. You will want to make sure it has the correct build profile. You can auto-detect and create the profile by running `conan profile detect`. After this, you can check the profile in `C:\Users\<USRNAM>\.conan2\profiles\.default` (replace `<USRNAM>` with your username). You want to have: `compiler=msvc`, `compiler.cppstd=17`, `compiler.version=193` (for Windows).
 
 ### 5. (Optional) Activate the virtual environment
 
@@ -269,17 +269,36 @@ For more options, see `uv run mlfmu --help` or `uv run mlfmu build --help`.
 
 The created FMU can be used for running (co-)simulations. We have tested the FMUs that we have created in the [Simulation Trust Center], which uses the [Open Simulation Platform] software.
 
+### 10. Compiling the documentation
+
+This repository uses sphinx with .rst and .md files as well as Python docstrings, to document the code and usage. To locally build the docs:
+
+```sh
+cd docs
+make html
+```
+
+You can then open index.html for access to all docs (for Windows: `start build\html\index.html`).
+
 ## Meta
 
 All code in mlfmu is DNV intellectual property.
 
 Copyright (c) 2024 [DNV](https://www.dnv.com) AS. All rights reserved.
 
+Primary contributors:
+
 Kristoffer Skare - [@LinkedIn](https://www.linkedin.com/in/kristoffer-skare-19606a1a1/) - <kristoffer.skare@dnv.com>
 
 Jorge Luis Mendez - [@LinkedIn](https://www.linkedin.com/in/jorgelmh/) - <jorge.luis.mendez@dnv.com>
 
-Stephanie Kemna - [@LinkedIn](https://www.linkedin.com/in/stephaniekemna/) - <stephanie.kemna@dnv.com>
+Additional contributors (testing, docs, examples, etc.):
+
+Melih Akdağ - [@LinkedIn](https://www.linkedin.com/in/melih-akdag/) - <melih.akdag@dnv.com>
+
+Stephanie Kemna - [@LinkedIn](https://www.linkedin.com/in/stephaniekemna/)
+
+Hee Jong Park - [@LinkedIn](https://www.linkedin.com/in/heejongpark/) - <hee.jong.park@dnv.com>
 
 ## Contributing
 
@@ -299,7 +318,7 @@ For your contribution, please make sure you follow the [STYLEGUIDE](STYLEGUIDE.m
 
 ## License & dependencies
 
-This code is distributed under the BSD 3-Clause license. See [LICENSE](LICENSE.md) for more information.
+This code is distributed under the BSD 3-Clause license. See [LICENSE](LICENSE) for more information.
 
 It makes use of [cpp-fmu], which is distributed under the MPL license at <https://github.com/viproma/cppfmu>.
 

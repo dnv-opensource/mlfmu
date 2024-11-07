@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path("../../src").absolute()))
 
 project = "mlfmu"
 copyright = "2024, DNV AS. All rights reserved."
-author = "Author One, Author Two, Author Three"
+author = "Kristoffer Skare, Jorge Luis Mendez, Stephanie Kemna, Melih Akdag"
 
 # The full version, including alpha/beta/rc tags
 release = "0.1.6"
@@ -65,7 +65,7 @@ html_theme = "furo"
 html_static_path = ["_static"]
 # html_logo = "_static/mlfmu.svg"
 autodoc_default_options = {
-    "member-order": "bysource",
+    "member-order": "groupwise",
     "undoc-members": True,
     "exclude-members": "__weakref__",
 }
