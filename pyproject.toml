@@ -63,11 +63,11 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/dnv-innersource/mlfmu"
-Documentation = "https://dnv-innersource.github.io/mlfmu/README.html"
-Repository = "https://github.com/dnv-innersource/mlfmu.git"
-Issues = "https://github.com/dnv-innersource/mlfmu/issues"
-Changelog = "https://github.com/dnv-innersource/mlfmu/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/dnv-opensource/mlfmu"
+Documentation = "https://dnv-opensource.github.io/mlfmu/README.html"
+Repository = "https://github.com/dnv-opensource/mlfmu.git"
+Issues = "https://github.com/dnv-opensource/mlfmu/issues"
+Changelog = "https://github.com/dnv-opensource/mlfmu/blob/main/CHANGELOG.md"
 
 
 [tool.uv]
