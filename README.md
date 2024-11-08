@@ -1,8 +1,8 @@
 [![pypi](https://img.shields.io/pypi/v/mlfmu.svg?color=blue)](https://pypi.python.org/pypi/mlfmu)
 [![versions](https://img.shields.io/pypi/pyversions/mlfmu.svg?color=blue)](https://pypi.python.org/pypi/mlfmu)
-[![license](https://img.shields.io/pypi/l/mlfmu.svg)](https://github.com/dnv-innersource/mlfmu/blob/main/LICENSE)
-![ci](https://img.shields.io/github/actions/workflow/status/dnv-innersource/mlfmu/.github%2Fworkflows%2Fnightly_build.yml?label=ci)
-[![docs](https://img.shields.io/github/actions/workflow/status/dnv-innersource/mlfmu/.github%2Fworkflows%2Fpush_to_release.yml?label=docs)][mlfmu_docs]
+[![license](https://img.shields.io/pypi/l/mlfmu.svg)](https://github.com/dnv-opensource/mlfmu/blob/main/LICENSE)
+![ci](https://img.shields.io/github/actions/workflow/status/dnv-opensource/mlfmu/.github%2Fworkflows%2Fnightly_build.yml?label=ci)
+[![docs](https://img.shields.io/github/actions/workflow/status/dnv-opensource/mlfmu/.github%2Fworkflows%2Fpush_to_release.yml?label=docs)][mlfmu_docs]
 
 # mlfmu
 
@@ -175,7 +175,7 @@ We use conan for building the FMU. For the conan building to work later on, you 
 Clone the mlfmu repository into your local development directory:
 
 ```sh
-git clone https://github.com/dnv-innersource/mlfmu path/to/your/dev/mlfmu
+git clone https://github.com/dnv-opensource/mlfmu path/to/your/dev/mlfmu
 git submodule update --init --recursive
 ```
 
@@ -302,7 +302,7 @@ Hee Jong Park - [@LinkedIn](https://www.linkedin.com/in/heejongpark/) - <hee.jon
 
 ## Contributing
 
-1. Fork it (<https://github.com/dnv-innersource/mlfmu/fork>) (Note: this is currently disabled for this repo. For development, continue with the next step.)
+1. Fork it (<https://github.com/dnv-opensource/mlfmu/fork>) (Note: this is currently disabled for this repo. For development, continue with the next step.)
 2. Create an issue in your GitHub repo
 3. Create your branch based on the issue number and type (`git checkout -b issue-name`)
 4. Evaluate and stage the changes you want to commit (`git add -i`)
@@ -323,7 +323,7 @@ This code is distributed under the BSD 3-Clause license. See [LICENSE](LICENSE) 
 It makes use of [cpp-fmu], which is distributed under the MPL license at <https://github.com/viproma/cppfmu>.
 
 <!-- Markdown link & img dfn's -->
-[mlfmu_docs]: https://dnv-innersource.github.io/mlfmu/README.html
+[mlfmu_docs]: https://dnv-opensource.github.io/mlfmu/README.html
 [cpp-fmu]: https://github.com/viproma/cppfmu
 [Open Simulation Platform]: https://opensimulationplatform.com/
 [Simulation Trust Center]: https://store.veracity.com/simulation-trust-center
