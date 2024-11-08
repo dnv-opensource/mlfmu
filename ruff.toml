@@ -21,13 +21,13 @@ select = [
 ]
 ignore = [
     # Ruff lint rules temporarily ignored, but which should be reactivated and resolved in the future.
-    "D100", # Missing docstring in public module   <- TODO @MVx: reactivate and resolve docstring issues  @CLAROS, 2024-10-15
-    "D101", # Missing docstring in public class   <- TODO @MVx: reactivate and resolve docstring issues  @CLAROS, 2024-10-15
-    "D102", # Missing docstring in public method   <- TODO @MVx: reactivate and resolve docstring issues  @CLAROS, 2024-10-15
-    "D103", # Missing docstring in public function   <- TODO @MVx: reactivate and resolve docstring issues  @CLAROS, 2024-10-15
-    "D104", # Missing docstring in public package   <- TODO @MVx: reactivate and resolve docstring issues  @CLAROS, 2024-10-15
-    "D105", # Missing docstring in magic method   <- TODO @MVx: reactivate and resolve docstring issues  @CLAROS, 2024-10-15
-    "D107", # Missing docstring in __init__   <- TODO @MVx: reactivate and resolve docstring issues  @CLAROS, 2024-10-15
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D102", # Missing docstring in public method
+    "D103", # Missing docstring in public function
+    "D104", # Missing docstring in public package
+    "D105", # Missing docstring in magic method
+    "D107", # Missing docstring in __init__
     # Ruff lint rules considered as too strict and hence ignored
     "ANN101",  # Missing type annotation for `self` argument in instance methods (NOTE: also listed as deprecated by Ruff)
     "ANN102",  # Missing type annotation for `cls` argument in class methods (NOTE: also listed as deprecated by Ruff)
