@@ -1,0 +1,39 @@
+ONNXModel
+=========
+
+.. currentmodule:: mlfmu.types.onnx_model
+
+.. autoclass:: ONNXModel
+   :members:
+   :show-inheritance:
+
+
+   
+   .. automethod:: __init__
+   
+   .. rubric:: Methods
+   .. autosummary::
+   
+      ~ONNXModel.__init__
+      ~ONNXModel.load_inputs
+      ~ONNXModel.load_outputs
+   
+   
+
+
+   
+   
+   .. rubric:: Attributes
+   .. autosummary::
+   
+      ~ONNXModel.filename
+      ~ONNXModel.input_name
+      ~ONNXModel.input_size
+      ~ONNXModel.output_name
+      ~ONNXModel.output_size
+      ~ONNXModel.state_size
+      ~ONNXModel.states_name
+      ~ONNXModel.time_input
+      ~ONNXModel.time_input_name
+   
+   
