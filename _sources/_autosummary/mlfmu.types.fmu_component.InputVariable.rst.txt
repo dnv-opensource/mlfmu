@@ -1,0 +1,64 @@
+InputVariable
+=============
+
+.. currentmodule:: mlfmu.types.fmu_component
+
+.. autoclass:: InputVariable
+   :members:
+   :show-inheritance:
+
+
+   
+   .. automethod:: __init__
+   
+   .. rubric:: Methods
+   .. autosummary::
+   
+      ~InputVariable.__init__
+      ~InputVariable.construct
+      ~InputVariable.copy
+      ~InputVariable.dict
+      ~InputVariable.from_orm
+      ~InputVariable.json
+      ~InputVariable.model_construct
+      ~InputVariable.model_copy
+      ~InputVariable.model_dump
+      ~InputVariable.model_dump_json
+      ~InputVariable.model_json_schema
+      ~InputVariable.model_parametrized_name
+      ~InputVariable.model_post_init
+      ~InputVariable.model_rebuild
+      ~InputVariable.model_validate
+      ~InputVariable.model_validate_json
+      ~InputVariable.model_validate_strings
+      ~InputVariable.parse_file
+      ~InputVariable.parse_obj
+      ~InputVariable.parse_raw
+      ~InputVariable.schema
+      ~InputVariable.schema_json
+      ~InputVariable.update_forward_refs
+      ~InputVariable.validate
+   
+   
+
+
+   
+   
+   .. rubric:: Attributes
+   .. autosummary::
+   
+      ~InputVariable.model_computed_fields
+      ~InputVariable.model_config
+      ~InputVariable.model_extra
+      ~InputVariable.model_fields
+      ~InputVariable.model_fields_set
+      ~InputVariable.agent_input_indexes
+      ~InputVariable.name
+      ~InputVariable.type
+      ~InputVariable.description
+      ~InputVariable.variability
+      ~InputVariable.start_value
+      ~InputVariable.is_array
+      ~InputVariable.length
+   
+   

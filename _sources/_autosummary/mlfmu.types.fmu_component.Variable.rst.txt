@@ -1,0 +1,63 @@
+Variable
+========
+
+.. currentmodule:: mlfmu.types.fmu_component
+
+.. autoclass:: Variable
+   :members:
+   :show-inheritance:
+
+
+   
+   .. automethod:: __init__
+   
+   .. rubric:: Methods
+   .. autosummary::
+   
+      ~Variable.__init__
+      ~Variable.construct
+      ~Variable.copy
+      ~Variable.dict
+      ~Variable.from_orm
+      ~Variable.json
+      ~Variable.model_construct
+      ~Variable.model_copy
+      ~Variable.model_dump
+      ~Variable.model_dump_json
+      ~Variable.model_json_schema
+      ~Variable.model_parametrized_name
+      ~Variable.model_post_init
+      ~Variable.model_rebuild
+      ~Variable.model_validate
+      ~Variable.model_validate_json
+      ~Variable.model_validate_strings
+      ~Variable.parse_file
+      ~Variable.parse_obj
+      ~Variable.parse_raw
+      ~Variable.schema
+      ~Variable.schema_json
+      ~Variable.update_forward_refs
+      ~Variable.validate
+   
+   
+
+
+   
+   
+   .. rubric:: Attributes
+   .. autosummary::
+   
+      ~Variable.model_computed_fields
+      ~Variable.model_config
+      ~Variable.model_extra
+      ~Variable.model_fields
+      ~Variable.model_fields_set
+      ~Variable.name
+      ~Variable.type
+      ~Variable.description
+      ~Variable.variability
+      ~Variable.start_value
+      ~Variable.is_array
+      ~Variable.length
+   
+   
