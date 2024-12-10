@@ -7,6 +7,12 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 
 ### Changed
 
+* Added checks for Windows vs Linux and fixed compilation for Linux, tested with Ubuntu 20.04.
+
+## [1.0.1]
+
+### Changed
+
 * Update generated docs; cleaning, fix for warnings, add missing pages and info, update authors and maintainers.
 * Add where the source code for cppfmu can be found, add third party license.
 * Added missing unit tests for the template data generated when building the FMU.
