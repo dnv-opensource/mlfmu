@@ -55,7 +55,26 @@ std::wstring OnnxFmu::formatOnnxPath(cppfmu::FMIString fmuResourceLocation)
  */
 void OnnxFmu::CreateSession()
 {
-    session_ = Ort::Session(env, onnxPath_.c_str(), Ort::SessionOptions {nullptr});
+    #ifdef _WIN32
+        // Windows
+        // Ort::Session::Session(const Ort::Env &, const wchar_t *,const Ort::SessionOptions &)
+        session_ = Ort::Session(env, onnxPath_.c_str(), Ort::SessionOptions {nullptr});
+    #else
+        // Linux
+        // Ort::Session::Session(Ort::Env&, const char*, Ort::SessionOptions)
+        const wchar_t * input = onnxPath_.c_str();
+        size_t size = (wcslen(input) + 1) * sizeof(wchar_t);
+        char * buffer = new char[size];
+        #ifdef __STDC_LIB_EXT1__
+            // wcstombs_s is only guaranteed to be available if __STDC_LIB_EXT1__ is defined
+            size_t convertedSize;
+            std::wcstombs_s(&convertedSize, buffer, size, input, size);
+        #else
+            std::wcstombs(buffer, input, size);
+        #endif
+        session_ = Ort::Session(env, buffer, Ort::SessionOptions {nullptr});
+        delete[] buffer;
+    #endif
 }
 
 /**
