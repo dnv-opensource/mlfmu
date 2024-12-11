@@ -340,7 +340,9 @@ def build_fmu(
         f"-DFMU_NAMES={fmu_name}",
         f"-DFMU_SOURCE_PATH={fmu_src_path.parent!s}",
     ]
-    cmake_command = ["cmake", *cmake_set_folders, "--preset", "conan-default"]
+    # Windows vs Linux
+    conan_preset = "conan-default" if os.name == "nt" else "conan-release"
+    cmake_command = ["cmake", *cmake_set_folders, "--preset", conan_preset]
     cmake_build_command = ["cmake", "--build", ".", "-j", "14", "--config", "Release"]
 
     # Change directory to the build folder

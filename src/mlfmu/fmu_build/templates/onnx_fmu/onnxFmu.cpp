@@ -1,5 +1,7 @@
 #include "onnxFmu.hpp"
 
+#include <iostream>
+
 /**
  * \brief Constructs an instance of the OnnxFmu class.
  *
@@ -9,9 +11,12 @@
  */
 OnnxFmu::OnnxFmu(cppfmu::FMIString fmuResourceLocation)
 {
-
-    onnxPath_ = formatOnnxPath(fmuResourceLocation);
-    CreateSession();
+    formatOnnxPath(fmuResourceLocation);
+    try {
+        CreateSession();
+    } catch (const std::runtime_error& e) {
+        std::cerr << e.what() << '\n';
+    }
     OnnxFmu::Reset();
 }
 
@@ -21,13 +26,12 @@ OnnxFmu::OnnxFmu(cppfmu::FMIString fmuResourceLocation)
  *
  * Formats the onnx path by appending the ONNX_FILENAME to the given fmuResourceLocation.
  * If the path starts with "file:///", it removes the "file://" prefix.
+ * This is directly stored to the class var onnxPath_.
  *
  * \param fmuResourceLocation The location of the FMU resource.
- * \returns the formatted onnx path (std::wstring)
  */
-std::wstring OnnxFmu::formatOnnxPath(cppfmu::FMIString fmuResourceLocation)
+void OnnxFmu::formatOnnxPath(cppfmu::FMIString fmuResourceLocation)
 {
-
     // Creating complete path to onnx file
     std::wostringstream onnxPathStream;
     onnxPathStream << fmuResourceLocation;
@@ -41,7 +45,12 @@ std::wstring OnnxFmu::formatOnnxPath(cppfmu::FMIString fmuResourceLocation)
     if (startPath == L"file:///") {
         path = endPath;
     }
-    return path;
+    // save to onnxPath_ (wstring for Windows, else string)
+#ifdef _WIN32
+    onnxPath_ = path;
+#else
+    onnxPath_ = std::string(path.begin(), path.end());
+#endif
 }
 
 /**
@@ -55,6 +64,7 @@ std::wstring OnnxFmu::formatOnnxPath(cppfmu::FMIString fmuResourceLocation)
  */
 void OnnxFmu::CreateSession()
 {
+    // Create the ONNX environment
     session_ = Ort::Session(env, onnxPath_.c_str(), Ort::SessionOptions {nullptr});
 }
 
