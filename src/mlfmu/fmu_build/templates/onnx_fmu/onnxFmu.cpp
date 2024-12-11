@@ -1,5 +1,7 @@
 #include "onnxFmu.hpp"
 
+#include <iostream>
+
 /**
  * \brief Constructs an instance of the OnnxFmu class.
  *
@@ -9,9 +11,12 @@
  */
 OnnxFmu::OnnxFmu(cppfmu::FMIString fmuResourceLocation)
 {
-
-    onnxPath_ = formatOnnxPath(fmuResourceLocation);
-    CreateSession();
+    formatOnnxPath(fmuResourceLocation);
+    try {
+        CreateSession();
+    } catch (const std::runtime_error& e) {
+        std::cerr << e.what() << '\n';
+    }
     OnnxFmu::Reset();
 }
 
@@ -21,13 +26,12 @@ OnnxFmu::OnnxFmu(cppfmu::FMIString fmuResourceLocation)
  *
  * Formats the onnx path by appending the ONNX_FILENAME to the given fmuResourceLocation.
  * If the path starts with "file:///", it removes the "file://" prefix.
+ * This is directly stored to the class var onnxPath_.
  *
  * \param fmuResourceLocation The location of the FMU resource.
- * \returns the formatted onnx path (std::wstring)
  */
-std::wstring OnnxFmu::formatOnnxPath(cppfmu::FMIString fmuResourceLocation)
+void OnnxFmu::formatOnnxPath(cppfmu::FMIString fmuResourceLocation)
 {
-
     // Creating complete path to onnx file
     std::wostringstream onnxPathStream;
     onnxPathStream << fmuResourceLocation;
@@ -41,7 +45,12 @@ std::wstring OnnxFmu::formatOnnxPath(cppfmu::FMIString fmuResourceLocation)
     if (startPath == L"file:///") {
         path = endPath;
     }
-    return path;
+    // save to onnxPath_ (wstring for Windows, else string)
+#ifdef _WIN32
+    onnxPath_ = path;
+#else
+    onnxPath_ = std::string(path.begin(), path.end());
+#endif
 }
 
 /**
@@ -55,26 +64,8 @@ std::wstring OnnxFmu::formatOnnxPath(cppfmu::FMIString fmuResourceLocation)
  */
 void OnnxFmu::CreateSession()
 {
-    #ifdef _WIN32
-        // Windows
-        // Ort::Session::Session(const Ort::Env &, const wchar_t *,const Ort::SessionOptions &)
-        session_ = Ort::Session(env, onnxPath_.c_str(), Ort::SessionOptions {nullptr});
-    #else
-        // Linux
-        // Ort::Session::Session(Ort::Env&, const char*, Ort::SessionOptions)
-        const wchar_t * input = onnxPath_.c_str();
-        size_t size = (wcslen(input) + 1) * sizeof(wchar_t);
-        char * buffer = new char[size];
-        #ifdef __STDC_LIB_EXT1__
-            // wcstombs_s is only guaranteed to be available if __STDC_LIB_EXT1__ is defined
-            size_t convertedSize;
-            std::wcstombs_s(&convertedSize, buffer, size, input, size);
-        #else
-            std::wcstombs(buffer, input, size);
-        #endif
-        session_ = Ort::Session(env, buffer, Ort::SessionOptions {nullptr});
-        delete[] buffer;
-    #endif
+    // Create the ONNX environment
+    session_ = Ort::Session(env, onnxPath_.c_str(), Ort::SessionOptions {nullptr});
 }
 
 /**

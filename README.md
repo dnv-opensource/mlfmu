@@ -22,6 +22,8 @@ MLFMU serves as a tool for developers looking to integrate machine learning mode
 pip install mlfmu
 ```
 
+You may need to run `conan profile detect` before running the tool. See the notes further down in this README w.r.t. required cppstd version for Windows/Linux/MacOS.
+
 ## Creating ML FMUs
 
 ### Create your own ML model
@@ -142,6 +144,8 @@ For advanced usage options, e.g. editing the generated FMU source code, or using
 
 ## Development Setup
 
+If you just want to use `mlfmu`, you do not need to do the following steps. This is for those aiming to do development in this repo.
+
 ### 1. Install uv
 
 This project uses `uv` as package manager.
@@ -166,7 +170,7 @@ Once installed, you can update `uv` to its latest version, anytime, by running:
 uv self update
 ```
 
-### 2. Install Visual Studio Build Tools
+### 2. (Windows) Install Visual Studio Build Tools
 
 We use conan for building the FMU. For the conan building to work later on, you will need the Visual Studio Build tools 2022 to be installed. It is best to do this **before** installing conan (which gets installed as part of the package dependencies, see step 5). You can download and install the Build Tools for VS 2022 (for free) from <https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022>.
 
@@ -203,7 +207,11 @@ It allows the dependency resolver to upgrade dependencies to newer versions, whi
 uv sync -p 3.12 -U
 ```
 
-> Note: At this point, you should have conan installed. You will want to make sure it has the correct build profile. You can auto-detect and create the profile by running `conan profile detect`. After this, you can check the profile in `C:\Users\<USRNAM>\.conan2\profiles\.default` (replace `<USRNAM>` with your username). You want to have: `compiler=msvc`, `compiler.cppstd=17`, `compiler.version=193` (for Windows).
+> Note: At this point, you should have conan installed. You will want to make sure it has the correct build profile. You can auto-detect and create the profile by running `conan profile detect`.
+After this, you can check the profile:<br/>
+.. on Windows: in `C:\Users\<USRNAM>\.conan2\profiles\.default` (replace `<USRNAM>` with your username). You want to have: `compiler=msvc`, `compiler.cppstd=17`, `compiler.version=193`.<br/>
+.. on Linux: in `~/.conan2/profiles/default`, you will need at least `compiler.cppstd=gnu17` and `compiler.libcxx=libstdc++11`.
+.. on MacOS: in `~/.conan2/profiles/default`, you will need at least `compiler.cppstd=gnu20` (tested with `compiler.version=14`).
 
 ### 5. (Optional) Activate the virtual environment
 

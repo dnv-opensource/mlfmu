@@ -7,7 +7,7 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 
 ### Changed
 
-* Added checks for Windows vs Linux and fixed compilation for Linux, tested with Ubuntu 20.04.
+* Added checks for Windows vs Linux and fixed compilation for Linux/MacOS, updated README. Tested with Ubuntu 20.04, Ubuntu 22.04 and MacOS 14.4.
 
 ## [1.0.1]
 
