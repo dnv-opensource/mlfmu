@@ -1,0 +1,67 @@
+FmiInputVariable
+================
+
+.. currentmodule:: mlfmu.types.fmu_component
+
+.. autoclass:: FmiInputVariable
+   :members:
+   :show-inheritance:
+
+
+   
+   .. automethod:: __init__
+   
+   .. rubric:: Methods
+   .. autosummary::
+   
+      ~FmiInputVariable.__init__
+      ~FmiInputVariable.construct
+      ~FmiInputVariable.copy
+      ~FmiInputVariable.dict
+      ~FmiInputVariable.from_orm
+      ~FmiInputVariable.json
+      ~FmiInputVariable.model_construct
+      ~FmiInputVariable.model_copy
+      ~FmiInputVariable.model_dump
+      ~FmiInputVariable.model_dump_json
+      ~FmiInputVariable.model_json_schema
+      ~FmiInputVariable.model_parametrized_name
+      ~FmiInputVariable.model_post_init
+      ~FmiInputVariable.model_rebuild
+      ~FmiInputVariable.model_validate
+      ~FmiInputVariable.model_validate_json
+      ~FmiInputVariable.model_validate_strings
+      ~FmiInputVariable.parse_file
+      ~FmiInputVariable.parse_obj
+      ~FmiInputVariable.parse_raw
+      ~FmiInputVariable.schema
+      ~FmiInputVariable.schema_json
+      ~FmiInputVariable.update_forward_refs
+      ~FmiInputVariable.validate
+   
+   
+
+
+   
+   
+   .. rubric:: Attributes
+   .. autosummary::
+   
+      ~FmiInputVariable.model_computed_fields
+      ~FmiInputVariable.model_config
+      ~FmiInputVariable.model_extra
+      ~FmiInputVariable.model_fields
+      ~FmiInputVariable.model_fields_set
+      ~FmiInputVariable.causality
+      ~FmiInputVariable.variable_references
+      ~FmiInputVariable.agent_state_init_indexes
+      ~FmiInputVariable.agent_input_indexes
+      ~FmiInputVariable.name
+      ~FmiInputVariable.type
+      ~FmiInputVariable.description
+      ~FmiInputVariable.variability
+      ~FmiInputVariable.start_value
+      ~FmiInputVariable.is_array
+      ~FmiInputVariable.length
+   
+   

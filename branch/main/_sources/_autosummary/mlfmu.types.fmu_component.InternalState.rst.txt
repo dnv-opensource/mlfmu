@@ -1,0 +1,62 @@
+InternalState
+=============
+
+.. currentmodule:: mlfmu.types.fmu_component
+
+.. autoclass:: InternalState
+   :members:
+   :show-inheritance:
+
+
+   
+   .. automethod:: __init__
+   
+   .. rubric:: Methods
+   .. autosummary::
+   
+      ~InternalState.__init__
+      ~InternalState.check_only_one_initialization
+      ~InternalState.construct
+      ~InternalState.copy
+      ~InternalState.dict
+      ~InternalState.from_orm
+      ~InternalState.json
+      ~InternalState.model_construct
+      ~InternalState.model_copy
+      ~InternalState.model_dump
+      ~InternalState.model_dump_json
+      ~InternalState.model_json_schema
+      ~InternalState.model_parametrized_name
+      ~InternalState.model_post_init
+      ~InternalState.model_rebuild
+      ~InternalState.model_validate
+      ~InternalState.model_validate_json
+      ~InternalState.model_validate_strings
+      ~InternalState.parse_file
+      ~InternalState.parse_obj
+      ~InternalState.parse_raw
+      ~InternalState.schema
+      ~InternalState.schema_json
+      ~InternalState.update_forward_refs
+      ~InternalState.validate
+   
+   
+
+
+   
+   
+   .. rubric:: Attributes
+   .. autosummary::
+   
+      ~InternalState.model_computed_fields
+      ~InternalState.model_config
+      ~InternalState.model_extra
+      ~InternalState.model_fields
+      ~InternalState.model_fields_set
+      ~InternalState.name
+      ~InternalState.description
+      ~InternalState.start_value
+      ~InternalState.initialization_variable
+      ~InternalState.agent_output_indexes
+   
+   

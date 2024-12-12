@@ -1,0 +1,17 @@
+mlfmu.types.onnx\_model
+=======================
+
+.. automodule:: mlfmu.types.onnx_model
+   :members:
+   :exclude-members: ONNXModel,
+   
+
+
+   
+   .. rubric:: Classes
+   .. autosummary::
+      :toctree:
+      :template: custom-class.rst
+   
+      ONNXModel
+   
