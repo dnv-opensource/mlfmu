@@ -32,6 +32,7 @@ public:
 
     void formatOnnxPath(cppfmu::FMIString fmuResourceLocation);
 
+    // New functions for the OnnxTemplate class
     void CreateSession();
     bool SetOnnxInputs();
     bool GetOnnxOutputs();
@@ -56,7 +57,6 @@ private:
     Ort::RunOptions run_options;
     Ort::Session session_ {nullptr};
 
-    // std::wstring onnxPath_;
     // store path as wstring for Windows or as char * for Linux
 #ifdef _WIN32
     std::wstring onnxPath_;
