@@ -63,7 +63,7 @@ exclude_patterns = []
 html_title = f"mlfmu {release}"
 html_theme = "furo"
 html_static_path = ["_static"]
-# html_logo = "_static/mlfmu.svg"
+html_logo = "_static/mlfmu_logo_v1.svg"
 autodoc_default_options = {
     "member-order": "groupwise",
     "undoc-members": True,
