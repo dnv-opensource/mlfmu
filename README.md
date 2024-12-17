@@ -320,6 +320,8 @@ Hee Jong Park - [@LinkedIn](https://www.linkedin.com/in/heejongpark/) - <hee.jon
 
 For your contribution, please make sure you follow the [STYLEGUIDE](STYLEGUIDE.md) before creating the Pull Request.
 
+Note; version numbers should be updated in: `CHANGELOG.md`, `pyproject.toml`, and `source/docs/conf.py`.
+
 ## Errors & fixes
 
 - If you get an error similar to `..\fmu.cpp(4,10): error C1083: Cannot open include file: 'cppfmu_cs.hpp': No such file or directory`, you are missing cppfmu. This is a submodule to this repository. Make sure that you do a `git submodule update --init --recursive` in the top level folder.
