@@ -22,10 +22,4 @@ jobs:
         with:
           type: now
           target_branch: release
-          # @TODO: A dedicated RELEASE_TOKEN should be created in the repo settings
-          #        and used for this task when in production.
-          #        It is set here to the default GITHUB_TOKEN only
-          #        for demonstration purposes, enabling the workflow in the repo template
-          #        to run without additional configuration.
-          # github_token: ${{ secrets.RELEASE_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.RELEASE_TOKEN }}
