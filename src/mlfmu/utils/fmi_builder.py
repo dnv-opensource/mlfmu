@@ -97,7 +97,8 @@ def generate_model_description(fmu_model: FmiModel) -> ElementTree:
 
         # Appending output to <Outputs> inside <ModelStructure>
         if var.causality == FmiCausality.OUTPUT:
-            _ = SubElement(outputs, "Unknown", {"index": str(var.variable_reference)})
+            # Index is 1-indexed for <Unknown> tag
+            _ = SubElement(outputs, "Unknown", {"index": str(var.variable_reference + 1)})
 
     # Create XML tree containing root element and pretty format its contents
     xml_tree = ElementTree(root)
