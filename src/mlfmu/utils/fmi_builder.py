@@ -76,6 +76,7 @@ def generate_model_description(fmu_model: FmiModel) -> ElementTree:
     # <ModelStructure> tag with <Outputs> tab inside --> Append all outputs
     model_structure = SubElement(root, "ModelStructure")
     outputs = SubElement(model_structure, "Outputs")
+    initial_unknowns = SubElement(model_structure, "InitialUnknowns")
 
     for var in fmu_model.get_fmi_model_variables():
         # XML variable attributes
@@ -95,10 +96,13 @@ def generate_model_description(fmu_model: FmiModel) -> ElementTree:
         # FMI variable type element
         _ = SubElement(var_elem, var.type.value.capitalize(), var_type_attrs)
 
-        # Appending output to <Outputs> inside <ModelStructure>
+        # Adding outputs inside <ModelStructure>
         if var.causality == FmiCausality.OUTPUT:
             # Index is 1-indexed for <Unknown> tag
-            _ = SubElement(outputs, "Unknown", {"index": str(var.variable_reference + 1)})
+            unknown_attributes = {"index": str(var.variable_reference + 1)}
+            # For each output create an <Unknown> tag inside both <Outputs> and <InitialUnknowns>
+            _ = SubElement(outputs, "Unknown", unknown_attributes)
+            _ = SubElement(initial_unknowns, "Unknown", unknown_attributes)
 
     # Create XML tree containing root element and pretty format its contents
     xml_tree = ElementTree(root)
