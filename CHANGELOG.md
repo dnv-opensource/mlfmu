@@ -3,7 +3,14 @@
 All notable changes to the [mlfmu] project will be documented in this file.<br>
 The changelog format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [1.0.2]
+
+### Changed
+
+* MLFMU logo is added and conf.py is updated.
+* Added checks for Windows vs Linux and fixed compilation for Linux/MacOS, updated README. Tested with Ubuntu 20.04, Ubuntu 22.04 and MacOS 14.4.
+
+## [1.0.1]
 
 ### Changed
 

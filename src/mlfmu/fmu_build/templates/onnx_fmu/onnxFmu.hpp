@@ -30,8 +30,9 @@ class OnnxFmu : public cppfmu::SlaveInstance
 public:
     OnnxFmu(cppfmu::FMIString fmuResourceLocation);
 
+    void formatOnnxPath(cppfmu::FMIString fmuResourceLocation);
+
     // New functions for the OnnxTemplate class
-    std::wstring formatOnnxPath(cppfmu::FMIString fmuResourceLocation);
     void CreateSession();
     bool SetOnnxInputs();
     bool GetOnnxOutputs();
@@ -55,7 +56,13 @@ private:
     Ort::Env env;
     Ort::RunOptions run_options;
     Ort::Session session_ {nullptr};
+
+    // store path as wstring for Windows or as char * for Linux
+#ifdef _WIN32
     std::wstring onnxPath_;
+#else
+    std::string onnxPath_;
+#endif
 
     std::string inputName_ {ONNX_INPUT_NAME};
     std::array<int64_t, 2> inputShape_ {1, NUM_ONNX_INPUTS};

@@ -9,11 +9,8 @@ on:
 jobs:
   build_package:
     uses: ./.github/workflows/_build_package.yml
-  # publish_package_test:
-  #   needs:
-  #     - build_package
-  #   uses: ./.github/workflows/_publish_package_test.yml
   publish_package:
+    name: Publish package
     needs:
       - build_package
     runs-on: ubuntu-latest
@@ -26,7 +23,8 @@ jobs:
           name: artifact
           path: dist
       - uses: pypa/gh-action-pypi-publish@release/v1
-
+        # with:                                             # Uncomment this line to publish to testpypi
+        #   repository-url: https://test.pypi.org/legacy/   # Uncomment this line to publish to testpypi
   merge_into_release:
     uses: ./.github/workflows/_merge_into_release.yml
     secrets:

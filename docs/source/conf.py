@@ -26,7 +26,7 @@ copyright = "2024, DNV AS. All rights reserved."
 author = "Kristoffer Skare, Jorge Luis Mendez, Stephanie Kemna, Melih Akdag"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.6"
+release = "1.0.2"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -63,7 +63,7 @@ exclude_patterns = []
 html_title = f"mlfmu {release}"
 html_theme = "furo"
 html_static_path = ["_static"]
-# html_logo = "_static/mlfmu.svg"
+html_logo = "_static/mlfmu_logo_v1.svg"
 autodoc_default_options = {
     "member-order": "groupwise",
     "undoc-members": True,
