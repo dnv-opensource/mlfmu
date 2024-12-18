@@ -3,6 +3,12 @@
 All notable changes to the [mlfmu] project will be documented in this file.<br>
 The changelog format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## Unreleased
+
+### Changed
+
+* Generation of modelDescription.xml file to correctly generate tags for each output with 1-indexed indexes and InitialUnknowns tags
+
 ## [1.0.2]
 
 ### Changed
