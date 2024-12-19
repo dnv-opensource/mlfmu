@@ -78,7 +78,14 @@ def generate_model_description(fmu_model: FmiModel) -> ElementTree:
     outputs = SubElement(model_structure, "Outputs")
     initial_unknowns = SubElement(model_structure, "InitialUnknowns")
 
-    for var in fmu_model.get_fmi_model_variables():
+    # Get all variables to add them inside the <ModelVariables> tag
+    model_variables = fmu_model.get_fmi_model_variables()
+
+    # The variables needs to be added in the order of their valueReference
+    sorted_model_variables = sorted(model_variables, key=lambda x: x.variable_reference)
+
+    # Add each variable inside the <ModelVariables> tag
+    for var in sorted_model_variables:
         # XML variable attributes
         var_attrs = {
             "name": var.name,

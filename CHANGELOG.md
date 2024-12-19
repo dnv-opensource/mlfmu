@@ -8,6 +8,7 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 ### Changed
 
 * Generation of modelDescription.xml file to correctly generate tags for each output with 1-indexed indexes and InitialUnknowns tags
+* Generation of modelDescription.xml adds the variables (inputs, parameters and outputs) in the orderer of their valueReference. This is for the indexing to work correctly
 
 ## [1.0.2]
 
