@@ -1,6 +1,6 @@
 # Examples
 
-This folder contains a couple of examples you can look at and test the MLFMU tool with.
+This folder contains a couple of example files to use for testing the MLFMU tools and some FMUs that have been generated using this tool.
 Each folder is set up to contain:
 
 * `config`: containing the `.onnx` and `interface.json` files
