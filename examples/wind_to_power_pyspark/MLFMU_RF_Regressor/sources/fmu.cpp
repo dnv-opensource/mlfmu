@@ -6,19 +6,19 @@
 
 
 /**
- * \class WindToPower
- * \brief A class representing an WindToPower FMU.
+ * \class MLFMU_RF_Regressor
+ * \brief A class representing an MLFMU_RF_Regressor FMU.
  *
- * This class is derived from the OnnxFmu class and provides functionality specific to the WindToPower FMU.
+ * This class is derived from the OnnxFmu class and provides functionality specific to the MLFMU_RF_Regressor FMU.
  */
-class WindToPower : public OnnxFmu {
+class MLFMU_RF_Regressor : public OnnxFmu {
     public :
         /**
-         * \brief Constructs a new WindToPower object.
+         * \brief Constructs a new MLFMU_RF_Regressor object.
          *
          * \param fmuResourceLocation The location of the resources of the FMU.
          */
-        WindToPower(cppfmu::FMIString fmuResourceLocation) : OnnxFmu(fmuResourceLocation) {}
+        MLFMU_RF_Regressor(cppfmu::FMIString fmuResourceLocation) : OnnxFmu(fmuResourceLocation) {}
 
     private :
         // Add private members and functions here
@@ -48,5 +48,5 @@ cppfmu::UniquePtr<cppfmu::SlaveInstance> CppfmuInstantiateSlave(
     if (std::strcmp(fmuGUID, FMU_UUID) != 0) {
         throw std::runtime_error("FMU GUID mismatch");
     }
-    return cppfmu::AllocateUnique<WindToPower>(memory, fmuResourceLocation);
+    return cppfmu::AllocateUnique<MLFMU_RF_Regressor>(memory, fmuResourceLocation);
 }

@@ -1,11 +1,11 @@
 # Examples
 
 This folder contains a couple of example files to use for testing the MLFMU tools and some FMUs that have been generated using this tool.
-Each folder is set up to contain:
+Each folder is set up to contain at least:
 
-* `config`: containing the `.onnx` and `interface.json` files
-* `generated_fmu`: binary FMU files, to serve as examples
-* `<FmuName>`: source files for the FMU
+* `config`: the `.onnx` and `interface.json` files, which you can use to test the `mlfmu` commands with
+* `generated_fmu`: binary FMU files, to serve as examples, as generated when running `mlfmu build` for the config files
+* `<FmuName>`: files for the FMU as generated when running `mlfmu codegen`
 
 The FMUs in this folder have been validated using [FMU_check].
 
