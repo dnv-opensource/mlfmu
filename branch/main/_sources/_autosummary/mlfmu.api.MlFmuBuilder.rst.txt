@@ -1,0 +1,39 @@
+MlFmuBuilder
+============
+
+.. currentmodule:: mlfmu.api
+
+.. autoclass:: MlFmuBuilder
+   :members:
+   :show-inheritance:
+
+
+   
+   .. automethod:: __init__
+   
+   .. rubric:: Methods
+   .. autosummary::
+   
+      ~MlFmuBuilder.__init__
+      ~MlFmuBuilder.build
+      ~MlFmuBuilder.compile
+      ~MlFmuBuilder.default_build_folder
+      ~MlFmuBuilder.default_build_source_folder
+      ~MlFmuBuilder.default_compile_source_folder
+      ~MlFmuBuilder.default_fmu_output_folder
+      ~MlFmuBuilder.default_generate_source_folder
+      ~MlFmuBuilder.default_interface_file
+      ~MlFmuBuilder.default_model_file
+      ~MlFmuBuilder.generate
+   
+   
+
+
+   
+   
+   .. rubric:: Attributes
+   .. autosummary::
+   
+      ~MlFmuBuilder.temp_folder
+   
+   

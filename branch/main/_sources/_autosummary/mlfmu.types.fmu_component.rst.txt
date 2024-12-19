@@ -1,0 +1,29 @@
+mlfmu.types.fmu\_component
+==========================
+
+.. automodule:: mlfmu.types.fmu_component
+   :members:
+   :exclude-members: BaseModelConfig,FmiCausality,FmiInputVariable,FmiModel,FmiOutputVariable,FmiVariability,FmiVariable,FmiVariableType,InputVariable,InternalState,ModelComponent,OutputVariable,Variable,
+   
+
+
+   
+   .. rubric:: Classes
+   .. autosummary::
+      :toctree:
+      :template: custom-class.rst
+   
+      BaseModelConfig
+      FmiCausality
+      FmiInputVariable
+      FmiModel
+      FmiOutputVariable
+      FmiVariability
+      FmiVariable
+      FmiVariableType
+      InputVariable
+      InternalState
+      ModelComponent
+      OutputVariable
+      Variable
+   

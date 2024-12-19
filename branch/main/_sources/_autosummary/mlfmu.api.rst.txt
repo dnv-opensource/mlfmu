@@ -1,0 +1,24 @@
+﻿mlfmu.api
+=========
+
+.. automodule:: mlfmu.api
+   :members:
+   :exclude-members: MlFmuBuilder,MlFmuCommand,MlFmuProcess,
+   
+
+
+   
+   .. rubric:: Functions
+   .. autosummary::
+   
+      run
+   
+   .. rubric:: Classes
+   .. autosummary::
+      :toctree:
+      :template: custom-class.rst
+   
+      MlFmuBuilder
+      MlFmuCommand
+      MlFmuProcess
+   
