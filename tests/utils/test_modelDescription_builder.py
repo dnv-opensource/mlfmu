@@ -56,13 +56,14 @@ def test_generate_model_description_with_internal_state_params():
     variables = xml_structure.findall(".//ScalarVariable")
 
     assert xml_structure.getroot().tag == "fmiModelDescription"
-    assert variables[0].attrib["name"] == "state1"
-    assert variables[0].attrib["causality"] == "parameter"
-    assert variables[0][0].tag == "Real"
-    assert variables[0][0].attrib["start"] == "0.0"
 
-    assert variables[1].attrib["name"] == "output1"
-    assert variables[1].attrib["causality"] == "output"
+    assert variables[0].attrib["name"] == "output1"
+    assert variables[0].attrib["causality"] == "output"
+
+    assert variables[1].attrib["name"] == "state1"
+    assert variables[1].attrib["causality"] == "parameter"
+    assert variables[1][0].tag == "Real"
+    assert variables[1][0].attrib["start"] == "0.0"
 
 
 def test_generate_vector_ports():
