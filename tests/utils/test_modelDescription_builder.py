@@ -56,13 +56,14 @@ def test_generate_model_description_with_internal_state_params():
     variables = xml_structure.findall(".//ScalarVariable")
 
     assert xml_structure.getroot().tag == "fmiModelDescription"
-    assert variables[0].attrib["name"] == "state1"
-    assert variables[0].attrib["causality"] == "parameter"
-    assert variables[0][0].tag == "Real"
-    assert variables[0][0].attrib["start"] == "0.0"
 
-    assert variables[1].attrib["name"] == "output1"
-    assert variables[1].attrib["causality"] == "output"
+    assert variables[0].attrib["name"] == "output1"
+    assert variables[0].attrib["causality"] == "output"
+
+    assert variables[1].attrib["name"] == "state1"
+    assert variables[1].attrib["causality"] == "parameter"
+    assert variables[1][0].tag == "Real"
+    assert variables[1][0].attrib["start"] == "0.0"
 
 
 def test_generate_vector_ports():
@@ -193,5 +194,6 @@ def test_generate_model_description_output():
     output_variables = [var for var in variables if var.attrib.get("causality") == "output"]
     outputs_registered = xml_structure.findall(".//Outputs/Unknown")
 
-    assert output_variables[0].attrib["valueReference"] == outputs_registered[0].attrib["index"]
-    assert output_variables[1].attrib["valueReference"] == outputs_registered[1].attrib["index"]
+    # The index should be the valueReference + 1
+    assert int(output_variables[0].attrib["valueReference"]) + 1 == int(outputs_registered[0].attrib["index"])
+    assert int(output_variables[1].attrib["valueReference"]) + 1 == int(outputs_registered[1].attrib["index"])
