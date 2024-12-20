@@ -320,7 +320,7 @@ Hee Jong Park - [@LinkedIn](https://www.linkedin.com/in/heejongpark/) - <hee.jon
 
 For your contribution, please make sure you follow the [STYLEGUIDE](STYLEGUIDE.md) before creating the Pull Request.
 
-Note; version numbers should be updated in: `CHANGELOG.md`, `pyproject.toml`, and `source/docs/conf.py`.
+Note; version numbers are in: `CHANGELOG.md`, `pyproject.toml`, and `docs/source/conf.py` (and should be automatically updated by bump-my-version upon release).
 
 ## Errors & fixes
 
