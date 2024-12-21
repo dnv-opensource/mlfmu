@@ -1,0 +1,31 @@
+MlFmuProcess
+============
+
+.. currentmodule:: mlfmu.api
+
+.. autoclass:: MlFmuProcess
+   :members:
+   :show-inheritance:
+
+
+   
+   .. automethod:: __init__
+   
+   .. rubric:: Methods
+   .. autosummary::
+   
+      ~MlFmuProcess.__init__
+      ~MlFmuProcess.run
+   
+   
+
+
+   
+   
+   .. rubric:: Attributes
+   .. autosummary::
+   
+      ~MlFmuProcess.command
+      ~MlFmuProcess.builder
+   
+   
