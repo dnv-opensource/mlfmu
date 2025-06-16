@@ -25,7 +25,7 @@ name = "mlfmu"
 version = "1.0.2"
 description = "Export ML models represented as ONNX files to Functional-Mockup-Units (FMU)"
 readme = "README.md"
-requires-python = ">= 3.10"
+requires-python = ">= 3.10,<3.13"
 license = { file = "LICENSE" }
 authors = [
     { name = "Jorge Luis Mendez", email = "jorge.luis.mendez@dnv.com" },
