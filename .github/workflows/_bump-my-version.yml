@@ -5,6 +5,12 @@ on:
     secrets:
       GH_TOKEN:
         required: true
+    inputs:
+      bump-type:
+        description: 'Bump type'
+        required: false
+        default: 'patch'
+        type: string
   workflow_dispatch:
     inputs:
       bump-type:
