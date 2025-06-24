@@ -33,8 +33,10 @@ jobs:
             name: artifact
             path: dist
         - uses: pypa/gh-action-pypi-publish@release/v1
-          with:                                             # Uncomment this line to publish to testpypi
-             repository-url: https://test.pypi.org/legacy/   # Uncomment this line to publish to testpypi
+          # Uncomment the next 2 lines to publish to testpypi
+          # (note; this requires a trusted publisher on test.pypi.org, this is different from pypi.org)
+          # with:
+            #  repository-url: https://test.pypi.org/legacy/
 
   # create github release
   create_release:
