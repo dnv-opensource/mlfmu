@@ -22,7 +22,7 @@ jobs:
     needs: [code_quality, test]
     uses: ./.github/workflows/_bump-my-version.yml
     secrets:
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
     with:
       bump-type: ${{ github.event.inputs.bump-type || 'patch' }}
   # build and publish documentation
