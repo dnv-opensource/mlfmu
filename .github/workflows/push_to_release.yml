@@ -11,5 +11,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  code_quality:
+    uses: ./.github/workflows/_code_quality.yml
+  test:
+    uses: ./.github/workflows/_test.yml
+  # bump version and create tag
+  bump_version:
+    needs: [code_quality, test]
+    uses: ./.github/workflows/_bump-my-version.yml
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
   build_and_publish_documentation:
+    needs: bump_version
     uses: ./.github/workflows/_build_and_publish_documentation.yml
+  # build the package artifacts
+  build_package:
+    needs: build_and_publish_documentation
+    uses: ./.github/workflows/_build_package.yml
+  # release package to pypi, github release, and merge into main
+  publish_release:
+    needs: build_package
+    uses: ./.github/workflows/publish_release.yml
+    with:
+      new_version: ${{ needs.bump_version.outputs.new-version }}
