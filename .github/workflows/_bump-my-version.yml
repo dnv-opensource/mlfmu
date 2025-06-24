@@ -37,3 +37,12 @@ jobs:
         if: steps.bump.outputs.bumped == 'true'
         run: |
           echo "Version was bumped from ${{ steps.bump.outputs.previous-version }} to ${{ steps.bump.outputs.current-version }}!"
+
+      - name: Set outputs
+        id: set-outputs
+        run: |
+          echo "new-version=${{ steps.bump.outputs.current-version }}" >> $GITHUB_OUTPUT
+          echo "previous-version=${{ steps.bump.outputs.previous-version }}" >> $GITHUB_OUTPUT
+    outputs:
+      new-version: ${{ steps.bump.outputs.current-version }}
+      previous-version: ${{ steps.bump.outputs.previous-version }}
