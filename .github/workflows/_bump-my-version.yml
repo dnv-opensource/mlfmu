@@ -1,6 +1,10 @@
 name: Bump version
 
 on:
+  workflow_call:
+    secrets:
+      GH_TOKEN:
+        required: true
   workflow_dispatch:
     inputs:
       bump-type:

@@ -7,7 +7,12 @@ on:
       - v*
 
 jobs:
+  bump_version:
+    uses: ./.github/workflows/_bump-my-version.yml
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
   build_package:
+    needs: bump_version
     uses: ./.github/workflows/_build_package.yml
   publish_package:
     name: Publish package
@@ -23,8 +28,8 @@ jobs:
           name: artifact
           path: dist
       - uses: pypa/gh-action-pypi-publish@release/v1
-        # with:                                             # Uncomment this line to publish to testpypi
-        #   repository-url: https://test.pypi.org/legacy/   # Uncomment this line to publish to testpypi
+        with:                                             # Uncomment this line to publish to testpypi
+           repository-url: https://test.pypi.org/legacy/   # Uncomment this line to publish to testpypi
   merge_into_release:
     uses: ./.github/workflows/_merge_into_release.yml
     secrets:
