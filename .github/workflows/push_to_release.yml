@@ -31,6 +31,6 @@ jobs:
   # release package to pypi, github release, and merge into main
   publish_release:
     needs: build_package
-    uses: ./.github/workflows/publish_release.yml
+    uses: ./.github/workflows/_publish_release.yml
     with:
       new_version: ${{ needs.bump_version.outputs.new-version }}
