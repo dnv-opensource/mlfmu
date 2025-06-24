@@ -9,7 +9,7 @@ on:
     inputs:
       bump-type:
         description: 'Bump type'
-        required: true
+        required: false
         default: 'patch'
         type: choice
         options:
