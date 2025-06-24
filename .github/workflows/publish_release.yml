@@ -1,0 +1,31 @@
+name: Publish Release
+run-name: Publish Release ${{ github.event.ref }} created by @${{ github.actor }}
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build_package:
+    uses: ./.github/workflows/_build_package.yml
+  publish_package:
+    name: Publish package
+    needs:
+      - build_package
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: artifact
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        # with:                                             # Uncomment this line to publish to testpypi
+        #   repository-url: https://test.pypi.org/legacy/   # Uncomment this line to publish to testpypi
+  merge_into_release:
+    uses: ./.github/workflows/_merge_into_release.yml
+    secrets:
+      RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}

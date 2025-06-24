@@ -1,22 +1,19 @@
-<fmiModelDescription fmiVersion="2.0" modelName="WindToPower" guid="@FMU_UUID@" version="0.0.1" generationDateAndTime="2024-12-19T13:47:01+00:00" variableNamingConvention="structured" generationTool="MLFMU 1.0.2" description="A Machine Learning based FMU that outputs the estimated power output of a wind turbine given the wind speed and direction.">
+<fmiModelDescription fmiVersion="2.0" modelName="WindToPower" guid="@FMU_UUID@" version="0.0.1" generationDateAndTime="2024-03-12T14:06:31+00:00" variableNamingConvention="structured" generationTool="MLFMU 0.1.6" description="A Machine Learning based FMU that outputs the estimated power output of a windmill given the wind speed and direction.">
 	<CoSimulation modelIdentifier="WindToPower" canHandleVariableCommunicationStepSize="true" />
 	<ModelVariables>
-		<ScalarVariable name="windSpeed" valueReference="0" causality="input" description="The speed of the wind" variability="continuous">
+		<ScalarVariable name="windSpeed" valueReference="0" causality="input" description="Noise to be added to the change in wind speed" variability="continuous">
 			<Real start="0" />
 		</ScalarVariable>
-		<ScalarVariable name="windDirection" valueReference="1" causality="input" description="The direction of the wind" variability="continuous">
+		<ScalarVariable name="windDirection" valueReference="1" causality="input" description="Noise to be added to the change in wind direction" variability="continuous">
 			<Real start="0" />
 		</ScalarVariable>
-		<ScalarVariable name="power" valueReference="2" causality="output" description="The estimated wind turbine power output" variability="continuous">
+		<ScalarVariable name="power" valueReference="2" causality="output" description="The estimated windmill power output" variability="continuous">
 			<Real />
 		</ScalarVariable>
 	</ModelVariables>
 	<ModelStructure>
 		<Outputs>
-			<Unknown index="3" />
+			<Unknown index="2" />
 		</Outputs>
-		<InitialUnknowns>
-			<Unknown index="3" />
-		</InitialUnknowns>
 	</ModelStructure>
 </fmiModelDescription>
