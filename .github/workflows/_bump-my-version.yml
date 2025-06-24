@@ -3,7 +3,7 @@ name: Bump version
 on:
   workflow_call:
     secrets:
-      GH_TOKEN:
+      RELEASE_TOKEN:
         required: true
     inputs:
       bump-type:
@@ -44,7 +44,7 @@ jobs:
           BUMPVERSION_TAG: "true"
         with:
           args: ${{ inputs.bump-type }}
-          github-token: ${{ secrets.GH_TOKEN }}
+          github-token: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Check
         if: steps.bump.outputs.bumped == 'true'
