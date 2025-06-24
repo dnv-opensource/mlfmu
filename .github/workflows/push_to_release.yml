@@ -13,3 +13,14 @@ concurrency:
 jobs:
   build_and_publish_documentation:
     uses: ./.github/workflows/_build_and_publish_documentation.yml
+
+  # build the package artifacts
+  build_package:
+    needs: build_and_publish_documentation
+    uses: ./.github/workflows/_build_package.yml
+  # release package to pypi, github release, and merge into main
+  publish_release:
+    needs: build_package
+    uses: ./.github/workflows/_publish_release.yml
+    with:
+      new_version: ${{ needs.bump_version.outputs.new-version }}
