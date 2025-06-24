@@ -18,9 +18,37 @@ jobs:
   build_package:
     needs: build_and_publish_documentation
     uses: ./.github/workflows/_build_package.yml
-  # release package to pypi, github release, and merge into main
-  publish_release:
-    needs: build_package
-    uses: ./.github/workflows/_publish_release.yml
-    with:
-      new_version: ${{ needs.bump_version.outputs.new-version }}
+
+  # publish to pypi
+  publish_package:
+    name: Publish package
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+        id-token: write
+    steps:
+        - uses: actions/download-artifact@v4
+          with:
+            name: artifact
+            path: dist
+        - uses: pypa/gh-action-pypi-publish@release/v1
+          with:                                             # Uncomment this line to publish to testpypi
+             repository-url: https://test.pypi.org/legacy/   # Uncomment this line to publish to testpypi
+
+  # create github release
+  create_release:
+    needs: publish_package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-release@v1
+        with:
+          tag_name: v${{ needs.bump_version.outputs.new-version }}
+          release_name: Release v${{ needs.bump_version.outputs.new-version }}
+          draft: false
+          prerelease: false
+
+  # merge release branch into main
+  merge_into_release:
+    uses: ./.github/workflows/_merge_into_release.yml
+    secrets:
+      RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
