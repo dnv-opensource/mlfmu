@@ -19,9 +19,7 @@ def test_generate_simple_model_description():
     xml_structure = generate_model_description(fmu_model=fmi_model)
     variables = xml_structure.findall(".//ScalarVariable")
 
-    root = xml_structure.getroot()
-    assert root is not None, "XML structure has no root element"
-    assert root.tag == "fmiModelDescription"
+    assert xml_structure.getroot().tag == "fmiModelDescription"
     assert variables[0].attrib["name"] == "input1"
     assert variables[0].attrib["causality"] == "input"
     assert variables[0].attrib["variability"] == "continuous"
@@ -57,17 +55,14 @@ def test_generate_model_description_with_internal_state_params():
     xml_structure = generate_model_description(fmu_model=fmi_model)
     variables = xml_structure.findall(".//ScalarVariable")
 
-    root = xml_structure.getroot()
-    assert root is not None, "XML structure has no root element"
-    assert root.tag == "fmiModelDescription"
+    assert xml_structure.getroot().tag == "fmiModelDescription"
+    assert variables[0].attrib["name"] == "state1"
+    assert variables[0].attrib["causality"] == "parameter"
+    assert variables[0][0].tag == "Real"
+    assert variables[0][0].attrib["start"] == "0.0"
 
-    assert variables[0].attrib["name"] == "output1"
-    assert variables[0].attrib["causality"] == "output"
-
-    assert variables[1].attrib["name"] == "state1"
-    assert variables[1].attrib["causality"] == "parameter"
-    assert variables[1][0].tag == "Real"
-    assert variables[1][0].attrib["start"] == "0.0"
+    assert variables[1].attrib["name"] == "output1"
+    assert variables[1].attrib["causality"] == "output"
 
 
 def test_generate_vector_ports():
@@ -145,9 +140,7 @@ def test_generate_model_description_with_start_value():
     xml_structure = generate_model_description(fmu_model=fmi_model)
     variables = xml_structure.findall(".//ScalarVariable")
 
-    root = xml_structure.getroot()
-    assert root is not None, "XML structure has no root element"
-    assert root.tag == "fmiModelDescription"
+    assert xml_structure.getroot().tag == "fmiModelDescription"
     assert variables[0].attrib["name"] == "input1"
     assert variables[0].attrib["causality"] == "input"
     assert variables[0][0].tag == "Integer"
@@ -200,6 +193,5 @@ def test_generate_model_description_output():
     output_variables = [var for var in variables if var.attrib.get("causality") == "output"]
     outputs_registered = xml_structure.findall(".//Outputs/Unknown")
 
-    # The index should be the valueReference + 1
-    assert int(output_variables[0].attrib["valueReference"]) + 1 == int(outputs_registered[0].attrib["index"])
-    assert int(output_variables[1].attrib["valueReference"]) + 1 == int(outputs_registered[1].attrib["index"])
+    assert output_variables[0].attrib["valueReference"] == outputs_registered[0].attrib["index"]
+    assert output_variables[1].attrib["valueReference"] == outputs_registered[1].attrib["index"]

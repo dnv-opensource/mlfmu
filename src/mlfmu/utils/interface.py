@@ -1,8 +1,7 @@
-from __future__ import annotations
-
 import json
+import os
 from pathlib import Path
-from typing import TYPE_CHECKING, cast
+from typing import cast
 
 from dictIO.utils.path import relative_path
 from json_schema_for_humans.generate import (
@@ -11,14 +10,10 @@ from json_schema_for_humans.generate import (
     generate_schemas_doc,
 )
 from json_schema_for_humans.generation_configuration import GenerationConfiguration
+from pydantic import BaseModel
+from pydantic._internal._model_construction import ModelMetaclass
 
 from mlfmu.types.fmu_component import ModelComponent
-
-if TYPE_CHECKING:
-    import os
-
-    from pydantic import BaseModel
-    from pydantic._internal._model_construction import ModelMetaclass
 
 __ALL__ = ["publish_interface_schema"]
 
@@ -47,7 +42,7 @@ def generate_interface_schema(
     #             Behind the scenes in pdyantic, models always inherit the attributes of BaseModel.
     if not hasattr(model, "model_json_schema"):
         raise ValueError("model argument must be a pydantic BaseModel")
-    model = cast("BaseModel", model)
+    model = cast(BaseModel, model)
 
     # Create schema_dir if it does not exist
     schema_dir.mkdir(parents=True, exist_ok=True)
