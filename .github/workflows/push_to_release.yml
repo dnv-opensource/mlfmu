@@ -50,6 +50,7 @@ jobs:
 
   # merge release branch into main
   merge_into_release:
+    needs: build_package
     uses: ./.github/workflows/_merge_into_release.yml
     secrets:
       RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
