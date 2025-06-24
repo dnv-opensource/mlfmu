@@ -22,6 +22,7 @@ jobs:
   # publish to pypi
   publish_package:
     name: Publish package
+    needs: build_package
     runs-on: ubuntu-latest
     environment: release
     permissions:
