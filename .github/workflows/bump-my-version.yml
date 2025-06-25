@@ -17,6 +17,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       # notify if someone is trying to run this from any other branch than `release`
       - name: Ensure on release branch

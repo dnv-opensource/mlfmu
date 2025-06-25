@@ -40,10 +40,16 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
       - name: Create tag
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag v${{ steps.get_version.outputs.version }}
-          git push origin v${{ steps.get_version.outputs.version }}
+          TAG="v${{ steps.get_version.outputs.version }}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists. Skipping tag creation."
+            exit 0
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git tag "$TAG"
+            git push origin "$TAG"
+          fi
     outputs:
       version: ${{ steps.get_version.outputs.version }}
 
@@ -76,14 +82,9 @@ jobs:
           # with:
             #  repository-url: https://test.pypi.org/legacy/
 
-  # create github release
   create_release:
+    name: Create GitHub Release
     needs: [create_tag, publish_package]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/create-release@v1
-        with:
-          tag_name: v${{ needs.create_tag.outputs.version }}
-          release_name: Release v${{ needs.create_tag.outputs.version }}
-          draft: false
-          prerelease: false
+    uses: ./.github/workflows/_create_github_release.yml
+    with:
+      version: ${{ needs.create_tag.outputs.version }}

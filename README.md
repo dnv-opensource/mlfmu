@@ -320,7 +320,16 @@ Hee Jong Park - [@LinkedIn](https://www.linkedin.com/in/heejongpark/) - <hee.jon
 
 For your contribution, please make sure you follow the [STYLEGUIDE](STYLEGUIDE.md) before creating the Pull Request.
 
-For a new release, a push has to be made to the release branch. The recommended practice is to merge development PRs into main, and then, when one wants to release a new version, create a PR to push main into the release branch. The push into release should now automatically trigger an update of version numbering and create tags, using the `bump_my_version` package, and release it to GitHub and PyPi.
+### New releases
+
+The recommended practice is to merge development PRs into main, and then, when one wants to release a new version, create a PR to push main into the release branch.
+
+For a new release, please follow the next steps:
+
+1. Create a PR to merge all desired changes from the `main` to the `release` branch.
+1. After approval and merging, on GitHub, run the action "Bump version" on the `release` branch. This will create a new PR.
+1. On GitHub, access the PR created by bump-my-version, check, and approve (if all looks good).
+1. After approval and merging, on GitHub, run the action "Push to release" on the `release` branch. This will build everything and publish the package to PyPi, and create a new GitHub release.
 
 Note; version numbers are in: `CHANGELOG.md`, `pyproject.toml`, and `docs/source/conf.py` (and should be automatically updated by bump-my-version upon release).
 
