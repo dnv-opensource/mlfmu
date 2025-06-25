@@ -44,6 +44,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag v${{ steps.get_version.outputs.version }}
           git push origin v${{ steps.get_version.outputs.version }}
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
 
   # build and publish documentation
   build_and_publish_documentation:
@@ -76,12 +78,12 @@ jobs:
 
   # create github release
   create_release:
-    needs: publish_package
+    needs: [create_tag, publish_package]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/create-release@v1
         with:
-          tag_name: v${{ needs.bump_version.outputs.new-version }}
-          release_name: Release v${{ needs.bump_version.outputs.new-version }}
+          tag_name: v${{ needs.create_tag.outputs.version }}
+          release_name: Release v${{ needs.create_tag.outputs.version }}
           draft: false
           prerelease: false
