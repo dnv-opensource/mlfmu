@@ -46,7 +46,7 @@ jobs:
           BUMPVERSION_TAG: "false"
         with:
           args: ${{ inputs.bump-type }}
-          github-token: ${{ secrets.RELEASE_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check
         if: steps.bump.outputs.bumped == 'true'
@@ -62,4 +62,4 @@ jobs:
           body: "Automated version bump PR"
           base: release
           delete-branch: true
-          token: ${{ secrets.RELEASE_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
