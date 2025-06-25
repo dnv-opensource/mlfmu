@@ -3,7 +3,7 @@
 All notable changes to the [mlfmu] project will be documented in this file.<br>
 The changelog format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## [1.0.3]
 
 ### Changed
 

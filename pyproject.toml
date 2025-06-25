@@ -22,7 +22,7 @@ packages = [
 
 [project]
 name = "mlfmu"
-version = "1.0.2"
+version = "1.0.3"
 description = "Export ML models represented as ONNX files to Functional-Mockup-Units (FMU)"
 readme = "README.md"
 requires-python = ">= 3.10,<3.13"
@@ -163,7 +163,7 @@ reportUnnecessaryTypeIgnoreComment = "information"
 
 
 [tool.bumpversion]
-current_version = "1.0.2"
+current_version = "1.0.3"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 search = "{current_version}"
