@@ -13,10 +13,19 @@ on:
         - minor
         - patch
 
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # notify if someone is trying to run this from any other branch than `release`
+      - name: Ensure on release branch
+        run: |
+          if [ "${GITHUB_REF##*/}" != "release" ]; then
+            echo "This workflow must be run on the release branch."
+            exit 1
+          fi
+
       - name: Checkout the code
         uses: actions/checkout@v4
 
@@ -51,12 +60,3 @@ jobs:
           base: release
           delete-branch: true
           token: ${{ secrets.GITHUB_TOKEN }}
-
-    #   - name: Set outputs
-    #     id: set-outputs
-    #     run: |
-    #       echo "new-version=${{ steps.bump.outputs.current-version }}" >> $GITHUB_OUTPUT
-    #       echo "previous-version=${{ steps.bump.outputs.previous-version }}" >> $GITHUB_OUTPUT
-    # outputs:
-    #   new-version: ${{ steps.set-outputs.outputs.new-version }}
-    #   previous-version: ${{ steps.set-outputs.outputs.previous-version }}

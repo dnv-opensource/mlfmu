@@ -9,6 +9,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # notify if someone is trying to run this from any other branch than `release`
+  check_release_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure on release branch
+        run: |
+          if [ "${GITHUB_REF##*/}" != "release" ]; then
+            echo "This workflow must be run on the release branch."
+            exit 1
+          fi
   # code quality tests
   code_quality:
     uses: ./.github/workflows/_code_quality.yml
@@ -63,6 +73,7 @@ jobs:
           # (note; this requires a trusted publisher on test.pypi.org, this is different from pypi.org)
           # with:
             #  repository-url: https://test.pypi.org/legacy/
+
   # create github release
   create_release:
     needs: publish_package
@@ -74,10 +85,3 @@ jobs:
           release_name: Release v${{ needs.bump_version.outputs.new-version }}
           draft: false
           prerelease: false
-
-  # # merge release branch into main
-  # merge_into_release:
-  #   needs: build_package
-  #   uses: ./.github/workflows/_merge_into_release.yml
-  #   secrets:
-  #     RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
