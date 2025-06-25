@@ -12,8 +12,6 @@ jobs:
           lfs: true
           fetch-depth: 0 # ensure the latest commit is checked out
           ref: ${{ github.ref }} # ensure the latest commit is checked out
-      - name: Pull latest changes
-        run: git pull # ensure the latest commit is checked out, esp. after bumping version
       - name: Checkout submodules
         run:  git submodule update --init --recursive
       - name: Install uv

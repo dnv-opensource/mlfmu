@@ -18,8 +18,6 @@ jobs:
           lfs: true
           fetch-depth: 0 # ensure the latest commit is checked out
           ref: ${{ github.ref }} # ensure the latest commit is checked out
-      - name: Pull latest changes
-        run: git pull # ensure the latest commit is checked out, esp. after bumping version
       - name: Install uv
         uses: astral-sh/setup-uv@v2
         with:
