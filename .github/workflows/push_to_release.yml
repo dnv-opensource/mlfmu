@@ -93,3 +93,5 @@ jobs:
           release_name: Release v${{ needs.create_tag.outputs.version }}
           draft: false
           prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
