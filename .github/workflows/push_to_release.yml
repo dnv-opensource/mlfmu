@@ -82,16 +82,9 @@ jobs:
           # with:
             #  repository-url: https://test.pypi.org/legacy/
 
-  # create github release
   create_release:
+    name: Create GitHub Release
     needs: [create_tag, publish_package]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/create-release@v1
-        with:
-          tag_name: v${{ needs.create_tag.outputs.version }}
-          release_name: Release v${{ needs.create_tag.outputs.version }}
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    uses: ./.github/workflows/_create_github_release.yml
+    with:
+      version: ${{ needs.create_tag.outputs.version }}
