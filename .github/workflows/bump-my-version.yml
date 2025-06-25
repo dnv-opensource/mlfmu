@@ -1,0 +1,62 @@
+name: Bump version
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump-type:
+        description: 'Bump type'
+        required: false
+        default: 'patch'
+        type: choice
+        options:
+        - major
+        - minor
+        - patch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Set up Git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version
+        id: bump
+        uses: callowayproject/bump-my-version@master
+        env:
+          BUMPVERSION_TAG: "false"
+        with:
+          args: ${{ inputs.bump-type }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check
+        if: steps.bump.outputs.bumped == 'true'
+        run: |
+          echo "Version was bumped from ${{ steps.bump.outputs.previous-version }} to ${{ steps.bump.outputs.current-version }}!"
+
+      - name: Create Pull Request for version bump
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "Bump version: ${{ steps.bump.outputs.previous-version }} → ${{ steps.bump.outputs.current-version }}"
+          branch: bump-version-${{ steps.bump.outputs.current-version }}
+          title: "Bump version: ${{ steps.bump.outputs.previous-version }} → ${{ steps.bump.outputs.current-version }}"
+          body: "Automated version bump PR"
+          base: release
+          delete-branch: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+    #   - name: Set outputs
+    #     id: set-outputs
+    #     run: |
+    #       echo "new-version=${{ steps.bump.outputs.current-version }}" >> $GITHUB_OUTPUT
+    #       echo "previous-version=${{ steps.bump.outputs.previous-version }}" >> $GITHUB_OUTPUT
+    # outputs:
+    #   new-version: ${{ steps.set-outputs.outputs.new-version }}
+    #   previous-version: ${{ steps.set-outputs.outputs.previous-version }}
