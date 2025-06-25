@@ -46,6 +46,12 @@ jobs:
           args: ${{ inputs.bump-type }}
           github-token: ${{ secrets.GH_TOKEN }}
 
+      - name: Show git status
+        run: |
+          git status
+          git log -n 3 --oneline
+          cat pyproject.toml
+
       - name: Check
         if: steps.bump.outputs.bumped == 'true'
         run: |
