@@ -2,35 +2,88 @@ name: Push to release
 run-name: Push to release by @${{ github.actor }}
 
 on:
-  push:
-    branches:
-      - release
+  workflow_dispatch:
 
 concurrency:
   group: push-${{ github.ref }}-1
   cancel-in-progress: true
 
 jobs:
+  # notify if someone is trying to run this from any other branch than `release`
+  check_release_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure on release branch
+        run: |
+          if [ "${GITHUB_REF##*/}" != "release" ]; then
+            echo "This workflow must be run on the release branch."
+            exit 1
+          fi
+  # code quality tests
   code_quality:
     uses: ./.github/workflows/_code_quality.yml
+  # run tests
   test:
     uses: ./.github/workflows/_test.yml
-  # bump version and create tag
-  bump_version:
+  # create github tag
+  create_tag:
+    runs-on: ubuntu-latest
     needs: [code_quality, test]
-    uses: ./.github/workflows/_bump-my-version.yml
-    secrets:
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get version from pyproject.toml
+        id: get_version
+        run: |
+          VERSION=$(grep '^current_version' pyproject.toml | head -1 | cut -d'"' -f2)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Create tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag v${{ steps.get_version.outputs.version }}
+          git push origin v${{ steps.get_version.outputs.version }}
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+
+  # build and publish documentation
   build_and_publish_documentation:
-    needs: bump_version
+    needs: create_tag
     uses: ./.github/workflows/_build_and_publish_documentation.yml
+
   # build the package artifacts
   build_package:
     needs: build_and_publish_documentation
     uses: ./.github/workflows/_build_package.yml
-  # release package to pypi, github release, and merge into main
-  publish_release:
-    needs: build_package
-    uses: ./.github/workflows/_publish_release.yml
-    with:
-      new_version: ${{ needs.bump_version.outputs.new-version }}
+
+  # publish to pypi
+  publish_package:
+    name: Publish package
+    needs: [build_package]
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+        id-token: write
+    steps:
+        - uses: actions/download-artifact@v4
+          with:
+            name: artifact
+            path: dist
+        - uses: pypa/gh-action-pypi-publish@release/v1
+          # Uncomment the next 2 lines to publish to testpypi
+          # (note; this requires a trusted publisher on test.pypi.org, this is different from pypi.org)
+          # with:
+            #  repository-url: https://test.pypi.org/legacy/
+
+  # create github release
+  create_release:
+    needs: [create_tag, publish_package]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-release@v1
+        with:
+          tag_name: v${{ needs.create_tag.outputs.version }}
+          release_name: Release v${{ needs.create_tag.outputs.version }}
+          draft: false
+          prerelease: false

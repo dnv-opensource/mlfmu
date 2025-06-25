@@ -8,7 +8,7 @@ on:
 
 jobs:
   merge_into_release:
-    name: Merge ${{ github.event.ref }} -> release branch
+    name: Merge release branch -> main branch
     runs-on: ubuntu-latest
     environment: release
     steps:
@@ -17,9 +17,9 @@ jobs:
           # Fetch the whole history to prevent unrelated history errors
           fetch-depth: 0
           # The branch you want to checkout (usually equal to `branchtomerge`)
-          # ref: ${{ github.event.ref }}
+          ref: release
       - uses: devmasx/merge-branch@v1.4.0
         with:
           type: now
-          target_branch: release
+          target_branch: main
           github_token: ${{ secrets.RELEASE_TOKEN }}

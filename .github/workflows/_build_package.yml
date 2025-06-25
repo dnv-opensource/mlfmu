@@ -10,8 +10,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           lfs: true
-      - run:  git submodule update --init --recursive
-        name: Checkout submodules
+          fetch-depth: 0 # ensure the latest commit is checked out
+          ref: ${{ github.ref }} # ensure the latest commit is checked out
+      - name: Checkout submodules
+        run:  git submodule update --init --recursive
       - name: Install uv
         uses: astral-sh/setup-uv@v2
         with:
