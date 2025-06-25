@@ -17,6 +17,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       # notify if someone is trying to run this from any other branch than `release`
       - name: Ensure on release branch
@@ -43,7 +46,7 @@ jobs:
           BUMPVERSION_TAG: "false"
         with:
           args: ${{ inputs.bump-type }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Check
         if: steps.bump.outputs.bumped == 'true'
@@ -59,4 +62,4 @@ jobs:
           body: "Automated version bump PR"
           base: release
           delete-branch: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN }}
