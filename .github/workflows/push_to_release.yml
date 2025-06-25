@@ -34,37 +34,37 @@ jobs:
     needs: build_and_publish_documentation
     uses: ./.github/workflows/_build_package.yml
   # publish to pypi
-  publish_package:
-    name: Publish package
-    needs: [bump_version, build_package]
-    runs-on: ubuntu-latest
-    environment: release
-    permissions:
-        id-token: write
-    steps:
-        - uses: actions/download-artifact@v4
-          with:
-            name: artifact
-            path: dist
-        - uses: pypa/gh-action-pypi-publish@release/v1
-          # Uncomment the next 2 lines to publish to testpypi
-          # (note; this requires a trusted publisher on test.pypi.org, this is different from pypi.org)
-          # with:
-            #  repository-url: https://test.pypi.org/legacy/
-  # create github release
-  create_release:
-    needs: publish_package
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/create-release@v1
-        with:
-          tag_name: v${{ needs.bump_version.outputs.new-version }}
-          release_name: Release v${{ needs.bump_version.outputs.new-version }}
-          draft: false
-          prerelease: false
+  # publish_package:
+  #   name: Publish package
+  #   needs: [bump_version, build_package]
+  #   runs-on: ubuntu-latest
+  #   environment: release
+  #   permissions:
+  #       id-token: write
+  #   steps:
+  #       - uses: actions/download-artifact@v4
+  #         with:
+  #           name: artifact
+  #           path: dist
+  #       - uses: pypa/gh-action-pypi-publish@release/v1
+  #         # Uncomment the next 2 lines to publish to testpypi
+  #         # (note; this requires a trusted publisher on test.pypi.org, this is different from pypi.org)
+  #         # with:
+  #           #  repository-url: https://test.pypi.org/legacy/
+  # # create github release
+  # create_release:
+  #   needs: publish_package
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/create-release@v1
+  #       with:
+  #         tag_name: v${{ needs.bump_version.outputs.new-version }}
+  #         release_name: Release v${{ needs.bump_version.outputs.new-version }}
+  #         draft: false
+  #         prerelease: false
   # merge release branch into main
-  merge_into_release:
-    needs: build_package
-    uses: ./.github/workflows/_merge_into_release.yml
-    secrets:
-      RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+  # merge_into_release:
+  #   needs: build_package
+  #   uses: ./.github/workflows/_merge_into_release.yml
+  #   secrets:
+  #     RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
