@@ -119,12 +119,9 @@ stubPath = "stubs"
 include = [
     "src",
     "tests",
-    "examples",
 ]
 exclude = [
     "src/mlfmu/fmu_build/cppfmu",
-    "examples/wind_generator/ml_model/",
-    "examples/wind_to_power/ml_model/",
 ]
 
 typeCheckingMode = "basic"
