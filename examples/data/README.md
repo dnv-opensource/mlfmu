@@ -1,0 +1,1 @@
+This files comes from the publicly available ["Wind Turbine Scada Dataset"](https://www.kaggle.com/datasets/berkerisen/wind-turbine-scada-dataset/data) from Kaggle, the data is included in this repository for creating a complete example.
