@@ -6,7 +6,9 @@
 
 # mlfmu
 
-MLFMU serves as a tool for developers looking to integrate machine learning models into simulation environments. It enables the creation of Functional Mock-up Units (FMUs), which are simulation models that adhere to the FMI standard (<https://fmi-standard.org/>), from trained machine learning models exported in the ONNX format (<https://onnx.ai/>). The mlfmu package streamlines the process of transforming ONNX models into FMUs, facilitating their use in a wide range of simulation platforms that support the FMI standard such as the [Open Simulation Platform](https://open-simulation-platform.github.io/) or DNV's [Simulation Trust Center](https://store.veracity.com/simulation-trust-center)
+MLFMU serves as a tool for developers looking to integrate machine learning models into simulation environments. It enables the creation of Functional Mock-up Units (FMUs), which are simulation models that adhere to the FMI standard (<https://fmi-standard.org/>), from trained machine learning models exported in the ONNX format (<https://onnx.ai/>). The mlfmu package streamlines the process of transforming ONNX models into FMUs, facilitating their use in a wide range of simulation platforms that support the FMI standard such as the [Open Simulation Platform](https://open-simulation-platform.github.io/) or DNV's [Simulation Trust Center](https://store.veracity.com/simulation-trust-center).
+
+This work was first presented publicly at the [Open Simulation Platform conference 2024](https://opensimulationplatform.com/2024/09/23/osp-conference-2024-program/). You can find a pdf of the presentation in this repo under [`presentations/`](https://github.com/dnv-opensource/mlfmu/tree/main/presentations).
 
 ## Features
 
