@@ -1,0 +1,78 @@
+FmiCausality
+============
+
+.. currentmodule:: mlfmu.types.fmu_component
+
+.. autoclass:: FmiCausality
+   :members:
+   :show-inheritance:
+
+
+   
+   .. automethod:: __init__
+   
+   .. rubric:: Methods
+   .. autosummary::
+   
+      ~FmiCausality.encode
+      ~FmiCausality.replace
+      ~FmiCausality.split
+      ~FmiCausality.rsplit
+      ~FmiCausality.join
+      ~FmiCausality.capitalize
+      ~FmiCausality.casefold
+      ~FmiCausality.title
+      ~FmiCausality.center
+      ~FmiCausality.count
+      ~FmiCausality.expandtabs
+      ~FmiCausality.find
+      ~FmiCausality.partition
+      ~FmiCausality.index
+      ~FmiCausality.ljust
+      ~FmiCausality.lower
+      ~FmiCausality.lstrip
+      ~FmiCausality.rfind
+      ~FmiCausality.rindex
+      ~FmiCausality.rjust
+      ~FmiCausality.rstrip
+      ~FmiCausality.rpartition
+      ~FmiCausality.splitlines
+      ~FmiCausality.strip
+      ~FmiCausality.swapcase
+      ~FmiCausality.translate
+      ~FmiCausality.upper
+      ~FmiCausality.startswith
+      ~FmiCausality.endswith
+      ~FmiCausality.removeprefix
+      ~FmiCausality.removesuffix
+      ~FmiCausality.isascii
+      ~FmiCausality.islower
+      ~FmiCausality.isupper
+      ~FmiCausality.istitle
+      ~FmiCausality.isspace
+      ~FmiCausality.isdecimal
+      ~FmiCausality.isdigit
+      ~FmiCausality.isnumeric
+      ~FmiCausality.isalpha
+      ~FmiCausality.isalnum
+      ~FmiCausality.isidentifier
+      ~FmiCausality.isprintable
+      ~FmiCausality.zfill
+      ~FmiCausality.format
+      ~FmiCausality.format_map
+      ~FmiCausality.maketrans
+      ~FmiCausality.__init__
+   
+   
+
+
+   
+   
+   .. rubric:: Attributes
+   .. autosummary::
+   
+      ~FmiCausality.PARAMETER
+      ~FmiCausality.INPUT
+      ~FmiCausality.OUTPUT
+   
+   
