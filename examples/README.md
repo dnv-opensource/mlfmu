@@ -22,7 +22,7 @@ We have included the python code that was used to create the onnx models, which 
 If you want to train the models yourself and test everything, bottom up, here are the steps we took for training the models.
 The below steps assume you work on Windows and use the specific versions of software specified in the requirements.txt file, we have not tested this for other systems (as this is a mere, simple example).
 
-These models are using the publicly available ["Wind Turbine Scada Dataset"](https://www.kaggle.com/datasets/berkerisen/wind-turbine-scada-dataset/data) from Kaggle, the data is included here for creating a complete example.
+These models are using the publicly available ["Wind Turbine Scada Dataset"](https://www.kaggle.com/datasets/berkerisen/wind-turbine-scada-dataset/data) from Kaggle, which you should download into the `examples\data` folder.
 
 ### Install: Conda with pip (Windows native example)
 
