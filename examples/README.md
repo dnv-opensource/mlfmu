@@ -76,6 +76,8 @@ pip install -U tf2onnx
 
 ### ML Model creation instructions
 
+For these examples, we use the publicly available ["Wind Turbine Scada Dataset"](https://www.kaggle.com/datasets/berkerisen/wind-turbine-scada-dataset/data) from Kaggle. Download the dataset from [https://www.kaggle.com/datasets/berkerisen/wind-turbine-scada-dataset/data](https://www.kaggle.com/datasets/berkerisen/wind-turbine-scada-dataset/data), and store as `T1.csv` into the `data` folder.
+
 1. Make sure you are in your virtual environment, either ```conda activate mlfmu-examples```:
 
 2. To generate the FMUs, firstly run the notebooks to train the ML models and save them by running ```training_models.py```. Go into the directory of the specific model you are interested in (e.g. `wind_to_power\ml_model`):
