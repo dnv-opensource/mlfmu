@@ -119,7 +119,6 @@ stubPath = "stubs"
 include = [
     "src",
     "tests",
-    "examples",
 ]
 exclude = [
     "src/mlfmu/fmu_build/cppfmu",
@@ -189,3 +188,7 @@ replace = "## [{new_version}]"
 
 [[tool.bumpversion.files]]
 filename = "pyproject.toml"
+
+[tool.ruff.per-file-ignores]
+"examples/wind_generator/ml_model/*.py" = ["PGH003"]
+"examples/wind_to_power/ml_model/*.py" = ["PGH003"]

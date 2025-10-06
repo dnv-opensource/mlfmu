@@ -3,6 +3,10 @@
 All notable changes to the [mlfmu] project will be documented in this file.<br>
 The changelog format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [unreleased]
+
+* Added python code examples, and instruction in README, of how to create the .onnx models for wind_generator and wind_to_power.
+
 ## [1.0.3]
 
 ### Changed
