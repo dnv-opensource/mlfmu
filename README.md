@@ -1,8 +1,8 @@
 [![pypi](https://img.shields.io/pypi/v/mlfmu.svg?color=blue)](https://pypi.python.org/pypi/mlfmu)
 [![versions](https://img.shields.io/pypi/pyversions/mlfmu.svg?color=blue)](https://pypi.python.org/pypi/mlfmu)
 [![license](https://img.shields.io/pypi/l/mlfmu.svg)](https://github.com/dnv-opensource/mlfmu/blob/main/LICENSE)
-![ci](https://img.shields.io/github/actions/workflow/status/dnv-opensource/mlfmu/.github%2Fworkflows%2Fnightly_build.yml?label=ci)
-[![docs](https://img.shields.io/github/actions/workflow/status/dnv-opensource/mlfmu/.github%2Fworkflows%2Fpush_to_release.yml?label=docs)][mlfmu_docs]
+[![docs](https://github.com/dnv-opensource/mlfmu/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/dnv-opensource/mlfmu/actions/workflows/pages/pages-build-deployment)
+
 
 # mlfmu
 
