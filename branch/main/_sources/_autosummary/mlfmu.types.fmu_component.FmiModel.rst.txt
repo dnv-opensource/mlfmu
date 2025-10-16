@@ -1,0 +1,44 @@
+FmiModel
+========
+
+.. currentmodule:: mlfmu.types.fmu_component
+
+.. autoclass:: FmiModel
+   :members:
+   :show-inheritance:
+
+
+   
+   .. automethod:: __init__
+   
+   .. rubric:: Methods
+   .. autosummary::
+   
+      ~FmiModel.__init__
+      ~FmiModel.add_state_initialization_parameters
+      ~FmiModel.add_variable_references
+      ~FmiModel.format_fmi_variable
+      ~FmiModel.get_fmi_model_variables
+      ~FmiModel.get_template_mapping
+      ~FmiModel.get_total_variable_number
+   
+   
+
+
+   
+   
+   .. rubric:: Attributes
+   .. autosummary::
+   
+      ~FmiModel.name
+      ~FmiModel.guid
+      ~FmiModel.inputs
+      ~FmiModel.outputs
+      ~FmiModel.parameters
+      ~FmiModel.author
+      ~FmiModel.description
+      ~FmiModel.copyright
+      ~FmiModel.license
+      ~FmiModel.state_initialization_reuse
+   
+   

@@ -1,0 +1,4 @@
+# LICENSE THIRD PARTY
+
+```{include} ../../LICENSE_THIRD_PARTY
+```

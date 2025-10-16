@@ -1,0 +1,80 @@
+FmiVariability
+==============
+
+.. currentmodule:: mlfmu.types.fmu_component
+
+.. autoclass:: FmiVariability
+   :members:
+   :show-inheritance:
+
+
+   
+   .. automethod:: __init__
+   
+   .. rubric:: Methods
+   .. autosummary::
+   
+      ~FmiVariability.encode
+      ~FmiVariability.replace
+      ~FmiVariability.split
+      ~FmiVariability.rsplit
+      ~FmiVariability.join
+      ~FmiVariability.capitalize
+      ~FmiVariability.casefold
+      ~FmiVariability.title
+      ~FmiVariability.center
+      ~FmiVariability.count
+      ~FmiVariability.expandtabs
+      ~FmiVariability.find
+      ~FmiVariability.partition
+      ~FmiVariability.index
+      ~FmiVariability.ljust
+      ~FmiVariability.lower
+      ~FmiVariability.lstrip
+      ~FmiVariability.rfind
+      ~FmiVariability.rindex
+      ~FmiVariability.rjust
+      ~FmiVariability.rstrip
+      ~FmiVariability.rpartition
+      ~FmiVariability.splitlines
+      ~FmiVariability.strip
+      ~FmiVariability.swapcase
+      ~FmiVariability.translate
+      ~FmiVariability.upper
+      ~FmiVariability.startswith
+      ~FmiVariability.endswith
+      ~FmiVariability.removeprefix
+      ~FmiVariability.removesuffix
+      ~FmiVariability.isascii
+      ~FmiVariability.islower
+      ~FmiVariability.isupper
+      ~FmiVariability.istitle
+      ~FmiVariability.isspace
+      ~FmiVariability.isdecimal
+      ~FmiVariability.isdigit
+      ~FmiVariability.isnumeric
+      ~FmiVariability.isalpha
+      ~FmiVariability.isalnum
+      ~FmiVariability.isidentifier
+      ~FmiVariability.isprintable
+      ~FmiVariability.zfill
+      ~FmiVariability.format
+      ~FmiVariability.format_map
+      ~FmiVariability.maketrans
+      ~FmiVariability.__init__
+   
+   
+
+
+   
+   
+   .. rubric:: Attributes
+   .. autosummary::
+   
+      ~FmiVariability.CONSTANT
+      ~FmiVariability.FIXED
+      ~FmiVariability.TUNABLE
+      ~FmiVariability.DISCRETE
+      ~FmiVariability.CONTINUOUS
+   
+   

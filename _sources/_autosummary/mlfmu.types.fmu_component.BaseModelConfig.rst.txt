@@ -1,0 +1,56 @@
+BaseModelConfig
+===============
+
+.. currentmodule:: mlfmu.types.fmu_component
+
+.. autoclass:: BaseModelConfig
+   :members:
+   :show-inheritance:
+
+
+   
+   .. automethod:: __init__
+   
+   .. rubric:: Methods
+   .. autosummary::
+   
+      ~BaseModelConfig.__init__
+      ~BaseModelConfig.construct
+      ~BaseModelConfig.copy
+      ~BaseModelConfig.dict
+      ~BaseModelConfig.from_orm
+      ~BaseModelConfig.json
+      ~BaseModelConfig.model_construct
+      ~BaseModelConfig.model_copy
+      ~BaseModelConfig.model_dump
+      ~BaseModelConfig.model_dump_json
+      ~BaseModelConfig.model_json_schema
+      ~BaseModelConfig.model_parametrized_name
+      ~BaseModelConfig.model_post_init
+      ~BaseModelConfig.model_rebuild
+      ~BaseModelConfig.model_validate
+      ~BaseModelConfig.model_validate_json
+      ~BaseModelConfig.model_validate_strings
+      ~BaseModelConfig.parse_file
+      ~BaseModelConfig.parse_obj
+      ~BaseModelConfig.parse_raw
+      ~BaseModelConfig.schema
+      ~BaseModelConfig.schema_json
+      ~BaseModelConfig.update_forward_refs
+      ~BaseModelConfig.validate
+   
+   
+
+
+   
+   
+   .. rubric:: Attributes
+   .. autosummary::
+   
+      ~BaseModelConfig.model_computed_fields
+      ~BaseModelConfig.model_config
+      ~BaseModelConfig.model_extra
+      ~BaseModelConfig.model_fields
+      ~BaseModelConfig.model_fields_set
+   
+   

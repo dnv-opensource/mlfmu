@@ -1,0 +1,3 @@
+# LICENSE
+```{include} ../../LICENSE
+```

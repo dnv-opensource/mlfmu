@@ -1,0 +1,68 @@
+ModelComponent
+==============
+
+.. currentmodule:: mlfmu.types.fmu_component
+
+.. autoclass:: ModelComponent
+   :members:
+   :show-inheritance:
+
+
+   
+   .. automethod:: __init__
+   
+   .. rubric:: Methods
+   .. autosummary::
+   
+      ~ModelComponent.__init__
+      ~ModelComponent.construct
+      ~ModelComponent.copy
+      ~ModelComponent.dict
+      ~ModelComponent.from_orm
+      ~ModelComponent.json
+      ~ModelComponent.model_construct
+      ~ModelComponent.model_copy
+      ~ModelComponent.model_dump
+      ~ModelComponent.model_dump_json
+      ~ModelComponent.model_json_schema
+      ~ModelComponent.model_parametrized_name
+      ~ModelComponent.model_post_init
+      ~ModelComponent.model_rebuild
+      ~ModelComponent.model_validate
+      ~ModelComponent.model_validate_json
+      ~ModelComponent.model_validate_strings
+      ~ModelComponent.parse_file
+      ~ModelComponent.parse_obj
+      ~ModelComponent.parse_raw
+      ~ModelComponent.schema
+      ~ModelComponent.schema_json
+      ~ModelComponent.update_forward_refs
+      ~ModelComponent.validate
+   
+   
+
+
+   
+   
+   .. rubric:: Attributes
+   .. autosummary::
+   
+      ~ModelComponent.model_computed_fields
+      ~ModelComponent.model_config
+      ~ModelComponent.model_extra
+      ~ModelComponent.model_fields
+      ~ModelComponent.model_fields_set
+      ~ModelComponent.name
+      ~ModelComponent.version
+      ~ModelComponent.author
+      ~ModelComponent.description
+      ~ModelComponent.copyright
+      ~ModelComponent.license
+      ~ModelComponent.inputs
+      ~ModelComponent.outputs
+      ~ModelComponent.parameters
+      ~ModelComponent.states
+      ~ModelComponent.uses_time
+      ~ModelComponent.state_initialization_reuse
+   
+   

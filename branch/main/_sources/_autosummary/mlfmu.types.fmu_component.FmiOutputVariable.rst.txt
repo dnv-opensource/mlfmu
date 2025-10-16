@@ -1,0 +1,66 @@
+FmiOutputVariable
+=================
+
+.. currentmodule:: mlfmu.types.fmu_component
+
+.. autoclass:: FmiOutputVariable
+   :members:
+   :show-inheritance:
+
+
+   
+   .. automethod:: __init__
+   
+   .. rubric:: Methods
+   .. autosummary::
+   
+      ~FmiOutputVariable.__init__
+      ~FmiOutputVariable.construct
+      ~FmiOutputVariable.copy
+      ~FmiOutputVariable.dict
+      ~FmiOutputVariable.from_orm
+      ~FmiOutputVariable.json
+      ~FmiOutputVariable.model_construct
+      ~FmiOutputVariable.model_copy
+      ~FmiOutputVariable.model_dump
+      ~FmiOutputVariable.model_dump_json
+      ~FmiOutputVariable.model_json_schema
+      ~FmiOutputVariable.model_parametrized_name
+      ~FmiOutputVariable.model_post_init
+      ~FmiOutputVariable.model_rebuild
+      ~FmiOutputVariable.model_validate
+      ~FmiOutputVariable.model_validate_json
+      ~FmiOutputVariable.model_validate_strings
+      ~FmiOutputVariable.parse_file
+      ~FmiOutputVariable.parse_obj
+      ~FmiOutputVariable.parse_raw
+      ~FmiOutputVariable.schema
+      ~FmiOutputVariable.schema_json
+      ~FmiOutputVariable.update_forward_refs
+      ~FmiOutputVariable.validate
+   
+   
+
+
+   
+   
+   .. rubric:: Attributes
+   .. autosummary::
+   
+      ~FmiOutputVariable.model_computed_fields
+      ~FmiOutputVariable.model_config
+      ~FmiOutputVariable.model_extra
+      ~FmiOutputVariable.model_fields
+      ~FmiOutputVariable.model_fields_set
+      ~FmiOutputVariable.causality
+      ~FmiOutputVariable.variable_references
+      ~FmiOutputVariable.agent_output_indexes
+      ~FmiOutputVariable.name
+      ~FmiOutputVariable.type
+      ~FmiOutputVariable.description
+      ~FmiOutputVariable.variability
+      ~FmiOutputVariable.start_value
+      ~FmiOutputVariable.is_array
+      ~FmiOutputVariable.length
+   
+   

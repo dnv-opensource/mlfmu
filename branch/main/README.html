@@ -1,0 +1,707 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="ML Model" href="MLMODEL.html"><link rel="prev" title="mlfmu: Example Python Package" href="index.html">
+        <link rel="prefetch" href="_static/mlfmu_logo_v1.svg" as="image">
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+        <title>mlfmu - mlfmu 1.0.3</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mlfmu 1.0.3</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/mlfmu_logo_v1.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mlfmu 1.0.3</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">mlfmu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MLMODEL.html">ML Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ADVANCED.html">Advanced Usage</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="cli.html">CLI Documentation</a><input aria-label="Toggle navigation of CLI Documentation" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="cli.mlfmu.html">mlfmu - CLI interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="_autosummary/mlfmu.api.html">mlfmu.api</a><input aria-label="Toggle navigation of mlfmu.api" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.api.MlFmuBuilder.html">MlFmuBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.api.MlFmuCommand.html">MlFmuCommand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.api.MlFmuProcess.html">MlFmuProcess</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="_autosummary/mlfmu.types.html">mlfmu.types</a><input aria-label="Toggle navigation of mlfmu.types" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.html">mlfmu.types.fmu_component</a><input aria-label="Toggle navigation of mlfmu.types.fmu_component" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.BaseModelConfig.html">BaseModelConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.FmiCausality.html">FmiCausality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.FmiInputVariable.html">FmiInputVariable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.FmiModel.html">FmiModel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.FmiOutputVariable.html">FmiOutputVariable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.FmiVariability.html">FmiVariability</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.FmiVariable.html">FmiVariable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.FmiVariableType.html">FmiVariableType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.InputVariable.html">InputVariable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.InternalState.html">InternalState</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.ModelComponent.html">ModelComponent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.OutputVariable.html">OutputVariable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.Variable.html">Variable</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="_autosummary/mlfmu.types.onnx_model.html">mlfmu.types.onnx_model</a><input aria-label="Toggle navigation of mlfmu.types.onnx_model" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.onnx_model.ONNXModel.html">ONNXModel</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="_autosummary/mlfmu.utils.html">mlfmu.utils</a><input aria-label="Toggle navigation of mlfmu.utils" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.utils.builder.html">mlfmu.utils.builder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.utils.fmi_builder.html">mlfmu.utils.fmi_builder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.utils.interface.html">mlfmu.utils.interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.utils.logging.html">mlfmu.utils.logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.utils.path.html">mlfmu.utils.path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.utils.signals.html">mlfmu.utils.signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.utils.strings.html">mlfmu.utils.strings</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="STYLEGUIDE.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LICENSE.html">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LICENSE_THIRD_PARTY.html">LICENSE THIRD PARTY</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/README.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <p><a class="reference external" href="https://pypi.python.org/pypi/mlfmu"><img alt="pypi" src="https://img.shields.io/pypi/v/mlfmu.svg?color=blue" /></a>
+<a class="reference external" href="https://pypi.python.org/pypi/mlfmu"><img alt="versions" src="https://img.shields.io/pypi/pyversions/mlfmu.svg?color=blue" /></a>
+<a class="reference external" href="https://github.com/dnv-opensource/mlfmu/blob/main/LICENSE"><img alt="license" src="https://img.shields.io/pypi/l/mlfmu.svg" /></a>
+<a class="reference external" href="https://dnv-opensource.github.io/mlfmu/README.html"><img alt="docs" src="https://github.com/dnv-opensource/mlfmu/actions/workflows/pages/pages-build-deployment/badge.svg" /></a></p>
+<section id="mlfmu">
+<h1>mlfmu<a class="headerlink" href="#mlfmu" title="Link to this heading">¶</a></h1>
+<p>MLFMU serves as a tool for developers looking to integrate machine learning models into simulation environments. It enables the creation of Functional Mock-up Units (FMUs), which are simulation models that adhere to the FMI standard (<a class="reference external" href="https://fmi-standard.org/">https://fmi-standard.org/</a>), from trained machine learning models exported in the ONNX format (<a class="reference external" href="https://onnx.ai/">https://onnx.ai/</a>). The mlfmu package streamlines the process of transforming ONNX models into FMUs, facilitating their use in a wide range of simulation platforms that support the FMI standard such as the <a class="reference external" href="https://open-simulation-platform.github.io/">Open Simulation Platform</a> or DNV’s <a class="reference external" href="https://store.veracity.com/simulation-trust-center">Simulation Trust Center</a>.</p>
+<p>This work was first presented publicly at the <a class="reference external" href="https://opensimulationplatform.com/2024/09/23/osp-conference-2024-program/">Open Simulation Platform conference 2024</a>. You can find a pdf of the presentation in this repo under <a class="reference external" href="https://github.com/dnv-opensource/mlfmu/tree/main/presentations"><code class="docutils literal notranslate"><span class="pre">presentations/</span></code></a>.</p>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Compile trained ML models into FMUs (Functional Mock-up Units).</p></li>
+<li><p>Easy to integrate in building pipelines.</p></li>
+<li><p>Declarative solution, just define what the inputs/outputs/parameters of your co-simulation model should look like and MLFMU will take care of the rest.</p></li>
+<li><p>Support for FMU signal vectors in FMI 2.0.</p></li>
+<li><p>Advanced customizations by enabling you to change the C++ code of the FMU.</p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>mlfmu
+</pre></div>
+</div>
+<p>You may need to run <code class="docutils literal notranslate"><span class="pre">conan</span> <span class="pre">profile</span> <span class="pre">detect</span></code> before running the tool. See the notes further down in this README w.r.t. required cppstd version for Windows/Linux/MacOS.</p>
+</section>
+<section id="creating-ml-fmus">
+<h2>Creating ML FMUs<a class="headerlink" href="#creating-ml-fmus" title="Link to this heading">¶</a></h2>
+<section id="create-your-own-ml-model">
+<h3>Create your own ML model<a class="headerlink" href="#create-your-own-ml-model" title="Link to this heading">¶</a></h3>
+<p>Before you use this mlfmu tool, you should create your machine learning (ML) model, using whatever your preferred tool is.</p>
+<ol class="arabic simple">
+<li><p>Define the architecture of your ML model and prepare the model to receive the inputs following to MLFMU’s input format.</p></li>
+</ol>
+<blockquote>
+<div><p>Note 1: This example subclasses a Keras model for demonstration purposes. However, the tool is flexible and can accommodate other frameworks such as PyTorch, TensorFlow, Scikit-learn, and more.</p>
+</div></blockquote>
+<blockquote>
+<div><p>Note 2: We showcase a simple example here. For more detailed information on how you can prepare your model to be compatible with this tool, see <a class="reference internal" href="MLMODEL.html"><span class="std std-doc">MLMODEL.md</span></a></p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create your ML model</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MlModel</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_inputs</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="c1"># 1 hidden layer, 1 output layer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_layer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_layer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">all_inputs</span><span class="p">):</span> <span class="c1"># model forward pass</span>
+        <span class="c1"># unpack inputs</span>
+        <span class="n">inputs</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">all_inputs</span>
+
+        <span class="c1"># Do something with the inputs</span>
+        <span class="c1"># Here we have 1 hidden layer</span>
+        <span class="n">d1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_layer</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_layer</span><span class="p">(</span><span class="n">d1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">outputs</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Train your model, then save it as an ONNX file, e.g.:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">onnx</span>
+
+<span class="n">ml_model</span> <span class="o">=</span> <span class="n">MlModel</span><span class="p">()</span>
+<span class="c1"># compile: configure model for training</span>
+<span class="n">ml_model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">RMSProp</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">)</span>
+<span class="c1"># fit: train your ML model for some number of epochs</span>
+<span class="n">ml_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">training_dataset</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="n">nr_epochs</span><span class="p">)</span>
+
+<span class="c1"># Save the trained model as ONNX at a specified path</span>
+<span class="n">onnx_model</span> <span class="o">=</span> <span class="n">tf2onnx</span><span class="o">.</span><span class="n">convert</span><span class="o">.</span><span class="n">from_keras</span><span class="p">(</span><span class="n">ml_model</span><span class="p">)</span>
+<span class="n">onnx</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">onnx_model</span><span class="p">,</span> <span class="s1">&#39;path/to/save&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>(Optional) You may want to check your onnx file to make sure it produces the right output. You can do this by loading the onnx file and (using the same test input) compare the onnx model predictions to your original model predictions.
+You can also check the model using Netron: <a class="reference external" href="https://netron.app/">https://netron.app/</a> or <a class="reference external" href="https://github.com/lutzroeder/netron">https://github.com/lutzroeder/netron</a></p></li>
+</ol>
+</section>
+<section id="preparing-for-and-using-mlfmu">
+<h3>Preparing for and using MLFMU<a class="headerlink" href="#preparing-for-and-using-mlfmu" title="Link to this heading">¶</a></h3>
+<p>Given that you have an ML model, you now need to:</p>
+<ol class="arabic simple">
+<li><p>Prepare the FMU interface specification (.json), to specify your FMU’s inputs, parameters, and output, map these to the ML model’s inputs and output (<code class="docutils literal notranslate"><span class="pre">agentInputIndexes</span></code>) and to specify whether it uses time (<code class="docutils literal notranslate"><span class="pre">usesTime</span></code>).</p></li>
+</ol>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="c1">// Interface.json</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MyMLFMU&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A Machine Learning based FMU&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;usesTime&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;inputs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;input_1&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;My input signal to the model at position 0&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;agentInputIndexes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;input_2&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;My input signal as a vector with four elements at position 1 to 5&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;agentInputIndexes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;1:5&quot;</span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;real&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;isArray&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;length&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;parameters&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;parameter_1&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;My input signal to the model at position 1&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;agentInputIndexes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;outputs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;prediction&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The prediction generated by ML model&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;agentOutputIndexes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;0&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>More information about the interface.json schema can be found in the mlfmu\docs\interface\schema.html</p>
+<ol class="arabic simple" start="2">
+<li><p>Compile the FMU:</p></li>
+</ol>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mlfmu<span class="w"> </span>build<span class="w"> </span>--interface-file<span class="w"> </span>interface.json<span class="w"> </span>--model-file<span class="w"> </span>model.onnx
+</pre></div>
+</div>
+<p>or if the files are in your current working directory:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mlfmu<span class="w"> </span>build
+</pre></div>
+</div>
+</section>
+</section>
+<section id="extended-documentation">
+<h2>Extended documentation<a class="headerlink" href="#extended-documentation" title="Link to this heading">¶</a></h2>
+<p>For more explanation on the ONNX file structure and inputs/outputs for your model, please refer to mlfmu’s <a class="reference internal" href="MLMODEL.html"><span class="std std-doc">MLMODEL.md</span></a>.</p>
+<p>For advanced usage options, e.g. editing the generated FMU source code, or using the tool via a Python class, please refer to mlfmu’s <a class="reference internal" href="ADVANCED.html"><span class="std std-doc">ADVANCED.md</span></a>.</p>
+</section>
+<section id="development-setup">
+<h2>Development Setup<a class="headerlink" href="#development-setup" title="Link to this heading">¶</a></h2>
+<p>If you just want to use <code class="docutils literal notranslate"><span class="pre">mlfmu</span></code>, you do not need to do the following steps. This is for those aiming to do development in this repo.</p>
+<section id="install-uv">
+<h3>1. Install uv<a class="headerlink" href="#install-uv" title="Link to this heading">¶</a></h3>
+<p>This project uses <code class="docutils literal notranslate"><span class="pre">uv</span></code> as package manager.
+If you haven’t already, install <a class="reference external" href="https://docs.astral.sh/uv">uv</a>, preferably using it’s <a class="reference external" href="https://docs.astral.sh/uv/getting-started/installation/#__tabbed_1_2">“Standalone installer”</a> method: <br>
+..on Windows:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>powershell<span class="w"> </span>-ExecutionPolicy<span class="w"> </span>ByPass<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span>
+</pre></div>
+</div>
+<p>..on MacOS and Linux:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+</pre></div>
+</div>
+<p>(see <a class="reference external" href="https://docs.astral.sh/uv/getting-started/installation/">docs.astral.sh/uv</a> for all / alternative installation methods.)</p>
+<p>Once installed, you can update <code class="docutils literal notranslate"><span class="pre">uv</span></code> to its latest version, anytime, by running:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>self<span class="w"> </span>update
+</pre></div>
+</div>
+</section>
+<section id="windows-install-visual-studio-build-tools">
+<h3>2. (Windows) Install Visual Studio Build Tools<a class="headerlink" href="#windows-install-visual-studio-build-tools" title="Link to this heading">¶</a></h3>
+<p>We use conan for building the FMU. For the conan building to work later on, you will need the Visual Studio Build tools 2022 to be installed. It is best to do this <strong>before</strong> installing conan (which gets installed as part of the package dependencies, see step 5). You can download and install the Build Tools for VS 2022 (for free) from <a class="reference external" href="https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022">https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022</a>.</p>
+</section>
+<section id="clone-the-repository">
+<h3>3. Clone the repository<a class="headerlink" href="#clone-the-repository" title="Link to this heading">¶</a></h3>
+<p>Clone the mlfmu repository into your local development directory:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dnv-opensource/mlfmu<span class="w"> </span>path/to/your/dev/mlfmu
+git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init<span class="w"> </span>--recursive
+</pre></div>
+</div>
+</section>
+<section id="install-dependencies">
+<h3>4. Install dependencies<a class="headerlink" href="#install-dependencies" title="Link to this heading">¶</a></h3>
+<p>Run <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">sync</span></code> to create a virtual environment and install all project dependencies into it:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync
+</pre></div>
+</div>
+<p>Use the command line option <code class="docutils literal notranslate"><span class="pre">-p</span></code> to specifiy the Python version to resolve the dependencies against.
+For instance, use <code class="docutils literal notranslate"><span class="pre">-p</span> <span class="pre">3.12</span></code> to specify Python 3.12 .</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>-p<span class="w"> </span><span class="m">3</span>.12
+</pre></div>
+</div>
+<blockquote>
+<div><p>Note: In case the specified Python version is not found on your machine, <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">sync</span></code> will automatically download and install it.</p>
+</div></blockquote>
+<p>Optionally, use <code class="docutils literal notranslate"><span class="pre">-U</span></code> in addition to allow package upgrades. Especially in cases when you change to a newer Python version, adding <code class="docutils literal notranslate"><span class="pre">-U</span></code> can be useful. <br>
+It allows the dependency resolver to upgrade dependencies to newer versions, which might be necessary to support the (newer) Python version you specified.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>-p<span class="w"> </span><span class="m">3</span>.12<span class="w"> </span>-U
+</pre></div>
+</div>
+<blockquote>
+<div><p>Note: At this point, you should have conan installed. You will want to make sure it has the correct build profile. You can auto-detect and create the profile by running <code class="docutils literal notranslate"><span class="pre">conan</span> <span class="pre">profile</span> <span class="pre">detect</span></code>.
+After this, you can check the profile:<br/>
+.. on Windows: in <code class="docutils literal notranslate"><span class="pre">C:\Users\&lt;USRNAM&gt;\.conan2\profiles\.default</span></code> (replace <code class="docutils literal notranslate"><span class="pre">&lt;USRNAM&gt;</span></code> with your username). You want to have: <code class="docutils literal notranslate"><span class="pre">compiler=msvc</span></code>, <code class="docutils literal notranslate"><span class="pre">compiler.cppstd=17</span></code>, <code class="docutils literal notranslate"><span class="pre">compiler.version=193</span></code>.<br/>
+.. on Linux: in <code class="docutils literal notranslate"><span class="pre">~/.conan2/profiles/default</span></code>, you will need at least <code class="docutils literal notranslate"><span class="pre">compiler.cppstd=gnu17</span></code> and <code class="docutils literal notranslate"><span class="pre">compiler.libcxx=libstdc++11</span></code>.
+.. on MacOS: in <code class="docutils literal notranslate"><span class="pre">~/.conan2/profiles/default</span></code>, you will need at least <code class="docutils literal notranslate"><span class="pre">compiler.cppstd=gnu20</span></code> (tested with <code class="docutils literal notranslate"><span class="pre">compiler.version=14</span></code>).</p>
+</div></blockquote>
+</section>
+<section id="optional-activate-the-virtual-environment">
+<h3>5. (Optional) Activate the virtual environment<a class="headerlink" href="#optional-activate-the-virtual-environment" title="Link to this heading">¶</a></h3>
+<p>When using <code class="docutils literal notranslate"><span class="pre">uv</span></code>, most of the time there will be no longer a need to manually activate the virtual environment. <br>
+Whenever you run a command via <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span></code> inside your project folder structure, <code class="docutils literal notranslate"><span class="pre">uv</span></code> will find the <code class="docutils literal notranslate"><span class="pre">.venv</span></code> virtual environment in the working directory or any parent directory, and activate it on the fly:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>&lt;command&gt;
+</pre></div>
+</div>
+<p>However, you still <em>can</em> manually activate the virtual environment if needed.
+While we did not face any issues using VS Code as IDE, you might e.g. use an IDE which needs the .venv manually activated in order to properly work. <br>
+If this is the case, you can anytime activate the virtual environment using one of the “known” legacy commands: <br>
+..on Windows:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>.venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate.bat
+</pre></div>
+</div>
+<p>..on Linux:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</pre></div>
+</div>
+</section>
+<section id="install-pre-commit-hooks">
+<h3>6. Install pre-commit hooks<a class="headerlink" href="#install-pre-commit-hooks" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file in the project root directory contains a configuration for pre-commit hooks.
+To install the pre-commit hooks defined therein in your local git repository, run:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>pre-commit<span class="w"> </span>install
+</pre></div>
+</div>
+<p>All pre-commit hooks configured in <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> will now run each time you commit changes.</p>
+</section>
+<section id="test-that-the-installation-works">
+<h3>7. Test that the installation works<a class="headerlink" href="#test-that-the-installation-works" title="Link to this heading">¶</a></h3>
+<p>To test that the installation works, run pytest in the project root folder:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>pytest
+</pre></div>
+</div>
+</section>
+<section id="run-an-example">
+<h3>8. Run an example<a class="headerlink" href="#run-an-example" title="Link to this heading">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>.<span class="se">\e</span>xamples<span class="se">\w</span>ind_generator<span class="se">\c</span>onfig<span class="se">\</span>
+uv<span class="w"> </span>run<span class="w"> </span>mlfmu<span class="w"> </span>build
+</pre></div>
+</div>
+<p>As an alternative, you can run from the main directory:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>mlfmu<span class="w"> </span>build<span class="w"> </span>--interface-file<span class="w"> </span>.<span class="se">\e</span>xamples<span class="se">\w</span>ind_generator<span class="se">\c</span>onfig<span class="se">\i</span>nterface.json<span class="w"> </span>--model-file<span class="w"> </span>.<span class="se">\e</span>xamples<span class="se">\w</span>ind_generator<span class="se">\c</span>onfig<span class="se">\e</span>xample.onnx
+</pre></div>
+</div>
+<p><em>Note</em>: wherever you run the build command from, is where the FMU file will be created, unless you specify otherwise with <code class="docutils literal notranslate"><span class="pre">--fmu-path</span></code>.</p>
+<p>For more options, see <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">mlfmu</span> <span class="pre">--help</span></code> or <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">mlfmu</span> <span class="pre">build</span> <span class="pre">--help</span></code>.</p>
+</section>
+<section id="use-your-new-ml-fmu">
+<h3>9. Use your new ML FMU<a class="headerlink" href="#use-your-new-ml-fmu" title="Link to this heading">¶</a></h3>
+<p>The created FMU can be used for running (co-)simulations. We have tested the FMUs that we have created in the <a class="reference external" href="https://store.veracity.com/simulation-trust-center">Simulation Trust Center</a>, which uses the <a class="reference external" href="https://opensimulationplatform.com/">Open Simulation Platform</a> software.</p>
+</section>
+<section id="compiling-the-documentation">
+<h3>10. Compiling the documentation<a class="headerlink" href="#compiling-the-documentation" title="Link to this heading">¶</a></h3>
+<p>This repository uses sphinx with .rst and .md files as well as Python docstrings, to document the code and usage. To locally build the docs:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs
+make<span class="w"> </span>html
+</pre></div>
+</div>
+<p>You can then open index.html for access to all docs (for Windows: <code class="docutils literal notranslate"><span class="pre">start</span> <span class="pre">build\html\index.html</span></code>).</p>
+</section>
+</section>
+<section id="meta">
+<h2>Meta<a class="headerlink" href="#meta" title="Link to this heading">¶</a></h2>
+<p>All code in mlfmu is DNV intellectual property.</p>
+<p>Copyright (c) 2024 <a class="reference external" href="https://www.dnv.com">DNV</a> AS. All rights reserved.</p>
+<p>Primary contributors:</p>
+<p>Kristoffer Skare - <a class="reference external" href="https://www.linkedin.com/in/kristoffer-skare-19606a1a1/">&#64;LinkedIn</a> - <a class="reference external" href="mailto:kristoffer&#46;skare&#37;&#52;&#48;dnv&#46;com">kristoffer<span>&#46;</span>skare<span>&#64;</span>dnv<span>&#46;</span>com</a></p>
+<p>Jorge Luis Mendez - <a class="reference external" href="https://www.linkedin.com/in/jorgelmh/">&#64;LinkedIn</a> - <a class="reference external" href="mailto:jorge&#46;luis&#46;mendez&#37;&#52;&#48;dnv&#46;com">jorge<span>&#46;</span>luis<span>&#46;</span>mendez<span>&#64;</span>dnv<span>&#46;</span>com</a></p>
+<p>Additional contributors (testing, docs, examples, etc.):</p>
+<p>Melih Akdağ - <a class="reference external" href="https://www.linkedin.com/in/melih-akdag/">&#64;LinkedIn</a> - <a class="reference external" href="mailto:melih&#46;akdag&#37;&#52;&#48;dnv&#46;com">melih<span>&#46;</span>akdag<span>&#64;</span>dnv<span>&#46;</span>com</a></p>
+<p>Stephanie Kemna - <a class="reference external" href="https://www.linkedin.com/in/stephaniekemna/">&#64;LinkedIn</a></p>
+<p>Hee Jong Park - <a class="reference external" href="https://www.linkedin.com/in/heejongpark/">&#64;LinkedIn</a> - <a class="reference external" href="mailto:hee&#46;jong&#46;park&#37;&#52;&#48;dnv&#46;com">hee<span>&#46;</span>jong<span>&#46;</span>park<span>&#64;</span>dnv<span>&#46;</span>com</a></p>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Fork it (<a class="reference external" href="https://github.com/dnv-opensource/mlfmu/fork">https://github.com/dnv-opensource/mlfmu/fork</a>) (Note: this is currently disabled for this repo. For development, continue with the next step.)</p></li>
+<li><p>Create an issue in your GitHub repo</p></li>
+<li><p>Create your branch based on the issue number and type (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">-b</span> <span class="pre">issue-name</span></code>)</p></li>
+<li><p>Evaluate and stage the changes you want to commit (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">-i</span></code>)</p></li>
+<li><p>Commit your changes (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-am</span> <span class="pre">'place</span> <span class="pre">a</span> <span class="pre">descriptive</span> <span class="pre">commit</span> <span class="pre">message</span> <span class="pre">here'</span></code>)</p></li>
+<li><p>Push to the branch (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">issue-name</span></code>)</p></li>
+<li><p>Create a new Pull Request in GitHub</p></li>
+</ol>
+<p>For your contribution, please make sure you follow the <a class="reference internal" href="STYLEGUIDE.html"><span class="std std-doc">STYLEGUIDE</span></a> before creating the Pull Request.</p>
+<section id="new-releases">
+<h3>New releases<a class="headerlink" href="#new-releases" title="Link to this heading">¶</a></h3>
+<p>The recommended practice is to merge development PRs into main, and then, when one wants to release a new version, create a PR to push main into the release branch.</p>
+<p>For a new release, please follow the next steps:</p>
+<ol class="arabic simple">
+<li><p>Create a PR to merge all desired changes from the <code class="docutils literal notranslate"><span class="pre">main</span></code> to the <code class="docutils literal notranslate"><span class="pre">release</span></code> branch.</p></li>
+<li><p>After approval and merging, on GitHub, run the action “Bump version” on the <code class="docutils literal notranslate"><span class="pre">release</span></code> branch. This will create a new PR.</p></li>
+<li><p>On GitHub, access the PR created by bump-my-version, check, and approve (if all looks good).</p></li>
+<li><p>After approval and merging, on GitHub, run the action “Push to release” on the <code class="docutils literal notranslate"><span class="pre">release</span></code> branch. This will build everything and publish the package to PyPi, and create a new GitHub release.</p></li>
+</ol>
+<p>Note; version numbers are in: <code class="docutils literal notranslate"><span class="pre">CHANGELOG.md</span></code>, <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, and <code class="docutils literal notranslate"><span class="pre">docs/source/conf.py</span></code> (and should be automatically updated by bump-my-version upon release).</p>
+</section>
+</section>
+<section id="errors-fixes">
+<h2>Errors &amp; fixes<a class="headerlink" href="#errors-fixes" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>If you get an error similar to <code class="docutils literal notranslate"><span class="pre">..\fmu.cpp(4,10):</span> <span class="pre">error</span> <span class="pre">C1083:</span> <span class="pre">Cannot</span> <span class="pre">open</span> <span class="pre">include</span> <span class="pre">file:</span> <span class="pre">'cppfmu_cs.hpp':</span> <span class="pre">No</span> <span class="pre">such</span> <span class="pre">file</span> <span class="pre">or</span> <span class="pre">directory</span></code>, you are missing cppfmu. This is a submodule to this repository. Make sure that you do a <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">update</span> <span class="pre">--init</span> <span class="pre">--recursive</span></code> in the top level folder.</p></li>
+</ul>
+</section>
+<section id="license-dependencies">
+<h2>License &amp; dependencies<a class="headerlink" href="#license-dependencies" title="Link to this heading">¶</a></h2>
+<p>This code is distributed under the BSD 3-Clause license. See <a class="reference internal" href="LICENSE.html"><span class="doc std std-doc">LICENSE</span></a> for more information.</p>
+<p>It makes use of <a class="reference external" href="https://github.com/viproma/cppfmu">cpp-fmu</a>, which is distributed under the MPL license at <a class="reference external" href="https://github.com/viproma/cppfmu">https://github.com/viproma/cppfmu</a>.</p>
+<!-- Markdown link & img dfn's -->
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="MLMODEL.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">ML Model</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Home</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, DNV AS. All rights reserved.
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">mlfmu</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#creating-ml-fmus">Creating ML FMUs</a><ul>
+<li><a class="reference internal" href="#create-your-own-ml-model">Create your own ML model</a></li>
+<li><a class="reference internal" href="#preparing-for-and-using-mlfmu">Preparing for and using MLFMU</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#extended-documentation">Extended documentation</a></li>
+<li><a class="reference internal" href="#development-setup">Development Setup</a><ul>
+<li><a class="reference internal" href="#install-uv">1. Install uv</a></li>
+<li><a class="reference internal" href="#windows-install-visual-studio-build-tools">2. (Windows) Install Visual Studio Build Tools</a></li>
+<li><a class="reference internal" href="#clone-the-repository">3. Clone the repository</a></li>
+<li><a class="reference internal" href="#install-dependencies">4. Install dependencies</a></li>
+<li><a class="reference internal" href="#optional-activate-the-virtual-environment">5. (Optional) Activate the virtual environment</a></li>
+<li><a class="reference internal" href="#install-pre-commit-hooks">6. Install pre-commit hooks</a></li>
+<li><a class="reference internal" href="#test-that-the-installation-works">7. Test that the installation works</a></li>
+<li><a class="reference internal" href="#run-an-example">8. Run an example</a></li>
+<li><a class="reference internal" href="#use-your-new-ml-fmu">9. Use your new ML FMU</a></li>
+<li><a class="reference internal" href="#compiling-the-documentation">10. Compiling the documentation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#meta">Meta</a></li>
+<li><a class="reference internal" href="#contributing">Contributing</a><ul>
+<li><a class="reference internal" href="#new-releases">New releases</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#errors-fixes">Errors &amp; fixes</a></li>
+<li><a class="reference internal" href="#license-dependencies">License &amp; dependencies</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=baaebd52"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
+</html>

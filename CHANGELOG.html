@@ -1,0 +1,552 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Style Guide" href="STYLEGUIDE.html" /><link rel="prev" title="mlfmu.utils.strings" href="_autosummary/mlfmu.utils.strings.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
+        <title>Changelog - mlfmu 1.0.3</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">mlfmu 1.0.3</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/mlfmu_logo_v1.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">mlfmu 1.0.3</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">mlfmu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MLMODEL.html">ML Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ADVANCED.html">Advanced Usage</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="cli.html">CLI Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of CLI Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="cli.mlfmu.html">mlfmu - CLI interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="_autosummary/mlfmu.api.html">mlfmu.api</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of mlfmu.api</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.api.MlFmuBuilder.html">MlFmuBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.api.MlFmuCommand.html">MlFmuCommand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.api.MlFmuProcess.html">MlFmuProcess</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="_autosummary/mlfmu.types.html">mlfmu.types</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of mlfmu.types</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.html">mlfmu.types.fmu_component</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of mlfmu.types.fmu_component</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.BaseModelConfig.html">BaseModelConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.FmiCausality.html">FmiCausality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.FmiInputVariable.html">FmiInputVariable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.FmiModel.html">FmiModel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.FmiOutputVariable.html">FmiOutputVariable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.FmiVariability.html">FmiVariability</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.FmiVariable.html">FmiVariable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.FmiVariableType.html">FmiVariableType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.InputVariable.html">InputVariable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.InternalState.html">InternalState</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.ModelComponent.html">ModelComponent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.OutputVariable.html">OutputVariable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.fmu_component.Variable.html">Variable</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="_autosummary/mlfmu.types.onnx_model.html">mlfmu.types.onnx_model</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of mlfmu.types.onnx_model</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="_autosummary/mlfmu.types.onnx_model.ONNXModel.html">ONNXModel</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="_autosummary/mlfmu.utils.html">mlfmu.utils</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of mlfmu.utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.utils.builder.html">mlfmu.utils.builder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.utils.fmi_builder.html">mlfmu.utils.fmi_builder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.utils.interface.html">mlfmu.utils.interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.utils.logging.html">mlfmu.utils.logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.utils.path.html">mlfmu.utils.path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.utils.signals.html">mlfmu.utils.signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/mlfmu.utils.strings.html">mlfmu.utils.strings</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="STYLEGUIDE.html">Style Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LICENSE.html">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LICENSE_THIRD_PARTY.html">LICENSE THIRD PARTY</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/CHANGELOG.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">¶</a></h1>
+<p>All notable changes to the [mlfmu] project will be documented in this file.<br>
+The changelog format is based on <a class="reference external" href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>.</p>
+<section id="id1">
+<h2>[1.0.3]<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<section id="changed">
+<h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Add bump-my-version for handling release versions/updating in different files.</p></li>
+<li><p>Add README page for Examples dir, add generated FMUs for each example (given FMI tools page requirements for Examples), and update the files generated by mlfmu codegen (add for pyspark example)</p></li>
+<li><p>Generation of modelDescription.xml file to correctly generate tags for each output with 1-indexed indexes and InitialUnknowns tags</p></li>
+<li><p>Generation of modelDescription.xml adds the variables (inputs, parameters and outputs) in the orderer of their valueReference. This is for the indexing to work correctly</p></li>
+</ul>
+</section>
+</section>
+<section id="id2">
+<h2>[1.0.2]<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="id3">
+<h3>Changed<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>MLFMU logo is added and conf.py is updated.</p></li>
+<li><p>Added checks for Windows vs Linux and fixed compilation for Linux/MacOS, updated README. Tested with Ubuntu 20.04, Ubuntu 22.04 and MacOS 14.4.</p></li>
+</ul>
+</section>
+</section>
+<section id="id4">
+<h2>[1.0.1]<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<section id="id5">
+<h3>Changed<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Update generated docs; cleaning, fix for warnings, add missing pages and info, update authors and maintainers.</p></li>
+<li><p>Add where the source code for cppfmu can be found, add third party license.</p></li>
+<li><p>Added missing unit tests for the template data generated when building the FMU.</p></li>
+<li><p>Unit tests for the modelDescription.xml generation.</p></li>
+<li><p>Unit tests for the Interface JSON validation.</p></li>
+<li><p>Wind turbine power prediction model example is included in the mlfmu\examples\wind_to_power_pyspark directory.</p></li>
+<li><p>README.md : Interface.json is updated to show how to define vectors as inputs.</p></li>
+<li><p>Changed from <code class="docutils literal notranslate"><span class="pre">pip</span></code>/<code class="docutils literal notranslate"><span class="pre">tox</span></code> to <code class="docutils literal notranslate"><span class="pre">uv</span></code> as package manager</p></li>
+<li><p>README.md : Completely rewrote section “Development Setup”, introducing <code class="docutils literal notranslate"><span class="pre">uv</span></code> as package manager.</p></li>
+<li><p>Added missing docstrings for py/cpp/h files with help of Github Copilot</p></li>
+<li><p>Moved CMake + conan + c++ package files and folders with cpp code inside src folder to be included in package</p></li>
+<li><p>Replace pkg_resources with importlib.metadata for getting packages version to work in python 3.12</p></li>
+<li><p>Replace deprecated root_validator with model_validator in pydanitc class</p></li>
+<li><p>Remove unnecessary hard coded values in utils/builder.py</p></li>
+<li><p>Complete cli interface</p>
+<ul>
+<li><p>Add subparsers to cli argparser to handle several different commands</p></li>
+<li><p>Create MlFmuBuilder from args and run code according to command</p></li>
+</ul>
+</li>
+<li><p>Change cli test to match the new cli interface/parser</p></li>
+<li><p>Default agent_(input/output)_indexes is [] by default instead of None</p></li>
+<li><p>Updated doc by running publish-interface-docs</p></li>
+<li><p>Deleted azure files from old azure devops repo</p></li>
+<li><p>The generated modelDescription.xml files now also contain <ModelStructure> with a list of the outputs of the FMU.</p></li>
+<li><p>OnnxFmu cpp template class updated to be able to initialize state with FMU Variables</p>
+<ul>
+<li><p>Add variables to specify which FMU variable that should be used to initialize which state</p></li>
+<li><p>Add function to DoStep that initializes the state at the beginning of the first time step.</p></li>
+</ul>
+</li>
+<li><p>model_definitions_template.h</p>
+<ul>
+<li><p>Add definitions for the the number of states that should be initialized and array of index/value reference pairs to describe how the states should be initialized</p></li>
+</ul>
+</li>
+<li><p>Fmu Component json interface</p>
+<ul>
+<li><p>Add name, description and start_value to state in the json interface</p></li>
+<li><p>States changed from a single InternalState to a list of InternalState</p></li>
+</ul>
+</li>
+<li><p>Fixed typo from ‘tunnable’ to ‘tunable’</p></li>
+<li><p>Fixed number of onnx output check to be correct (1-3 and not always raising exception)</p></li>
+<li><p>Fix correct fmi causality for parameters</p></li>
+<li><p>Fix correct default variability for parameters</p></li>
+<li><p>Fix expanding of array variables into one variable per index for inputs and parameters to work as outputs</p></li>
+<li><p>Default build target in builder to wind_to_power example</p></li>
+<li><p>CMakeList.txt (from old repo) to be able to take an arbitrary path where the fmu files to be compiled are located</p></li>
+<li><p>Builder to run commands to compile generated files into an fmu</p>
+<ul>
+<li><p>Can take and keep track of arbitrary paths</p></li>
+</ul>
+</li>
+<li><p>Builder checks if the files needed to compile the fmu exists before trying to compile the fmu</p></li>
+<li><p>Replaced “TODO: Trow Error?” with raising a fitting exception</p></li>
+<li><p>replaced black formatter with ruff formatter</p></li>
+<li><p>Changed publishing workflow to use OpenID Connect (Trusted Publisher Management) when publishing to PyPI</p></li>
+<li><p>Updated copyright statement</p></li>
+<li><p>VS Code settings: Turned off automatic venv activation</p></li>
+<li><p>Edited descriptions in the examples/wind_to_power/config/interface.json</p></li>
+</ul>
+</section>
+<section id="added">
+<h3>Added<a class="headerlink" href="#added" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Added BSD 3-Clause License</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">mypy</span></code> as static type checker (in addition to <code class="docutils literal notranslate"><span class="pre">pyright</span></code>)</p></li>
+<li><p>Add .gitattributes to handle line endings, removed eol from .editorconfig</p></li>
+<li><p>Add .github/pull_request_template.md for enabling PR templates on Github</p></li>
+<li><p>Add conan dependency to pyproject.toml</p></li>
+<li><p>Add MlFmuBuilder class to generate code and compile FMU</p>
+<ul>
+<li><p>Find default paths to files and directories if not given in cli</p></li>
+<li><p>Run functions in utils/builder.py according to which command is being run</p></li>
+<li><p>Clean up temporary/build files after the process is done</p></li>
+</ul>
+</li>
+<li><p>Added feature to be able to initialize states using previously defined parameters or inputs</p>
+<ul>
+<li><p>This is done by setting “initializationVariable” = “{variable name}”, instead of using the “name” and “start_value” attributes</p></li>
+<li><p>Added flag in schema to allow a variable to be reused when initializing states</p></li>
+<li><p>Allowed for multiple states to use the same variable for initialization</p></li>
+</ul>
+</li>
+<li><p>.clang-format to consistently format cpp code</p></li>
+<li><p>Added code to generate parameters for initialization of state</p></li>
+<li><p>Wind to power model example in examples</p>
+<ul>
+<li><p>Onnx file containing ml model</p></li>
+<li><p>Interface json file containing information needed not contained in onnx file</p></li>
+</ul>
+</li>
+<li><p>The generated fmu files resulting from running running builder on the new wind_to_power example</p></li>
+<li><p>CMakeLists.txt and conanfile.txt from old repo to configure compiling/building FMU from generated files</p></li>
+</ul>
+</section>
+<section id="removed">
+<h3>Removed<a class="headerlink" href="#removed" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>VS Code settings: Removed the setting which added the /src folder to PythonPath. This is no longer necessary. <code class="docutils literal notranslate"><span class="pre">uv</span></code> installs the project itself as a package in “editable” mode, which removes the need to manually add /src to the PythonPath environment variable.</p></li>
+</ul>
+</section>
+<section id="github-workflows">
+<h3>GitHub workflows<a class="headerlink" href="#github-workflows" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>(all workflows): Adapted to use <code class="docutils literal notranslate"><span class="pre">uv</span></code> as package manager</p></li>
+<li><p>_test_future.yml : updated Python version to 3.13.0-alpha - 3.13.0</p></li>
+<li><p>_test_future.yml : updated name of test job to ‘test313’</p></li>
+</ul>
+</section>
+<section id="dependencies">
+<h3>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Updated to ruff&gt;=0.6.3  (from ruff==0.2.1)</p></li>
+<li><p>Updated to pyright&gt;=1.1.378  (from pyright==1.1.350)</p></li>
+<li><p>Updated to sourcery&gt;=1.22  (from sourcery==1.15)</p></li>
+<li><p>Updated to pytest&gt;=8.3  (from pytest&gt;=7.4)</p></li>
+<li><p>updated to pytest-cov&gt;=5.0  (from pytest-cov&gt;=4.1)</p></li>
+<li><p>Updated to Sphinx&gt;=8.0  (from Sphinx&gt;=7.2)</p></li>
+<li><p>Updated to sphinx-argparse-cli&gt;=1.17  (from sphinx-argparse-cli&gt;=1.11)</p></li>
+<li><p>Updated to myst-parser&gt;=4.0  (from myst-parser&gt;=2.0)</p></li>
+<li><p>Updated to furo&gt;=2024.8  (from furo&gt;=2023.9.10)</p></li>
+<li><p>Updated to setup-python&#64;v5  (from setup-python&#64;v4)</p></li>
+<li><p>Updated to actions-gh-pages&#64;v4  (from actions-gh-pages&#64;v3)</p></li>
+<li><p>Updated to upload-artifact&#64;v4  (from upload-artifact&#64;v3)</p></li>
+<li><p>Updated to download-artifact&#64;v4  (from download-artifact&#64;v3)</p></li>
+<li><p>Updated to dictIO&gt;=0.3.4  (from dictIO&gt;=0.3.1)</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="STYLEGUIDE.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Style Guide</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="_autosummary/mlfmu.utils.strings.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">mlfmu.utils.strings</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, DNV AS. All rights reserved.
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#id1">[1.0.3]</a><ul>
+<li><a class="reference internal" href="#changed">Changed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id2">[1.0.2]</a><ul>
+<li><a class="reference internal" href="#id3">Changed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">[1.0.1]</a><ul>
+<li><a class="reference internal" href="#id5">Changed</a></li>
+<li><a class="reference internal" href="#added">Added</a></li>
+<li><a class="reference internal" href="#removed">Removed</a></li>
+<li><a class="reference internal" href="#github-workflows">GitHub workflows</a></li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=baaebd52"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=5fa4622c"></script>
+    </body>
+</html>
