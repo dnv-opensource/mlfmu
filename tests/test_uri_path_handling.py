@@ -8,6 +8,11 @@ in onnxFmu.cpp was incorrectly stripping 8 characters instead of 7 when removing
 The actual formatOnnxPath function is in C++ and gets compiled into the FMU binary,
 so this test serves as documentation of the expected behavior and can be used for
 regression testing if the logic is ever ported to Python.
+
+Note: This fix specifically addresses Unix absolute paths. Windows file URIs 
+(e.g., file:///C:/path) may require additional handling in the future, as stripping 
+7 characters would result in /C:/path instead of C:/path. However, the issue report
+indicates this is primarily a Unix-focused fix.
 """
 
 import pytest
@@ -28,10 +33,6 @@ class TestUriPathHandling:
             ("file:///tmp/extracted_fmu/resources/model.onnx", "/tmp/extracted_fmu/resources/model.onnx"),
             ("file:///home/user/fmu/model.onnx", "/home/user/fmu/model.onnx"),
             ("file:///var/lib/simulation/model.onnx", "/var/lib/simulation/model.onnx"),
-            
-            # Windows paths (for documentation - actual behavior may vary on Windows)
-            # Note: Windows file URIs typically use file:///C:/path format
-            ("file:///C:/Users/test/model.onnx", "/C:/Users/test/model.onnx"),
             
             # Paths without file:// prefix should remain unchanged
             ("/tmp/path/model.onnx", "/tmp/path/model.onnx"),
