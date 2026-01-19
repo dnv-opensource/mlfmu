@@ -77,7 +77,7 @@ dev-dependencies = [
     "ruff>=0.6.3",
     "pyright>=1.1.378",
     "mypy>=1.11.1",
-    "sourcery>=1.22",
+    "sourcery>=1.40,!=1.41.1",
     "pre-commit>=3.8",
     "Sphinx>=8.0",
     "sphinx-argparse-cli>=1.17",

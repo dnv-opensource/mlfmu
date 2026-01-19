@@ -25,7 +25,7 @@ OnnxFmu::OnnxFmu(cppfmu::FMIString fmuResourceLocation)
  * \brief Formats the onnx path.
  *
  * Formats the onnx path by appending the ONNX_FILENAME to the given fmuResourceLocation.
- * If the path starts with "file:///", it removes the "file://" prefix.
+ * If the path starts with "file://", it removes the "file://" prefix.
  * This is directly stored to the class var onnxPath_.
  *
  * \param fmuResourceLocation The location of the FMU resource.
@@ -40,9 +40,9 @@ void OnnxFmu::formatOnnxPath(cppfmu::FMIString fmuResourceLocation)
 
     // Remove file:// from the path if it is at the beginning
     std::wstring path = onnxPathStream.str();
-    std::wstring startPath = path.substr(0, 8);
-    std::wstring endPath = path.substr(8);
-    if (startPath == L"file:///") {
+    std::wstring startPath = path.substr(0, 7);
+    std::wstring endPath = path.substr(7);
+    if (startPath == L"file://") {
         path = endPath;
     }
     // save to onnxPath_ (wstring for Windows, else string)
